@@ -129,29 +129,26 @@ public class Player extends B2DObject{
 	}
 	
 	public void update(float dt){
-		animation.update(dt);
-		pc.update(dt);
+
 		
-		float angleDegrees = (float) Math.toDegrees(Math.atan2(Game.V_HEIGHT - (InputHandler.mouseY / 2),
-															   InputHandler.mouseX/2));
-		if(angleDegrees<0) angleDegrees+=360; //angleDegrees is [-180,180] and we fix it to [0,360]
+		Vector2 pos = pc.getMiddlePoint(); /*new Vector2(Game.V_WIDTH,Game.V_HEIGHT);*/
+		Vector2 mousePos = new Vector2(InputHandler.mouseX, Game.V_HEIGHT*Game.SCALE - InputHandler.mouseY);
+		float angleDegrees = (float) Math.toDegrees(Math.atan2((mousePos.y - pos.y), (mousePos.x - pos.x)));
 		
-		//TODO: FIXME
-		pc.setTorsoAnimationFrame((int) ( (angleDegrees/2) * 7) /180   );//InputHandler.mouseY / ((Game.V_HEIGHT*2) /7)
+		pc.setTorsoAnimationFrame( (int) InputHandler.mouseY / 60  );
+				
 		pc.setArmRotation(angleDegrees);
 		pc.setLegsDelay(Math.abs(1 / (body.getLinearVelocity().x * ANIMATION_MAX_SPEED)));
-		// checks the side of the screen the mouse is on
-		// updates the textures acordingly
-		/*if(InputHandler.mouseX > Game.V_WIDTH){ 
-			if(animation.getFrame().isFlipX())
-				animation.getFrame().flip(true, false);
-		}else{
-			if(!animation.getFrame().isFlipX();
-				animation.getFrame().flip(true, false);
-		}*/
+
+		if(mousePos.x < (Game.V_WIDTH*Game.SCALE)/2)
+			pc.isFlip(true);
+		else
+			pc.isFlip(false);
+
 		
-		//auto update the animation sp
-		/**/
+		
+		animation.update(dt);
+		pc.update(dt);
 		
 	}
 	

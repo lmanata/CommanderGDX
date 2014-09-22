@@ -1,5 +1,6 @@
 package com.afonsobordado.CommanderGDX.entities.characters;
 
+import com.afonsobordado.CommanderGDX.Game;
 import com.afonsobordado.CommanderGDX.handlers.Animation;
 import com.afonsobordado.CommanderGDX.vars.B2DVars;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -14,7 +15,8 @@ public class PlayerCharacter {
 	private Vector2 torsoPin;
 	private Vector2 armPin;
 	private float armRotation;
-	private Sprite armSprite; // update this sprite when we update the arm
+
+	private boolean isFlip;
 
 
 	private Body body;
@@ -34,8 +36,20 @@ public class PlayerCharacter {
 		this.armPin = armPin;
 		this.body = body;
 		arm.setFrame(8);
-		this.armSprite = new Sprite(arm.getFrame());
-		armSprite.setOrigin(armPin.x, armPin.y);
+		isFlip = false;
+
+	}
+	
+	
+	public void update(float dt){
+		if(isFlip && !legs.getFrame().isFlipX()) legs.getFrame().flip(true, false);
+		if(isFlip && !torso.getFrame().isFlipX()) torso.getFrame().flip(true, false);
+		if(isFlip && !arm.getFrame().isFlipX()) arm.getFrame().flip(true, false);
+		
+		if(!isFlip && legs.getFrame().isFlipX()) legs.getFrame().flip(true, false);
+		if(!isFlip && torso.getFrame().isFlipX()) torso.getFrame().flip(true, false);
+		if(!isFlip && arm.getFrame().isFlipX()) arm.getFrame().flip(true, false);
+		legs.update(dt);		
 		
 	}
 	
@@ -55,7 +69,8 @@ public class PlayerCharacter {
 		
 		float armX = (body.getPosition().x * B2DVars.PPM - legs.getFrame().getRegionWidth() / 2) +//origianl torso pos
 				   torsoPin.x - // with this the corner of our image would go on the torso pin pos
-				   armPin.x; // we now offset by the arm pin, so they match
+				   armPin.x - // we now offset by the arm pin, so they match
+				   ((isFlip) ? arm.getFrame().getRegionWidth()/2 : 0); 
 		
 		float armY = (body.getPosition().y * B2DVars.PPM - legs.getFrame().getRegionHeight() / 2) - // same as above
 					torsoPin.y +
@@ -64,26 +79,18 @@ public class PlayerCharacter {
 		sb.draw(arm.getFrame(),
 				armX,
 				armY,
-				armPin.x,
+				((isFlip) ? arm.getFrame().getRegionWidth() - armPin.x : armPin.x) ,
 				arm.getFrame().getRegionHeight()-armPin.y,
 				arm.getFrame().getRegionWidth(),
 				arm.getFrame().getRegionHeight(),
 				1,
 				1,
-				armRotation);
+				armRotation - ((isFlip) ? 180 : 0));
 		
 		
 	}
 	
-	public void update(float dt){
-		legs.update(dt);		
-		
 
-		
-		//armSprite.setPosition(armX, armY);
-		//armSprite.rotate(armRotation);
-		
-	}
 	
 	public void setTorsoAnimationFrame(int frameN){
 		torso.setFrame(frameN);
@@ -97,12 +104,21 @@ public class PlayerCharacter {
 		this.armRotation = armRotation;
 	}
 	
-	public Sprite getArmSprite() {
-		return armSprite;
+	
+	public Vector2 getMiddlePoint(){
+		
+		return new Vector2 ((Game.V_WIDTH * Game.SCALE)/2,
+							(Game.V_WIDTH * Game.SCALE)/2);
 	}
 
 	public void setLegsDelay(float delay) {
 		legs.setDelay(delay);
 	}
+	
+	
+	public void isFlip(boolean isFlip) {
+		this.isFlip = isFlip;
+	}
+
 	
 }

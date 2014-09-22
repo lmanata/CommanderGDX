@@ -22,7 +22,6 @@ public class Game implements ApplicationListener{
 	public static final int SCALE = 2;
 	
 	public static final float STEP = 1 / 60f;
-	private float accum;
 	
 	
 	private SpriteBatch sb;
@@ -32,7 +31,6 @@ public class Game implements ApplicationListener{
 	private GameStateManager gsm;
 	
 	public static AssetManager aManager;
-	//public static Resources res;
 	public static MouseAim mouse;
 	
 

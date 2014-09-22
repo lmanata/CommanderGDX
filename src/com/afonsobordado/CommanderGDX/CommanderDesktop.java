@@ -40,8 +40,8 @@ public class CommanderDesktop {
 		cfg.width = Game.V_WIDTH * Game.SCALE;
 		cfg.height = Game.V_HEIGHT * Game.SCALE;
 		cfg.vSyncEnabled = false;
-		cfg.foregroundFPS = 0;
-		cfg.backgroundFPS = 0;
+		/*cfg.foregroundFPS = 80;*/
+		/*cfg.backgroundFPS = 0;*/
 		
 		new LwjglApplication(new Game(), cfg);
 		
