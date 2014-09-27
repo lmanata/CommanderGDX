@@ -49,8 +49,9 @@ public class Play extends GameState{
 	private OrthogonalTiledMapRenderer tmr;
 	
 	private Player player; // this is the local controllable player
+	
 	//using LibGdx array because according to libgdx is faster than ArrayList
-	private Array<B2DObject> playerList; // B2DSprite because i'm planing on adding other player classes
+	private Array<B2DObject> playerList;
 	
 	private HUD hud;
 	
@@ -117,7 +118,7 @@ public class Play extends GameState{
 		
 		//camera to follow player
 		cam.position.set(player.getPostion().x * B2DVars.PPM,
-						 Game.V_HEIGHT / 2 ,
+						 player.getPostion().y * B2DVars.PPM,
 						 0);
 		cam.update();
 		
@@ -139,7 +140,7 @@ public class Play extends GameState{
 		if(debug){
 			fps.log();
 			b2dCam.position.set(player.getBody().getPosition().x ,
-								1.2f,
+								0.95f,
 								0);
 			b2dCam.update();
 			b2dr.render(world, b2dCam.combined);

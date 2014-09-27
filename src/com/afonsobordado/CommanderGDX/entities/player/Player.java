@@ -121,7 +121,7 @@ public class Player extends B2DObject{
 		
 		
 	}
-	
+	 
 	public void render(SpriteBatch sb) {
 		sb.begin();
 		pc.render(sb);
@@ -130,13 +130,13 @@ public class Player extends B2DObject{
 	
 	public void update(float dt){
 
+		Vector2 pos = new Vector2(Game.V_WIDTH, Game.V_HEIGHT); 
+		//due to have used the scale below we can now use the v_width which is half of the width with scaling
 		
-		Vector2 pos = pc.getMiddlePoint(); /*new Vector2(Game.V_WIDTH,Game.V_HEIGHT);*/
 		Vector2 mousePos = new Vector2(InputHandler.mouseX, Game.V_HEIGHT*Game.SCALE - InputHandler.mouseY);
 		float angleDegrees = (float) Math.toDegrees(Math.atan2((mousePos.y - pos.y), (mousePos.x - pos.x)));
 		
-		pc.setTorsoAnimationFrame( (int) InputHandler.mouseY / 60  );
-				
+		pc.setTorsoAnimationFrame( (int) InputHandler.mouseY / (Game.V_HEIGHT /4 )  );
 		pc.setArmRotation(angleDegrees);
 		pc.setLegsDelay(Math.abs(1 / (body.getLinearVelocity().x * ANIMATION_MAX_SPEED)));
 

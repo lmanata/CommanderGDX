@@ -1,9 +1,7 @@
 package com.afonsobordado.CommanderGDX.entities.characters;
 
-import com.afonsobordado.CommanderGDX.Game;
 import com.afonsobordado.CommanderGDX.handlers.Animation;
 import com.afonsobordado.CommanderGDX.vars.B2DVars;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
@@ -49,6 +47,8 @@ public class PlayerCharacter {
 		if(!isFlip && legs.getFrame().isFlipX()) legs.getFrame().flip(true, false);
 		if(!isFlip && torso.getFrame().isFlipX()) torso.getFrame().flip(true, false);
 		if(!isFlip && arm.getFrame().isFlipX()) arm.getFrame().flip(true, false);
+		/*flip if required*/
+		
 		legs.update(dt);		
 		
 	}
@@ -70,7 +70,7 @@ public class PlayerCharacter {
 		float armX = (body.getPosition().x * B2DVars.PPM - legs.getFrame().getRegionWidth() / 2) +//origianl torso pos
 				   torsoPin.x - // with this the corner of our image would go on the torso pin pos
 				   armPin.x - // we now offset by the arm pin, so they match
-				   ((isFlip) ? arm.getFrame().getRegionWidth()/2 : 0); 
+				   ((isFlip) ? arm.getFrame().getRegionWidth()/2 : 0);
 		
 		float armY = (body.getPosition().y * B2DVars.PPM - legs.getFrame().getRegionHeight() / 2) - // same as above
 					torsoPin.y +
@@ -102,13 +102,6 @@ public class PlayerCharacter {
 
 	public void setArmRotation(float armRotation) {
 		this.armRotation = armRotation;
-	}
-	
-	
-	public Vector2 getMiddlePoint(){
-		
-		return new Vector2 ((Game.V_WIDTH * Game.SCALE)/2,
-							(Game.V_WIDTH * Game.SCALE)/2);
 	}
 
 	public void setLegsDelay(float delay) {
