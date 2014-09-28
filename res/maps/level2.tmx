@@ -5,17 +5,17 @@
  </tileset>
  <layer name="red" width="69" height="8">
   <data encoding="base64" compression="zlib">
-   eJxjYBgFo2AUjIJRgAwYoXioAlxuH8p+GuqAkQqYVDuGOgAAKqAAGg==
+   eJxjYBgF1AaMA+2AQQIYGRBhwYgmRgs82AG6G4eCm2kJsPl/sITJQKQpXPaR4w5qmjVQYCi5lRhA6zJuKJaJhAAA6ngAPQ==
   </data>
  </layer>
  <layer name="green" width="69" height="8">
   <data encoding="base64" compression="zlib">
-   eJxjYBgFo2AUjATARII6YtUONkCqu4eqP2kJBluYMKHh4W7vKEAAAFPIAB0=
+   eJxjYBgFo2B4A6aBdsAgAcSGAxMJagcbINXdQ8WfzEiY1mCwhQkTGh6s9g5kuA22OEMHTDhoQgAAf0wAMg==
   </data>
  </layer>
  <layer name="blue" width="69" height="8">
   <data encoding="base64" compression="zlib">
-   eJxjYBi5gHmgHTAIwWiYYIKRHibMOPAoGNpguMYhrdLpaPqnPwAAwhAANw==
+   eJxjYBh6gHmQmTPQgJr+GA5hQm0/DPUwodT9zDjwUAVD2e3UBMM1HGiVTodL+h9KAAAZEwBG
   </data>
  </layer>
  <objectgroup name="crystals" width="69" height="8">

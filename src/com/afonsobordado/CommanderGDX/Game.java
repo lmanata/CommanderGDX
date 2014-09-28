@@ -6,6 +6,7 @@ import com.afonsobordado.CommanderGDX.entities.mouse.MouseAim;
 import com.afonsobordado.CommanderGDX.handlers.GameStateManager;
 import com.afonsobordado.CommanderGDX.handlers.InputHandler;
 import com.afonsobordado.CommanderGDX.handlers.InputProcessor;
+import com.afonsobordado.CommanderGDX.packets.PacketConsoleMessage;
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
@@ -13,17 +14,20 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.esotericsoftware.kryonet.Client;
+import com.esotericsoftware.kryonet.Connection;
+import com.esotericsoftware.kryonet.Listener;
 
 public class Game implements ApplicationListener{
 
 	public static final String TITLE = "CommanderGDX";
 	public static final int V_WIDTH = 640;
 	public static final int V_HEIGHT = 480;
-	public static final int SCALE = 2;
+	public static final int SCALE = 1;
 	
 	public static final float STEP = 1 / 60f;
 	
-	
+	public String ipAddr;
 	private SpriteBatch sb;
 	private OrthographicCamera cam;
 	private OrthographicCamera hudCam;
@@ -32,10 +36,28 @@ public class Game implements ApplicationListener{
 	
 	public static AssetManager aManager;
 	public static MouseAim mouse;
+	public static Client client;
 	
 
 	
 	public void create() {
+		
+		
+		client = new Client();
+		client.start();
+		client.getKryo().register(PacketConsoleMessage.class);
+		
+		client.addListener(new Listener() {
+	    	public void received (Connection connection, Object object) {
+	    			if (object instanceof PacketConsoleMessage){
+	    				PacketConsoleMessage pcm = (PacketConsoleMessage) object;
+	    					System.out.println("[REMOTE]: " + pcm.message);
+	    					//connection.sendTCP(pcm);
+	    			}
+	           }
+	     });
+		
+		
 		Gdx.input.setInputProcessor(new InputProcessor());
 		
 		aManager = new AssetManager();
@@ -65,6 +87,8 @@ public class Game implements ApplicationListener{
 		hudCam = new OrthographicCamera();
 		hudCam.setToOrtho(false, V_WIDTH,V_HEIGHT);
 		gsm = new GameStateManager(this);
+		
+
 		
 	}
 	public void dispose() {}

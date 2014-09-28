@@ -19,8 +19,8 @@ public class MouseAim extends RObject{
 	
 	public void render(SpriteBatch sb){
 		sb.begin();
-		int finalX = (InputHandler.mouseX / 2) - (int) (width / 2);
-		int finalY = Game.V_HEIGHT - (InputHandler.mouseY / 2) - (int) (height / 2);
+		int finalX = (InputHandler.mouseX / Game.SCALE) - (int) (width / Game.SCALE);
+		int finalY = Game.V_HEIGHT - (InputHandler.mouseY / Game.SCALE) - (int) (height / Game.SCALE);
 		
 		sb.draw(animation.getFrame(),
 				finalX,

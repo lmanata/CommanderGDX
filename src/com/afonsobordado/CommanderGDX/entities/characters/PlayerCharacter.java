@@ -92,8 +92,8 @@ public class PlayerCharacter {
 	
 
 	
-	public void setTorsoAnimationFrame(int frameN){
-		torso.setFrame(frameN);
+	public void setTorsoFrame(int frame){
+		torso.setFrame(frame);
 	}
 
 	public float getArmRotation() {
@@ -108,10 +108,24 @@ public class PlayerCharacter {
 		legs.setDelay(delay);
 	}
 	
+	public void setLegsFrame(int frame){
+		legs.setFrame(frame);
+	}
 	
-	public void isFlip(boolean isFlip) {
-		this.isFlip = isFlip;
+	public void setFlip(boolean setFlip) {
+		this.isFlip = setFlip;
+	}
+	
+	public boolean isFlip(){
+		return this.isFlip;
+	}
+	
+	public void setFoward(boolean setFoward){
+		legs.setFowards(setFoward);
 	}
 
+	public boolean isFoward(){
+		return legs.isFowards();
+	}
 	
 }

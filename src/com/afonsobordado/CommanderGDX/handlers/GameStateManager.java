@@ -4,6 +4,7 @@ import java.util.Stack;
 
 import com.afonsobordado.CommanderGDX.Game;
 import com.afonsobordado.CommanderGDX.states.GameState;
+import com.afonsobordado.CommanderGDX.states.IPmenu;
 import com.afonsobordado.CommanderGDX.states.Play;
 
 
@@ -14,6 +15,7 @@ public class GameStateManager {
 	
 	private Stack<GameState> gameStates;
 	public static final int PLAY = 1;
+	public static final int IPMENU = 2;
 	
 	public GameStateManager(Game game){
 		this.game = game;
@@ -33,6 +35,7 @@ public class GameStateManager {
 	
 	private GameState getState(int state){
 			if(state == PLAY) return new Play(this);
+			if(state == IPMENU) return new IPmenu(this);
 			return null;
 	}
 	

@@ -1,5 +1,9 @@
 package com.afonsobordado.CommanderGDX.states;
 
+import java.io.IOException;
+
+import javax.swing.JOptionPane;
+
 import com.afonsobordado.CommanderGDX.Game;
 import com.afonsobordado.CommanderGDX.entities.UI.HUD;
 import com.afonsobordado.CommanderGDX.entities.objects.B2DObject;
@@ -7,6 +11,7 @@ import com.afonsobordado.CommanderGDX.entities.player.Player;
 import com.afonsobordado.CommanderGDX.handlers.GameStateManager;
 import com.afonsobordado.CommanderGDX.handlers.InputHandler;
 import com.afonsobordado.CommanderGDX.handlers.MyContactListener;
+import com.afonsobordado.CommanderGDX.packets.PacketConsoleMessage;
 import com.afonsobordado.CommanderGDX.vars.B2DVars;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.FPSLogger;
@@ -54,11 +59,12 @@ public class Play extends GameState{
 	private Array<B2DObject> playerList;
 	
 	private HUD hud;
-	
+	private String mapName = "res/maps/level2.tmx";
 	
 	
 	public Play(GameStateManager gsm) {
 		super(gsm);
+		
 		playerList = new Array<B2DObject>();
 		world = new World(new Vector2(0, -9.81f), true);
 		world.setContactListener(cl = new MyContactListener());
@@ -69,12 +75,22 @@ public class Play extends GameState{
 		
 		createTiles(); //fix this //tiled map
 		hud = new HUD(player);
-		
-		
+	/*	
+	    try {
+			Game.client.connect(5000, gsm.game().ipAddr, 54555, 54777);
+		    PacketConsoleMessage pcm = new PacketConsoleMessage();
+		    pcm.message = "hie";
+		    Game.client.sendTCP(pcm);
+			
+		} catch (IOException e) {
+			JOptionPane.showMessageDialog(null, "Server not visible");
+		}*/
+
+	    
 		if(debug){
 			b2dr = new Box2DDebugRenderer();
 			b2dCam  = new OrthographicCamera();
-			b2dCam.setToOrtho(false, Game.V_WIDTH / B2DVars.PPM, Game.V_HEIGHT / B2DVars.PPM);
+			b2dCam.setToOrtho(false, Game.V_WIDTH/ B2DVars.PPM, Game.V_HEIGHT / B2DVars.PPM);
 			fps = new FPSLogger();
 		}
 
@@ -139,21 +155,24 @@ public class Play extends GameState{
 		
 		if(debug){
 			fps.log();
-			b2dCam.position.set(player.getBody().getPosition().x ,
-								0.95f,
-								0);
+			b2dCam.position.set( player.getBody().getPosition().x,
+								 player.getBody().getPosition().y,
+								 0 );
 			b2dCam.update();
 			b2dr.render(world, b2dCam.combined);
 		}
 	}
 	
 	public void dispose() {
+		world.dispose();
+		tileMap.dispose();
+		tmr.dispose();
 	}
 	
 	
 	private void createTiles(){
 		//load tile map
-		tileMap = new TmxMapLoader().load("res/maps/level1.tmx");
+		tileMap = new TmxMapLoader().load(mapName);
 		tmr = new OrthogonalTiledMapRenderer(tileMap);
 		tileSize = (int) tileMap.getProperties().get("tilewidth");
 		TiledMapTileLayer layer;
@@ -187,7 +206,7 @@ public class Play extends GameState{
 							(row + 0.5f) * tileSize / B2DVars.PPM); 
 					
 					ChainShape cs = new ChainShape();
-					Vector2[] v = new Vector2[3];
+					Vector2[] v = new Vector2[4];
 					v[0] = new Vector2(
 							-tileSize / 2 / B2DVars.PPM,
 							-tileSize / 2 / B2DVars.PPM);
@@ -197,9 +216,12 @@ public class Play extends GameState{
 					v[2] = new Vector2(
 							-tileSize / 2 / B2DVars.PPM,
 							tileSize / 2 / B2DVars.PPM);
+					v[3] = new Vector2(
+							tileSize / 2 / B2DVars.PPM,
+							-tileSize / 2 / B2DVars.PPM);
 
 					cs.createChain(v);
-					fdef.friction = 0.1f;
+					fdef.friction = 0.2f;
 					fdef.shape = cs;
 					fdef.filter.categoryBits = bits; 
 					fdef.filter.maskBits = B2DVars.BIT_PLAYER; 
@@ -209,6 +231,7 @@ public class Play extends GameState{
 					
 				}
 			}
+			
 	}
 	
 	

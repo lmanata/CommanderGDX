@@ -8,6 +8,7 @@ import com.afonsobordado.CommanderGDX.entities.objects.B2DObject;
 import com.afonsobordado.CommanderGDX.handlers.Animation;
 import com.afonsobordado.CommanderGDX.handlers.InputHandler;
 import com.afonsobordado.CommanderGDX.vars.B2DVars;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -130,24 +131,32 @@ public class Player extends B2DObject{
 	
 	public void update(float dt){
 
-		Vector2 pos = new Vector2(Game.V_WIDTH, Game.V_HEIGHT); 
-		//due to have used the scale below we can now use the v_width which is half of the width with scaling
+		Vector2 pos = new Vector2((Game.V_WIDTH*Game.SCALE)/2, (Game.V_HEIGHT*Game.SCALE)/2); 
 		
-		Vector2 mousePos = new Vector2(InputHandler.mouseX, Game.V_HEIGHT*Game.SCALE - InputHandler.mouseY);
+		Vector2 mousePos = new Vector2(InputHandler.mouseX, (Game.V_HEIGHT*Game.SCALE) - InputHandler.mouseY);
 		float angleDegrees = (float) Math.toDegrees(Math.atan2((mousePos.y - pos.y), (mousePos.x - pos.x)));
 		
-		pc.setTorsoAnimationFrame( (int) InputHandler.mouseY / (Game.V_HEIGHT /4 )  );
+		pc.setTorsoFrame( (int) InputHandler.mouseY / (Game.V_HEIGHT / 4)  );
 		pc.setArmRotation(angleDegrees);
 		pc.setLegsDelay(Math.abs(1 / (body.getLinearVelocity().x * ANIMATION_MAX_SPEED)));
-
-		if(mousePos.x < (Game.V_WIDTH*Game.SCALE)/2)
-			pc.isFlip(true);
-		else
-			pc.isFlip(false);
+		pc.setFlip(mousePos.x < (Game.V_WIDTH*Game.SCALE)/2);
+		
+		
+		if(body.getLinearVelocity().x == 0 && body.getLinearVelocity().y == 0){ // stopped boddy
+			//pc.setLegsFrame(8);
+			pc.setLegsDelay(0);
+		}else if(body.getLinearVelocity().x != 0 && body.getLinearVelocity().y != 0){ // jumping body
+			//pc.setLegsFrame(4); //this is just a random one that looks good while on air
+			pc.setLegsDelay(0);
+		}else{
+			// if the body has speed against the legs animations
+			pc.setFoward(!((pc.isFlip() && body.getLinearVelocity().x >= 0) || (!pc.isFlip() && body.getLinearVelocity().x < 0)));
+		}
+		
 
 		
 		
-		animation.update(dt);
+		//animation.update(dt);
 		pc.update(dt);
 		
 	}
