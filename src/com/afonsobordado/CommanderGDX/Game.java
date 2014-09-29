@@ -6,7 +6,7 @@ import com.afonsobordado.CommanderGDX.entities.mouse.MouseAim;
 import com.afonsobordado.CommanderGDX.handlers.GameStateManager;
 import com.afonsobordado.CommanderGDX.handlers.InputHandler;
 import com.afonsobordado.CommanderGDX.handlers.InputProcessor;
-import com.afonsobordado.CommanderGDX.packets.PacketConsoleMessage;
+import com.afonsobordado.CommanderGDX.packets.*;
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
@@ -27,7 +27,16 @@ public class Game implements ApplicationListener{
 	
 	public static final float STEP = 1 / 60f;
 	
-	public String ipAddr;
+	
+	private boolean play=false;
+	
+	//variables about the current game. if any
+	public static String ipAddr;
+	public String declineReason;
+	
+	
+	
+	
 	private SpriteBatch sb;
 	private OrthographicCamera cam;
 	private OrthographicCamera hudCam;
@@ -44,16 +53,28 @@ public class Game implements ApplicationListener{
 		
 		
 		client = new Client();
-		client.start();
 		client.getKryo().register(PacketConsoleMessage.class);
-		
+		client.getKryo().register(PacketHello.class);
+	    client.getKryo().register(PacketAccepted.class);
+	    client.getKryo().register(PacketDeclined.class);
+		new Thread(client).start();
+
+	    
 		client.addListener(new Listener() {
 	    	public void received (Connection connection, Object object) {
 	    			if (object instanceof PacketConsoleMessage){
 	    				PacketConsoleMessage pcm = (PacketConsoleMessage) object;
 	    					System.out.println("[REMOTE]: " + pcm.message);
-	    					//connection.sendTCP(pcm);
+	    			} else if (object instanceof PacketAccepted){
+	    				PacketAccepted pcm = (PacketAccepted) object;
+	    					//set some variables, that come with packetaccepted
+	    					play=true;
+	    			} else if (object instanceof PacketDeclined){
+	    				declineReason = ((PacketDeclined) object).reason;
+	    				//pop back to the menu and present a decline reason
+	    				play=false;
 	    			}
+	    			
 	           }
 	     });
 		
@@ -95,6 +116,7 @@ public class Game implements ApplicationListener{
 	
 	public void render() {
 		Gdx.graphics.setTitle(TITLE + " -- FPS: " + Gdx.graphics.getFramesPerSecond());
+		if(play) gsm.pushState(gsm.PLAY);
 		gsm.update(Gdx.graphics.getDeltaTime());
 		mouse.update(Gdx.graphics.getDeltaTime());
 		gsm.render();
