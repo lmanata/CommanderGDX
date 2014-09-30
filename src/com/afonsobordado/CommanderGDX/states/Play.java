@@ -12,6 +12,7 @@ import com.afonsobordado.CommanderGDX.handlers.GameStateManager;
 import com.afonsobordado.CommanderGDX.handlers.InputHandler;
 import com.afonsobordado.CommanderGDX.handlers.MyContactListener;
 import com.afonsobordado.CommanderGDX.packets.PacketConsoleMessage;
+import com.afonsobordado.CommanderGDX.packets.PacketPositionUpdate;
 import com.afonsobordado.CommanderGDX.vars.B2DVars;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.FPSLogger;
@@ -125,6 +126,12 @@ public class Play extends GameState{
 		for(B2DObject p: playerList){
 			p.update(dt);
 		}
+		
+		PacketPositionUpdate ppu = new PacketPositionUpdate();
+		ppu.id = 0;
+		ppu.name = "huie";
+		ppu.pos = player.getPostion();
+		Game.client.sendUDP(ppu);
 		
 	}
 	

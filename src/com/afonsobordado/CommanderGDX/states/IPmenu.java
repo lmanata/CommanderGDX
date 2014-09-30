@@ -45,7 +45,7 @@ public class IPmenu extends GameState{
 		    	  
 		    	PacketHello ph = new PacketHello();
 		    	ph.name = "huehuehe"; // this is some random global
-				Game.client.sendTCP(ph);
+				Game.client.sendUDP(ph);
 		    	 
 		        timerIsOn = true;
 		         
@@ -53,7 +53,7 @@ public class IPmenu extends GameState{
 		            
 		            @Override
 		            public void run() {
-		            	System.err.println("Well shit :(");
+		           
 		            	//timeout, plz advise user
 		            }
 

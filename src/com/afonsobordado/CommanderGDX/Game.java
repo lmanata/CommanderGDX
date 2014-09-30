@@ -14,6 +14,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Vector2;
 import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
@@ -57,6 +58,8 @@ public class Game implements ApplicationListener{
 		client.getKryo().register(PacketHello.class);
 	    client.getKryo().register(PacketAccepted.class);
 	    client.getKryo().register(PacketDeclined.class);
+	    client.getKryo().register(PacketPositionUpdate.class);
+	    client.getKryo().register(Vector2.class);
 		new Thread(client).start();
 
 	    
@@ -116,12 +119,15 @@ public class Game implements ApplicationListener{
 	
 	public void render() {
 		Gdx.graphics.setTitle(TITLE + " -- FPS: " + Gdx.graphics.getFramesPerSecond());
-		if(play) gsm.pushState(gsm.PLAY);
 		gsm.update(Gdx.graphics.getDeltaTime());
 		mouse.update(Gdx.graphics.getDeltaTime());
 		gsm.render();
 		mouse.render(sb);
 		InputHandler.update();
+		if(play){
+			play=false;
+			gsm.pushState(gsm.PLAY);
+		}
 	}
 	
 	public void pause() {}
