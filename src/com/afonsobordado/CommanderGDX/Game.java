@@ -6,6 +6,7 @@ import com.afonsobordado.CommanderGDX.entities.mouse.MouseAim;
 import com.afonsobordado.CommanderGDX.handlers.GameStateManager;
 import com.afonsobordado.CommanderGDX.handlers.InputHandler;
 import com.afonsobordado.CommanderGDX.handlers.InputProcessor;
+import com.afonsobordado.CommanderGDX.handlers.NetworkListener;
 import com.afonsobordado.CommanderGDX.packets.*;
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
@@ -29,12 +30,12 @@ public class Game implements ApplicationListener{
 	public static final float STEP = 1 / 60f;
 	
 	
-	private boolean play=false;
+	
 	
 	//variables about the current game. if any
 	public static String ipAddr;
-	public String declineReason;
-	
+	public static String declineReason;
+	public static boolean play=false;
 	
 	
 	
@@ -61,25 +62,7 @@ public class Game implements ApplicationListener{
 	    client.getKryo().register(PacketPositionUpdate.class);
 	    client.getKryo().register(Vector2.class);
 		new Thread(client).start();
-
-	    
-		client.addListener(new Listener() {
-	    	public void received (Connection connection, Object object) {
-	    			if (object instanceof PacketConsoleMessage){
-	    				PacketConsoleMessage pcm = (PacketConsoleMessage) object;
-	    					System.out.println("[REMOTE]: " + pcm.message);
-	    			} else if (object instanceof PacketAccepted){
-	    				PacketAccepted pcm = (PacketAccepted) object;
-	    					//set some variables, that come with packetaccepted
-	    					play=true;
-	    			} else if (object instanceof PacketDeclined){
-	    				declineReason = ((PacketDeclined) object).reason;
-	    				//pop back to the menu and present a decline reason
-	    				play=false;
-	    			}
-	    			
-	           }
-	     });
+		client.addListener(new NetworkListener());
 		
 		
 		Gdx.input.setInputProcessor(new InputProcessor());
@@ -124,7 +107,8 @@ public class Game implements ApplicationListener{
 		gsm.render();
 		mouse.render(sb);
 		InputHandler.update();
-		if(play){
+		if(play){ 
+			//we cant call gsmpushstate on the kyro listener because that listener is on the kyro thread wich doesent have opengl binds
 			play=false;
 			gsm.pushState(gsm.PLAY);
 		}
