@@ -8,6 +8,7 @@ import com.afonsobordado.CommanderGDX.handlers.InputHandler;
 import com.afonsobordado.CommanderGDX.handlers.InputProcessor;
 import com.afonsobordado.CommanderGDX.handlers.NetworkListener;
 import com.afonsobordado.CommanderGDX.packets.*;
+import com.afonsobordado.CommanderGDX.packets.NetworkObject.NetworkPlayer;
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
@@ -34,6 +35,7 @@ public class Game implements ApplicationListener{
 	
 	//variables about the current game. if any
 	public static String ipAddr;
+	public static int id;
 	public static String declineReason;
 	public static boolean play=false;
 	
@@ -61,6 +63,7 @@ public class Game implements ApplicationListener{
 	    client.getKryo().register(PacketDeclined.class);
 	    client.getKryo().register(PacketPositionUpdate.class);
 	    client.getKryo().register(Vector2.class);
+	    client.getKryo().register(NetworkPlayer.class);
 		new Thread(client).start();
 		client.addListener(new NetworkListener());
 		

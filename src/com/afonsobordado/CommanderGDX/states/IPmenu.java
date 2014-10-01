@@ -45,7 +45,7 @@ public class IPmenu extends GameState{
 		    	  
 		    	PacketHello ph = new PacketHello();
 		    	ph.name = "huehuehe"; // this is some random global
-				Game.client.sendUDP(ph);
+				Game.client.sendTCP(ph);
 		    	 
 		        timerIsOn = true;
 		         

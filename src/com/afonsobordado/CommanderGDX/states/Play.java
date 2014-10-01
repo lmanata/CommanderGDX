@@ -13,6 +13,7 @@ import com.afonsobordado.CommanderGDX.handlers.InputHandler;
 import com.afonsobordado.CommanderGDX.handlers.MyContactListener;
 import com.afonsobordado.CommanderGDX.packets.PacketConsoleMessage;
 import com.afonsobordado.CommanderGDX.packets.PacketPositionUpdate;
+import com.afonsobordado.CommanderGDX.packets.NetworkObject.NetworkPlayer;
 import com.afonsobordado.CommanderGDX.vars.B2DVars;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.FPSLogger;
@@ -54,7 +55,7 @@ public class Play extends GameState{
 	private float tileSize;
 	private OrthogonalTiledMapRenderer tmr;
 	
-	private Player player; // this is the local controllable player
+	public static Player player; // this is the local controllable player
 	
 	//using LibGdx array because according to libgdx is faster than ArrayList
 	private Array<B2DObject> playerList;
@@ -76,7 +77,7 @@ public class Play extends GameState{
 		
 		createTiles(); //fix this //tiled map
 		hud = new HUD(player);
-	/*	
+		/*	
 	    try {
 			Game.client.connect(5000, gsm.game().ipAddr, 54555, 54777);
 		    PacketConsoleMessage pcm = new PacketConsoleMessage();
@@ -116,6 +117,15 @@ public class Play extends GameState{
 		
 		world.step(dt, 6, 2);
 		
+		NetworkPlayer np = new NetworkPlayer(player.getId(),
+											 player.getName(),
+											 player.getBody().getPosition(),
+											 player.getArmDegrees(),
+											 player.getBody().getLinearVelocity());
+
+		Game.client.sendTCP(np);
+		
+		
 		Array<Body> bodies = cl.getBodiesToRemove();
 		for(Body b: bodies){
 			world.destroyBody(b);
@@ -127,11 +137,12 @@ public class Play extends GameState{
 			p.update(dt);
 		}
 		
-		PacketPositionUpdate ppu = new PacketPositionUpdate();
+
+		/*PacketPositionUpdate ppu = new PacketPositionUpdate();
 		ppu.id = 0;
 		ppu.name = "huie";
 		ppu.pos = player.getPostion();
-		Game.client.sendUDP(ppu);
+		Game.client.sendUDP(ppu);*/
 		
 	}
 	

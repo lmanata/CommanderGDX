@@ -30,8 +30,13 @@ public class Player extends B2DObject{
 	public boolean grounded;
 	private long lastGroundTime;
 	private PlayerCharacter pc;
+	private int id;
+
+	private float armDegrees;
+	private String name;
 	
 	public Player(World world){
+		
 		BodyDef bdef  = new BodyDef();
 		FixtureDef fdef = new FixtureDef();
 		PolygonShape shape  = new PolygonShape();
@@ -87,7 +92,7 @@ public class Player extends B2DObject{
 	public void handleInput(){
 		
 		if(InputHandler.isPressed(InputHandler.BUTTON_UP) && grounded)
-			body.applyForceToCenter(0, 200, true); //250 Newtons
+			body.applyForceToCenter(0, B2DVars.JUMP_FORCE, true); //jumpForce
 		
 		
 		
@@ -108,13 +113,13 @@ public class Player extends B2DObject{
 				
 		// apply left impulse, but only if max velocity is not reached yet
 		if(InputHandler.isDown(InputHandler.BUTTON_LEFT) && vel.x > -PLAYER_MAX_VELOCITY){
-			body.applyLinearImpulse(-0.1f, 0, pos.x, pos.y, true);
+			body.applyLinearImpulse(-B2DVars.PLAYER_WALK_FORCE, 0, pos.x, pos.y, true);
 
 		}
 
 		// apply right impulse, but only if max velocity is not reached yet
 		if(InputHandler.isDown(InputHandler.BUTTON_RIGHT) && vel.x < PLAYER_MAX_VELOCITY){
-			body.applyLinearImpulse(0.1f, 0, pos.x, pos.y, true);
+			body.applyLinearImpulse(B2DVars.PLAYER_WALK_FORCE, 0, pos.x, pos.y, true);
 
 		}
 
@@ -134,10 +139,10 @@ public class Player extends B2DObject{
 		Vector2 pos = new Vector2((Game.V_WIDTH*Game.SCALE)/2, (Game.V_HEIGHT*Game.SCALE)/2); 
 		
 		Vector2 mousePos = new Vector2(InputHandler.mouseX, (Game.V_HEIGHT*Game.SCALE) - InputHandler.mouseY);
-		float angleDegrees = (float) Math.toDegrees(Math.atan2((mousePos.y - pos.y), (mousePos.x - pos.x)));
+		armDegrees = (float) Math.toDegrees(Math.atan2((mousePos.y - pos.y), (mousePos.x - pos.x)));
 		
 		pc.setTorsoFrame( (int) InputHandler.mouseY / (Game.V_HEIGHT / 4)  );
-		pc.setArmRotation(angleDegrees);
+		pc.setArmRotation(armDegrees);
 		pc.setLegsDelay(Math.abs(1 / (body.getLinearVelocity().x * ANIMATION_MAX_SPEED)));
 		pc.setFlip(mousePos.x < (Game.V_WIDTH*Game.SCALE)/2);
 		
@@ -159,6 +164,31 @@ public class Player extends B2DObject{
 		//animation.update(dt);
 		pc.update(dt);
 		
+	}
+	
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+
+	public float getArmDegrees() {
+		return armDegrees;
+	}
+
+	public void setArmDegrees(float armDegrees) {
+		this.armDegrees = armDegrees;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
 	}
 	
 }
