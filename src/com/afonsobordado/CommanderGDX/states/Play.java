@@ -1,18 +1,10 @@
 package com.afonsobordado.CommanderGDX.states;
 
-import java.io.IOException;
-
-import javax.swing.JOptionPane;
-
 import com.afonsobordado.CommanderGDX.Game;
 import com.afonsobordado.CommanderGDX.entities.UI.HUD;
-import com.afonsobordado.CommanderGDX.entities.objects.B2DObject;
 import com.afonsobordado.CommanderGDX.entities.player.Player;
 import com.afonsobordado.CommanderGDX.handlers.GameStateManager;
-import com.afonsobordado.CommanderGDX.handlers.InputHandler;
 import com.afonsobordado.CommanderGDX.handlers.MyContactListener;
-import com.afonsobordado.CommanderGDX.packets.PacketConsoleMessage;
-import com.afonsobordado.CommanderGDX.packets.PacketPositionUpdate;
 import com.afonsobordado.CommanderGDX.packets.NetworkObject.NetworkPlayer;
 import com.afonsobordado.CommanderGDX.vars.B2DVars;
 import com.badlogic.gdx.Gdx;
@@ -30,10 +22,7 @@ import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.ChainShape;
-import com.badlogic.gdx.physics.box2d.Filter;
-import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
-import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
 
@@ -44,10 +33,7 @@ public class Play extends GameState{
 	private Box2DDebugRenderer b2dr;
 	private OrthographicCamera b2dCam;
 	
-	
-	
 	private World world;
-
 	
 	private MyContactListener cl;
 	
@@ -58,10 +44,10 @@ public class Play extends GameState{
 	public static Player player; // this is the local controllable player
 	
 	//using LibGdx array because according to libgdx is faster than ArrayList
-	private Array<B2DObject> playerList;
+	public static Array<NetworkPlayer> playerList; // will probably be changed to clientPlayer or somthing like that
 	
 	private HUD hud;
-	private String mapName = "res/maps/level2.tmx";
+	public static String mapName = "level1";
 	
 	
 	public Play(GameStateManager gsm) {
@@ -74,30 +60,18 @@ public class Play extends GameState{
 			Game.networkListener.notifyAll(); // a glorious warrior has born
 		}
 		
-		playerList = new Array<B2DObject>();
+		playerList = new Array<NetworkPlayer>();
 
 		
 		//create player
 
-		playerList.add(player);
 		
 		createTiles(); //fix this //tiled map
 		hud = new HUD(player);
-		/*	
-	    try {
-			Game.client.connect(5000, gsm.game().ipAddr, 54555, 54777);
-		    PacketConsoleMessage pcm = new PacketConsoleMessage();
-		    pcm.message = "hie";
-		    Game.client.sendTCP(pcm);
-			
-		} catch (IOException e) {
-			JOptionPane.showMessageDialog(null, "Server not visible");
-		}*/
-
 	    
 		if(debug){
 			b2dr = new Box2DDebugRenderer();
-			b2dCam  = new OrthographicCamera();
+			b2dCam = new OrthographicCamera();
 			b2dCam.setToOrtho(false, Game.V_WIDTH/ B2DVars.PPM, Game.V_HEIGHT / B2DVars.PPM);
 			fps = new FPSLogger();
 		}
@@ -108,10 +82,7 @@ public class Play extends GameState{
 
 	public void handleInput() {
 		player.grounded = cl.isPlayerOnGround();
-		
-		for(B2DObject p: playerList){
-			p.handleInput();
-		}
+		player.handleInput();
 		
 		
 	}
@@ -131,24 +102,14 @@ public class Play extends GameState{
 
 		Game.client.sendTCP(np);
 		
+		player.update(dt);
+		
 		
 		Array<Body> bodies = cl.getBodiesToRemove();
 		for(Body b: bodies){
 			world.destroyBody(b);
 		}
 		bodies.clear();
-		
-		
-		for(B2DObject p: playerList){
-			p.update(dt);
-		}
-		
-
-		/*PacketPositionUpdate ppu = new PacketPositionUpdate();
-		ppu.id = 0;
-		ppu.name = "huie";
-		ppu.pos = player.getPostion();
-		Game.client.sendUDP(ppu);*/
 		
 	}
 	
@@ -168,10 +129,7 @@ public class Play extends GameState{
 		
 		//draw players
 		sb.setProjectionMatrix(cam.combined);
-		for(B2DObject p: playerList){
-			p.render(sb);
-		}
-		//player.render(sb);
+		player.render(sb);
 		
 		//draw hud
 		sb.setProjectionMatrix(hudCam.combined);
@@ -196,7 +154,7 @@ public class Play extends GameState{
 	
 	private void createTiles(){
 		//load tile map
-		tileMap = new TmxMapLoader().load(mapName);
+		tileMap = new TmxMapLoader().load("res/maps/" + mapName + ".tmx");
 		tmr = new OrthogonalTiledMapRenderer(tileMap);
 		tileSize = (int) tileMap.getProperties().get("tilewidth");
 		TiledMapTileLayer layer;

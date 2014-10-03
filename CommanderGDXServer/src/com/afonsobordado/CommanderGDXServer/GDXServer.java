@@ -8,8 +8,9 @@ import com.afonsobordado.CommanderGDX.packets.PacketAccepted;
 import com.afonsobordado.CommanderGDX.packets.PacketConsoleMessage;
 import com.afonsobordado.CommanderGDX.packets.PacketDeclined;
 import com.afonsobordado.CommanderGDX.packets.PacketHello;
+import com.afonsobordado.CommanderGDX.packets.PacketNewPlayer;
 import com.afonsobordado.CommanderGDX.packets.PacketPositionUpdate;
-import com.afonsobordado.CommanderGDXServer.LocalObjects.LocalPlayer;
+import com.afonsobordado.CommanderGDXServer.LocalObjects.LocalServerPlayer;
 import com.afonsobordado.CommanderGDXServer.NetworkObjects.NetworkPlayer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
@@ -18,14 +19,19 @@ import com.esotericsoftware.kryonet.Server;
 public class GDXServer {
 	public static final float STEP = 1 / 60f;
 	
-	public static ConcurrentHashMap<Integer, LocalPlayer> PlayerList;
+	public static ConcurrentHashMap<Integer, LocalServerPlayer> PlayerList;
+	public static Server server;
 	//ConcurrentHashMap is better because it allows for 32 simultaneous write locks, lets hope that we don't exceed that
+	
+	
+	//current game vars
+	public static String currentMap = "level2";
 	
 	public static void main(String[] args){
 		//World world = new World(new Vector2(0, -9.81f), true); 
 		
-		PlayerList = new ConcurrentHashMap<Integer, LocalPlayer>();
-	    Server server = new Server();
+		PlayerList = new ConcurrentHashMap<Integer, LocalServerPlayer>();
+	    server = new Server();
 	    server.getKryo().register(PacketConsoleMessage.class);
 	    server.getKryo().register(PacketHello.class);
 	    server.getKryo().register(PacketAccepted.class);
@@ -33,6 +39,7 @@ public class GDXServer {
 	    server.getKryo().register(PacketPositionUpdate.class);
 	    server.getKryo().register(Vector2.class);
 	    server.getKryo().register(NetworkPlayer.class);
+	    server.getKryo().register(PacketNewPlayer.class);
 	    server.start();
 	    
 	    try {

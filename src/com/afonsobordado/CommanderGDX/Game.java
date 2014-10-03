@@ -61,6 +61,7 @@ public class Game implements ApplicationListener{
 	    client.getKryo().register(PacketPositionUpdate.class);
 	    client.getKryo().register(Vector2.class);
 	    client.getKryo().register(NetworkPlayer.class);
+	    client.getKryo().register(PacketNewPlayer.class);
 		new Thread(client).start();
 		client.addListener(networkListener = new NetworkListener());
 		

@@ -3,6 +3,7 @@ package com.afonsobordado.CommanderGDX.handlers;
 import com.afonsobordado.CommanderGDX.packets.PacketAccepted;
 import com.afonsobordado.CommanderGDX.packets.PacketConsoleMessage;
 import com.afonsobordado.CommanderGDX.packets.PacketDeclined;
+import com.afonsobordado.CommanderGDX.packets.PacketNewPlayer;
 import com.afonsobordado.CommanderGDX.states.IPmenu;
 import com.afonsobordado.CommanderGDX.states.Play;
 import com.esotericsoftware.kryonet.Connection;
@@ -30,11 +31,18 @@ public class NetworkListener extends Listener{
 			}
 
 			Play.player.id = pa.id;
+			Play.mapName = pa.mapName;
 			
 		} else if (object instanceof PacketDeclined){
 			IPmenu.declineReason = ((PacketDeclined) object).reason;
 			IPmenu.play=false;
 			//pop back to the menu and present a decline reason
+		} else if (object instanceof PacketNewPlayer){
+			if(Play.playerList == null) return; //just to make sure we dont recieve random packets and cause null pointer exceptions
+			PacketNewPlayer pnp = (PacketNewPlayer) object;
+			//form new local player
+			Play.playerList.add(pnp.np);
+			System.out.println("A Brave warrior has joined the struggle");
 		}
 		
    }

@@ -4,7 +4,8 @@ import com.afonsobordado.CommanderGDX.packets.PacketAccepted;
 import com.afonsobordado.CommanderGDX.packets.PacketConsoleMessage;
 import com.afonsobordado.CommanderGDX.packets.PacketDeclined;
 import com.afonsobordado.CommanderGDX.packets.PacketHello;
-import com.afonsobordado.CommanderGDXServer.LocalObjects.LocalPlayer;
+import com.afonsobordado.CommanderGDX.packets.PacketNewPlayer;
+import com.afonsobordado.CommanderGDXServer.LocalObjects.LocalServerPlayer;
 import com.afonsobordado.CommanderGDXServer.NetworkObjects.NetworkPlayer;
 import com.badlogic.gdx.math.Vector2;
 import com.esotericsoftware.kryonet.Connection;
@@ -40,15 +41,25 @@ public class NetworkListener extends Listener{
     		
     		PacketAccepted pa = new PacketAccepted();
     		pa.id = GDXServer.PlayerList.size();
+    		pa.mapName = GDXServer.currentMap;
     		connection.sendTCP(pa);
     		
+    		LocalServerPlayer newPlayer = new LocalServerPlayer(GDXServer.PlayerList.size(),
+																ph.name,
+																new Vector2(0,0),
+																0f,
+																new Vector2(0,0),
+																connection.getID());
     		
-    		LocalPlayer newPlayer = new LocalPlayer(GDXServer.PlayerList.size(),
-									    			ph.name,
-									    			new Vector2(0,0),
-									    			0f,
-									    			new Vector2(0,0),
-									    			connection.getID());
+    		PacketNewPlayer pnp = new PacketNewPlayer();
+    		pnp.np = newPlayer.getNetworkPlayer();
+    		
+    		for(Connection c:GDXServer.server.getConnections()){
+    			c.sendTCP(pnp);
+    		}
+    		
+    		
+
     		/*i could use the connection id as a Integer on the hashmap
     		 *but i don't know how kryonet handles id's and if for some reason it can colide with a previous value*/
     		GDXServer.PlayerList.put(GDXServer.PlayerList.size(), newPlayer);
@@ -58,7 +69,7 @@ public class NetworkListener extends Listener{
     	} else if (object instanceof NetworkPlayer){
     		NetworkPlayer np = (NetworkPlayer) object;
     		
-    		for(LocalPlayer p: GDXServer.PlayerList.values()){
+    		for(LocalServerPlayer p: GDXServer.PlayerList.values()){
     			if(p.id == np.id && p.name.equals(np.name)){
     				//interpolation plz
     				p.armAngle = np.armAngle;

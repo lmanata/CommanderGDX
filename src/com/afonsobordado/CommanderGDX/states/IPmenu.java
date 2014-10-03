@@ -1,6 +1,9 @@
 package com.afonsobordado.CommanderGDX.states;
 
 import java.io.IOException;
+import java.math.BigInteger;
+import java.security.SecureRandom;
+import java.util.Random;
 import java.util.Scanner;
 
 import com.afonsobordado.CommanderGDX.Game;
@@ -47,11 +50,16 @@ public class IPmenu extends GameState{
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
+		    	
 		    	  
 		    	PacketHello ph = new PacketHello();
-		    	ph.name = "huehuehe"; // this is some random global
+		    	
+		    	SecureRandom random = new SecureRandom();
+		    	ph.name = new BigInteger(130, random).toString(32); // this is some random global
+		    	
 				Game.client.sendTCP(ph);
 		    	 
+				
 		        timerIsOn = true;
 		         
 		        Timer.schedule(new Task() {
