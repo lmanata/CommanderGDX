@@ -9,6 +9,7 @@ import com.afonsobordado.CommanderGDX.packets.PacketConsoleMessage;
 import com.afonsobordado.CommanderGDX.packets.PacketDeclined;
 import com.afonsobordado.CommanderGDX.packets.PacketHello;
 import com.afonsobordado.CommanderGDX.packets.PacketPositionUpdate;
+import com.afonsobordado.CommanderGDXServer.LocalObjects.LocalPlayer;
 import com.afonsobordado.CommanderGDXServer.NetworkObjects.NetworkPlayer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
@@ -17,13 +18,13 @@ import com.esotericsoftware.kryonet.Server;
 public class GDXServer {
 	public static final float STEP = 1 / 60f;
 	
-	public static ConcurrentHashMap<Integer, NetworkPlayer> PlayerList;
+	public static ConcurrentHashMap<Integer, LocalPlayer> PlayerList;
 	//ConcurrentHashMap is better because it allows for 32 simultaneous write locks, lets hope that we don't exceed that
 	
 	public static void main(String[] args){
 		//World world = new World(new Vector2(0, -9.81f), true); 
 		
-		PlayerList = new ConcurrentHashMap<Integer, NetworkPlayer>();
+		PlayerList = new ConcurrentHashMap<Integer, LocalPlayer>();
 	    Server server = new Server();
 	    server.getKryo().register(PacketConsoleMessage.class);
 	    server.getKryo().register(PacketHello.class);

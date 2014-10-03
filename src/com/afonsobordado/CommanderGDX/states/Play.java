@@ -127,8 +127,7 @@ public class Play extends GameState{
 											 player.getName(),
 											 player.getBody().getPosition(),
 											 player.getArmDegrees(),
-											 player.getBody().getLinearVelocity(),
-											 -1);
+											 player.getBody().getLinearVelocity());
 
 		Game.client.sendTCP(np);
 		

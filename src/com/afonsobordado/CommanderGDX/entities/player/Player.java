@@ -141,7 +141,7 @@ public class Player extends B2DObject{
 		Vector2 mousePos = new Vector2(InputHandler.mouseX, (Game.V_HEIGHT*Game.SCALE) - InputHandler.mouseY);
 		armDegrees = (float) Math.toDegrees(Math.atan2((mousePos.y - pos.y), (mousePos.x - pos.x)));
 		
-		pc.setTorsoFrame( (int) InputHandler.mouseY / (Game.V_HEIGHT / 4)  );
+		pc.setTorsoFrame( (int) InputHandler.mouseY / (Game.V_HEIGHT / 7)  );
 		pc.setArmRotation(armDegrees);
 		pc.setLegsDelay(Math.abs(1 / (body.getLinearVelocity().x * ANIMATION_MAX_SPEED)));
 		pc.setFlip(mousePos.x < (Game.V_WIDTH*Game.SCALE)/2);
