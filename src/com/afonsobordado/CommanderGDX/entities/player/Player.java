@@ -30,7 +30,7 @@ public class Player extends B2DObject{
 	public boolean grounded;
 	private long lastGroundTime;
 	private PlayerCharacter pc;
-	private int id;
+	public int id;
 
 	private float armDegrees;
 	private String name;

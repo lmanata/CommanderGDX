@@ -18,8 +18,6 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.esotericsoftware.kryonet.Client;
-import com.esotericsoftware.kryonet.Connection;
-import com.esotericsoftware.kryonet.Listener;
 
 public class Game implements ApplicationListener{
 
@@ -35,9 +33,7 @@ public class Game implements ApplicationListener{
 	
 	//variables about the current game. if any
 	public static String ipAddr;
-	public static int id;
-	public static String declineReason;
-	public static boolean play=false;
+	
 	
 	
 	
@@ -50,6 +46,7 @@ public class Game implements ApplicationListener{
 	public static AssetManager aManager;
 	public static MouseAim mouse;
 	public static Client client;
+	public static NetworkListener networkListener;
 	
 
 	
@@ -65,7 +62,7 @@ public class Game implements ApplicationListener{
 	    client.getKryo().register(Vector2.class);
 	    client.getKryo().register(NetworkPlayer.class);
 		new Thread(client).start();
-		client.addListener(new NetworkListener());
+		client.addListener(networkListener = new NetworkListener());
 		
 		
 		Gdx.input.setInputProcessor(new InputProcessor());
@@ -110,11 +107,6 @@ public class Game implements ApplicationListener{
 		gsm.render();
 		mouse.render(sb);
 		InputHandler.update();
-		if(play){ 
-			//we cant call gsmpushstate on the kyro listener because that listener is on the kyro thread wich doesent have opengl binds
-			play=false;
-			gsm.pushState(gsm.PLAY);
-		}
 	}
 	
 	public void pause() {}

@@ -66,13 +66,19 @@ public class Play extends GameState{
 	
 	public Play(GameStateManager gsm) {
 		super(gsm);
-		
-		playerList = new Array<B2DObject>();
 		world = new World(new Vector2(0, -9.81f), true);
 		world.setContactListener(cl = new MyContactListener());
+		player = new Player(world);
+		
+		synchronized(Game.networkListener){
+			Game.networkListener.notifyAll(); // a glorious warrior has born
+		}
+		
+		playerList = new Array<B2DObject>();
+
 		
 		//create player
-		player = new Player(world);
+
 		playerList.add(player);
 		
 		createTiles(); //fix this //tiled map
@@ -121,7 +127,8 @@ public class Play extends GameState{
 											 player.getName(),
 											 player.getBody().getPosition(),
 											 player.getArmDegrees(),
-											 player.getBody().getLinearVelocity());
+											 player.getBody().getLinearVelocity(),
+											 -1);
 
 		Game.client.sendTCP(np);
 		

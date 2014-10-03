@@ -16,6 +16,8 @@ public class IPmenu extends GameState{
 
 	boolean timerIsOn = false;
 	GameStateManager gsm;
+	public static String declineReason;
+	public static boolean play=false;
 	//this should be a fancy menu, but i just dont
 	public IPmenu(GameStateManager gsm) {
 		super(gsm);
@@ -29,7 +31,10 @@ public class IPmenu extends GameState{
 	}
 
 	public void update(float dt) {
-	
+		if(IPmenu.play){
+			play=false;
+			gsm.pushState(gsm.PLAY);
+		}
 	}
 
 	public void render() {
@@ -38,7 +43,7 @@ public class IPmenu extends GameState{
 		   
 		      if(!timerIsOn) {
 		    	try {
-					Game.client.connect(5000, Game.ipAddr, 54555, 54777);
+					Game.client.connect(15000, Game.ipAddr, 54555, 54777); // the ports and timeout should be global consts
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
@@ -55,13 +60,13 @@ public class IPmenu extends GameState{
 		            public void run() {
 		           
 		            	//timeout, plz advise user
+		            	//push menu
 		            }
 
 		         }, 15);
 		            
 		      } else if(Gdx.input.isTouched()) {
 		           Timer.instance().clear();
-		           System.err.println("Well shit :(");
 		           //we should push the menu state
 		           gsm.pushState(gsm.PLAY);
 		      }else{
