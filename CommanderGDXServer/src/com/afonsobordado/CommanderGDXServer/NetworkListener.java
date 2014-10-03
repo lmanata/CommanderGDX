@@ -54,30 +54,22 @@ public class NetworkListener extends Listener{
     		PacketNewPlayer pnp = new PacketNewPlayer();
     		pnp.np = newPlayer.getNetworkPlayer();
     		
-    		for(Connection c:GDXServer.server.getConnections()){
-    			c.sendTCP(pnp);
-    		}
+    		GDXServer.server.sendToAllExceptTCP(connection.getID(), pnp);
     		
     		
-
     		/*i could use the connection id as a Integer on the hashmap
     		 *but i don't know how kryonet handles id's and if for some reason it can colide with a previous value*/
     		GDXServer.PlayerList.put(GDXServer.PlayerList.size(), newPlayer);
-
     		
     		
     	} else if (object instanceof NetworkPlayer){
     		NetworkPlayer np = (NetworkPlayer) object;
+    		NetworkPlayer p  = GDXServer.PlayerList.get(np.id);
     		
-    		for(LocalServerPlayer p: GDXServer.PlayerList.values()){
-    			if(p.id == np.id && p.name.equals(np.name)){
-    				//interpolation plz
-    				p.armAngle = np.armAngle;
-    				p.linearVelocity = np.linearVelocity;
-    				p.pos = np.pos;
-    				
-    			}
-    		}
-       	}
-    }
+    		p.armAngle = np.armAngle;
+    		p.linearVelocity = np.linearVelocity;
+    		p.pos = np.pos;
+    	}
+	}
 }
+

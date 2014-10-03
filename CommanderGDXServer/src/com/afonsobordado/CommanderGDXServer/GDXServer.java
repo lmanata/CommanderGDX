@@ -20,9 +20,7 @@ public class GDXServer {
 	public static final float STEP = 1 / 60f;
 	
 	public static ConcurrentHashMap<Integer, LocalServerPlayer> PlayerList;
-	public static Server server;
-	//ConcurrentHashMap is better because it allows for 32 simultaneous write locks, lets hope that we don't exceed that
-	
+	public static Server server;	
 	
 	//current game vars
 	public static String currentMap = "level2";
@@ -30,7 +28,7 @@ public class GDXServer {
 	public static void main(String[] args){
 		//World world = new World(new Vector2(0, -9.81f), true); 
 		
-		PlayerList = new ConcurrentHashMap<Integer, LocalServerPlayer>();
+		PlayerList = new ConcurrentHashMap<Integer, LocalServerPlayer>(16, 0.9f, 2);
 	    server = new Server();
 	    server.getKryo().register(PacketConsoleMessage.class);
 	    server.getKryo().register(PacketHello.class);
@@ -55,7 +53,14 @@ public class GDXServer {
 	    
 	    server.addListener(new NetworkListener());
 		
-		for(;;);
+		for(;;){
+			if(System.currentTimeMillis() % 1000 == 0){
+				for(LocalServerPlayer lsp: GDXServer.PlayerList.values()){
+					//server.
+					System.out.println(lsp.name + ": " + lsp.id);
+				}
+			}
+		}
 		
 		
 	}

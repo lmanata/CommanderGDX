@@ -4,7 +4,7 @@ import com.afonsobordado.CommanderGDXServer.NetworkObjects.NetworkPlayer;
 import com.badlogic.gdx.math.Vector2;
 
 public class LocalServerPlayer extends NetworkPlayer{
-	int connectionID;
+	public int connectionID;
 
 	public LocalServerPlayer(int id, String name, Vector2 pos, float armAngle,Vector2 linearVelocity, int connectionID) {
 		this.id = id;
