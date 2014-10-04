@@ -1,8 +1,10 @@
 package com.afonsobordado.CommanderGDX.handlers;
 
+import com.afonsobordado.CommanderGDX.entities.player.LocalClientPlayer;
 import com.afonsobordado.CommanderGDX.packets.PacketAccepted;
 import com.afonsobordado.CommanderGDX.packets.PacketConsoleMessage;
 import com.afonsobordado.CommanderGDX.packets.PacketDeclined;
+import com.afonsobordado.CommanderGDX.packets.PacketDisconnect;
 import com.afonsobordado.CommanderGDX.packets.PacketNewPlayer;
 import com.afonsobordado.CommanderGDX.states.IPmenu;
 import com.afonsobordado.CommanderGDX.states.Play;
@@ -38,11 +40,18 @@ public class NetworkListener extends Listener{
 			IPmenu.play=false;
 			//pop back to the menu and present a decline reason
 		} else if (object instanceof PacketNewPlayer){
-			if(Play.playerList == null) return; //just to make sure we dont recieve random packets and cause null pointer exceptions
+			if(Play.playerList == null) return; //just to make sure we don't receive random packets and cause null pointer exceptions
+			
 			PacketNewPlayer pnp = (PacketNewPlayer) object;
-			//form new local player
-			Play.playerList.add(pnp.np);
+			LocalClientPlayer lcp = new  LocalClientPlayer(pnp.np);
+			
+			Play.playerList.put(pnp.np.id, lcp); //using the same id as the server prevents many array traversals
 			System.out.println("A Brave warrior has joined the struggle");
+			
+		} else if (object instanceof PacketDisconnect){
+			PacketDisconnect pd = (PacketDisconnect) object;
+			Play.playerList.remove(pd.np.id);
+			System.out.println("A faggot has quit! The reason \"" + pd.reason + "\" is not an acceptable reason");
 		}
 		
    }

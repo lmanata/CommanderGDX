@@ -1,25 +1,24 @@
 package com.afonsobordado.CommanderGDXServer;
 
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.concurrent.ConcurrentHashMap;
 
 import com.afonsobordado.CommanderGDX.packets.PacketAccepted;
 import com.afonsobordado.CommanderGDX.packets.PacketConsoleMessage;
 import com.afonsobordado.CommanderGDX.packets.PacketDeclined;
+import com.afonsobordado.CommanderGDX.packets.PacketDisconnect;
 import com.afonsobordado.CommanderGDX.packets.PacketHello;
 import com.afonsobordado.CommanderGDX.packets.PacketNewPlayer;
 import com.afonsobordado.CommanderGDX.packets.PacketPositionUpdate;
 import com.afonsobordado.CommanderGDXServer.LocalObjects.LocalServerPlayer;
 import com.afonsobordado.CommanderGDXServer.NetworkObjects.NetworkPlayer;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.World;
 import com.esotericsoftware.kryonet.Server;
 
 public class GDXServer {
 	public static final float STEP = 1 / 60f;
 	
-	public static ConcurrentHashMap<Integer, LocalServerPlayer> PlayerList;
+	public static ConcurrentHashMap<Integer, LocalServerPlayer> playerList;
 	public static Server server;	
 	
 	//current game vars
@@ -28,7 +27,7 @@ public class GDXServer {
 	public static void main(String[] args){
 		//World world = new World(new Vector2(0, -9.81f), true); 
 		
-		PlayerList = new ConcurrentHashMap<Integer, LocalServerPlayer>(16, 0.9f, 2);
+		playerList = new ConcurrentHashMap<Integer, LocalServerPlayer>(16, 0.9f, 2);
 	    server = new Server();
 	    server.getKryo().register(PacketConsoleMessage.class);
 	    server.getKryo().register(PacketHello.class);
@@ -38,6 +37,7 @@ public class GDXServer {
 	    server.getKryo().register(Vector2.class);
 	    server.getKryo().register(NetworkPlayer.class);
 	    server.getKryo().register(PacketNewPlayer.class);
+	    server.getKryo().register(PacketDisconnect.class);
 	    server.start();
 	    
 	    try {
@@ -55,9 +55,18 @@ public class GDXServer {
 		
 		for(;;){
 			if(System.currentTimeMillis() % 1000 == 0){
-				for(LocalServerPlayer lsp: GDXServer.PlayerList.values()){
-					//server.
-					System.out.println(lsp.name + ": " + lsp.id);
+				for(LocalServerPlayer lsp: GDXServer.playerList.values()){
+					System.out.println(lsp.name + ": " + lsp.id + " : X: " + lsp.pos.x + " Y: " + lsp.pos.y + " TimeOut: " + (System.currentTimeMillis()-lsp.lastPacketTime)); 
+					
+					if( (System.currentTimeMillis()-lsp.lastPacketTime) > GameVars.PLAYER_TIMEOUT){ //poll the timeout
+
+						PacketDisconnect pd = new PacketDisconnect();
+						pd.np = lsp.getNetworkPlayer();
+						pd.reason = "Timeout";
+						server.sendToAllTCP(pd);
+						
+						GDXServer.playerList.remove(lsp.id);
+					}
 				}
 			}
 		}

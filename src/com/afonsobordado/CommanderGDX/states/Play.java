@@ -1,7 +1,10 @@
 package com.afonsobordado.CommanderGDX.states;
 
+import java.util.concurrent.ConcurrentHashMap;
+
 import com.afonsobordado.CommanderGDX.Game;
 import com.afonsobordado.CommanderGDX.entities.UI.HUD;
+import com.afonsobordado.CommanderGDX.entities.player.LocalClientPlayer;
 import com.afonsobordado.CommanderGDX.entities.player.Player;
 import com.afonsobordado.CommanderGDX.handlers.GameStateManager;
 import com.afonsobordado.CommanderGDX.handlers.MyContactListener;
@@ -44,7 +47,7 @@ public class Play extends GameState{
 	public static Player player; // this is the local controllable player
 	
 	//using LibGdx array because according to libgdx is faster than ArrayList
-	public static Array<NetworkPlayer> playerList; // will probably be changed to clientPlayer or somthing like that
+	public static ConcurrentHashMap<Integer, LocalClientPlayer> playerList; // will probably be changed to clientPlayer or somthing like that
 	
 	private HUD hud;
 	public static String mapName = "level1";
@@ -60,7 +63,7 @@ public class Play extends GameState{
 			Game.networkListener.notifyAll(); // a glorious warrior has born
 		}
 		
-		playerList = new Array<NetworkPlayer>();
+		playerList = new ConcurrentHashMap<Integer, LocalClientPlayer>(16, 0.9f, 2);
 
 		
 		//create player

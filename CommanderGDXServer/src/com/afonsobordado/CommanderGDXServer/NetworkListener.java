@@ -13,6 +13,8 @@ import com.esotericsoftware.kryonet.Listener;
 
 public class NetworkListener extends Listener{
 	public void received (Connection connection, Object object) {
+		if(object == null) return;
+		
         if (object instanceof PacketConsoleMessage){
         	PacketConsoleMessage pcm = (PacketConsoleMessage) object;
         	System.out.println("[REMOTE]: " + pcm.message);
@@ -22,7 +24,7 @@ public class NetworkListener extends Listener{
     		String rejectReason = "";
     		PacketHello ph = (PacketHello) object;
     		
-    		for(NetworkPlayer p: GDXServer.PlayerList.values()){
+    		for(NetworkPlayer p: GDXServer.playerList.values()){
     			if(ph.name.equals(p.name)){
     				rejectReason = "Name Already Exists";
     				break;
@@ -40,11 +42,11 @@ public class NetworkListener extends Listener{
     		System.out.println("Client accepted: " + connection.getRemoteAddressTCP());
     		
     		PacketAccepted pa = new PacketAccepted();
-    		pa.id = GDXServer.PlayerList.size();
+    		pa.id = GDXServer.playerList.size();
     		pa.mapName = GDXServer.currentMap;
     		connection.sendTCP(pa);
     		
-    		LocalServerPlayer newPlayer = new LocalServerPlayer(GDXServer.PlayerList.size(),
+    		LocalServerPlayer newPlayer = new LocalServerPlayer(GDXServer.playerList.size(),
 																ph.name,
 																new Vector2(0,0),
 																0f,
@@ -59,16 +61,17 @@ public class NetworkListener extends Listener{
     		
     		/*i could use the connection id as a Integer on the hashmap
     		 *but i don't know how kryonet handles id's and if for some reason it can colide with a previous value*/
-    		GDXServer.PlayerList.put(GDXServer.PlayerList.size(), newPlayer);
+    		GDXServer.playerList.put(GDXServer.playerList.size(), newPlayer);
     		
     		
     	} else if (object instanceof NetworkPlayer){
     		NetworkPlayer np = (NetworkPlayer) object;
-    		NetworkPlayer p  = GDXServer.PlayerList.get(np.id);
+    		LocalServerPlayer p  = GDXServer.playerList.get(np.id);
     		
     		p.armAngle = np.armAngle;
     		p.linearVelocity = np.linearVelocity;
     		p.pos = np.pos;
+    		p.lastPacketTime = System.currentTimeMillis();
     	}
 	}
 }
