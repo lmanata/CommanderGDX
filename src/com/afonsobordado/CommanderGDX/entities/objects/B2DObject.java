@@ -13,7 +13,6 @@ public class B2DObject {
 	protected Body body;
 	protected Animation animation;
 	protected float width, height;
-	protected int ANIMATION_MAX_SPEED = 6;
 	
 	public B2DObject(){
 		animation = new Animation();

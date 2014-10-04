@@ -133,9 +133,10 @@ public class Player extends B2DObject{
 		
 		pc.setTorsoFrame( (int) InputHandler.mouseY / (Game.V_HEIGHT / 7)  );
 		pc.setArmRotation(armDegrees);
-		pc.setLegsDelay(Math.abs(1 / (body.getLinearVelocity().x * ANIMATION_MAX_SPEED)));
+		pc.setLegsDelay(Math.abs(1 / (body.getLinearVelocity().x * B2DVars.ANIMATION_MAX_SPEED)));
 		pc.setFlip(mousePos.x < (Game.V_WIDTH*Game.SCALE)/2);
 		
+		//System.out.println(armDegrees + 90);
 		
 		if(body.getLinearVelocity().x == 0 && body.getLinearVelocity().y == 0){ // stopped boddy
 			//pc.setLegsFrame(8);

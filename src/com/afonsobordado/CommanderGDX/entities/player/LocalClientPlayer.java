@@ -3,6 +3,7 @@ package com.afonsobordado.CommanderGDX.entities.player;
 import com.afonsobordado.CommanderGDX.Game;
 import com.afonsobordado.CommanderGDX.entities.characters.PlayerCharacter;
 import com.afonsobordado.CommanderGDX.handlers.Animation;
+import com.afonsobordado.CommanderGDX.handlers.InputHandler;
 import com.afonsobordado.CommanderGDX.packets.NetworkObject.NetworkPlayer;
 import com.afonsobordado.CommanderGDX.states.Play;
 import com.afonsobordado.CommanderGDX.vars.B2DVars;
@@ -93,6 +94,12 @@ public class LocalClientPlayer{
 	}
 	
 	public void update(float dt){
+		pc.setArmRotation(armAngle);
+		pc.setFlip(Math.abs(armAngle) >= 90);
+		pc.setLegsDelay(Math.abs(1 / (body.getLinearVelocity().x * B2DVars.ANIMATION_MAX_SPEED)));
+		/*pc.setTorsoFrame( (int) InputHandler.mouseY / (Game.V_HEIGHT / 7)  );*/
+		pc.setTorsoFrame((int) ((armAngle+90)%180) / 25 );
+	
 		pc.update(dt);
 	}
 	

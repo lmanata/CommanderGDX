@@ -48,9 +48,8 @@ public class Play extends GameState{
 	private OrthogonalTiledMapRenderer tmr;
 	
 	public static Player player; // this is the local controllable player
-	
-	//using LibGdx array because according to libgdx is faster than ArrayList
-	public static ConcurrentHashMap<Integer, LocalClientPlayer> playerList; // will probably be changed to clientPlayer or somthing like that
+
+	public static ConcurrentHashMap<Integer, LocalClientPlayer> playerList; // will probably be changed to clientPlayer or something like that
 	
 	private HUD hud;
 	public static String mapName = "level1";
@@ -128,6 +127,7 @@ public class Play extends GameState{
 
 		Game.client.sendTCP(np);
 		
+		System.out.println(playerList.size());
 		player.update(dt);
 		for(LocalClientPlayer lcp: playerList.values()){
 			lcp.update(dt);
