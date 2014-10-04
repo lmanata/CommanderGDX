@@ -48,7 +48,7 @@ public class NetworkListener extends Listener{
 			LocalClientPlayer lcp = new  LocalClientPlayer(pnp.np,Play.getWorld());
 			
 			Play.playerList.put(pnp.np.id, lcp); //using the same id as the server prevents many array traversals
-			System.out.println("A Brave warrior has joined the struggle");
+			System.out.println(pnp);
 		} else if (object instanceof NetworkPlayer){
 			NetworkPlayer np = (NetworkPlayer) object;
 			
@@ -61,12 +61,16 @@ public class NetworkListener extends Listener{
 
 			if(lcp == null) return; //we dont have the object yet
 			
-			lcp.updateNetworkPlayer(np);
+			synchronized(Play.getWorld()){
+				lcp.updateNetworkPlayer(np);
+			}
 			
 		} else if (object instanceof PacketDisconnect){
 			PacketDisconnect pd = (PacketDisconnect) object;
-			Play.playerList.remove(pd.np.id);
-			System.out.println("A faggot has quit! The reason \"" + pd.reason + "\" is not an acceptable reason");
+			//LocalClientPlayer lcp = Play.playerList.get(pd.np.id);
+			//lcp.destroy();
+			Play.playerList.remove(pd.np.id).destroy();
+			
 		}
 		
    }

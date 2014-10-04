@@ -74,5 +74,6 @@ public class Animation {
 	public void setPingPong(boolean pingPong) {this.pingPong = pingPong;}
 	public boolean isFowards() {return fowards;}
 	public void setFowards(boolean fowards) {this.fowards = fowards;}
+	public Animation getCopy(){return new Animation(frames);}
 	
 }

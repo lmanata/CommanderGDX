@@ -55,8 +55,12 @@ public class NetworkListener extends Listener{
     		
     		PacketNewPlayer pnp = new PacketNewPlayer();
     		pnp.np = newPlayer.getNetworkPlayer();
-    		
     		GDXServer.server.sendToAllExceptTCP(connection.getID(), pnp);
+    		
+    		for(LocalServerPlayer lsp: GDXServer.playerList.values()){
+    			pnp.np = lsp.getNetworkPlayer();
+    			connection.sendTCP(pnp);
+    		}
     		
     		
     		/*i could use the connection id as a Integer on the hashmap

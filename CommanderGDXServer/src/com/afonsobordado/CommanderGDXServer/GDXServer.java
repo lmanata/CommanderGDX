@@ -67,7 +67,6 @@ public class GDXServer {
 						GDXServer.playerList.remove(lsp.id);
 						continue;
 					}
-					
 					server.sendToAllUDP(lsp.getNetworkPlayer());
 					
 				}

@@ -34,7 +34,7 @@ import com.badlogic.gdx.utils.Array;
 
 public class Play extends GameState{
 
-	private boolean debug = false;
+	private boolean debug = true;
 	private FPSLogger fps;
 	private Box2DDebugRenderer b2dr;
 	private OrthographicCamera b2dCam;
@@ -116,8 +116,9 @@ public class Play extends GameState{
 
 	public void update(float dt) {
 		handleInput();
-		
-		world.step(dt, 6, 2);
+		synchronized(Play.getWorld()){
+			world.step(dt, 6, 2);
+		}
 		
 		NetworkPlayer np = new NetworkPlayer(player.getId(),
 											 player.getName(),
@@ -127,8 +128,8 @@ public class Play extends GameState{
 
 		Game.client.sendTCP(np);
 		
-		System.out.println(playerList.size());
 		player.update(dt);
+		//if(System.currentTimeMillis()%33 == 0)System.out.println(playerList.size());
 		for(LocalClientPlayer lcp: playerList.values()){
 			lcp.update(dt);
 		}
@@ -168,7 +169,7 @@ public class Play extends GameState{
 		hud.render(sb);
 		
 		if(debug){
-			fps.log();
+			//fps.log();
 			b2dCam.position.set( player.getBody().getPosition().x,
 								 player.getBody().getPosition().y,
 								 0 );

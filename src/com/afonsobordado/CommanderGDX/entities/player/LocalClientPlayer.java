@@ -1,15 +1,10 @@
 package com.afonsobordado.CommanderGDX.entities.player;
 
-import com.afonsobordado.CommanderGDX.Game;
 import com.afonsobordado.CommanderGDX.entities.characters.PlayerCharacter;
-import com.afonsobordado.CommanderGDX.handlers.Animation;
-import com.afonsobordado.CommanderGDX.handlers.InputHandler;
 import com.afonsobordado.CommanderGDX.packets.NetworkObject.NetworkPlayer;
 import com.afonsobordado.CommanderGDX.states.Play;
 import com.afonsobordado.CommanderGDX.vars.B2DVars;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
@@ -33,12 +28,12 @@ public class LocalClientPlayer{
 		
 		createBody(world);
 		
-		pc = new PlayerCharacter(Play.legsRun,
-				 Play.torsoAnim,
-				 Play.arms,
-				 new Vector2(8,16), //torsoPin
-				 new Vector2(4,4), //armPin
-				 body);
+		pc = new PlayerCharacter(Play.legsRun.getCopy(),
+								 Play.torsoAnim.getCopy(),
+								 Play.arms.getCopy(),
+								 new Vector2(8,16), //torsoPin
+								 new Vector2(4,4), //armPin
+								 body);
 		
 		body.setLinearVelocity(np.linearVelocity);
 		body.setTransform(np.pos, body.getAngle());
@@ -73,7 +68,7 @@ public class LocalClientPlayer{
 		shape.setAsBox(13 / B2DVars.PPM, 26 / B2DVars.PPM);
 		fdef.shape = shape;
 		fdef.filter.categoryBits = B2DVars.BIT_PLAYER;
-		fdef.filter.maskBits = B2DVars.BIT_GROUND;
+		fdef.filter.maskBits = B2DVars.BIT_GROUND | B2DVars.BIT_PLAYER;
 		
 		body.createFixture(fdef).setUserData("player");
 		
@@ -81,10 +76,9 @@ public class LocalClientPlayer{
 		shape.setAsBox(13 / B2DVars.PPM, 2 / B2DVars.PPM, new Vector2(0, -26 / B2DVars.PPM), 0);
 		fdef.shape = shape;
 		fdef.filter.categoryBits = B2DVars.BIT_PLAYER;
-		fdef.filter.maskBits = B2DVars.BIT_GROUND;
+		fdef.filter.maskBits = B2DVars.BIT_GROUND | B2DVars.BIT_PLAYER;
 		fdef.isSensor = true;
 		body.createFixture(fdef).setUserData("foot");
-		shape.dispose();
 	}
 	
 	public void render(SpriteBatch sb) {
@@ -97,10 +91,13 @@ public class LocalClientPlayer{
 		pc.setArmRotation(armAngle);
 		pc.setFlip(Math.abs(armAngle) >= 90);
 		pc.setLegsDelay(Math.abs(1 / (body.getLinearVelocity().x * B2DVars.ANIMATION_MAX_SPEED)));
-		/*pc.setTorsoFrame( (int) InputHandler.mouseY / (Game.V_HEIGHT / 7)  );*/
 		pc.setTorsoFrame((int) ((armAngle+90)%180) / 25 );
 	
 		pc.update(dt);
+	}
+	
+	public void destroy(){
+		body.getWorld().destroyBody(body);
 	}
 	
 }

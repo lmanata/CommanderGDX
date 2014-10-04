@@ -52,7 +52,7 @@ public class Player extends B2DObject{
 		shape.setAsBox(13 / B2DVars.PPM, 26 / B2DVars.PPM);
 		fdef.shape = shape;
 		fdef.filter.categoryBits = B2DVars.BIT_PLAYER;
-		fdef.filter.maskBits = B2DVars.BIT_GROUND;
+		fdef.filter.maskBits = B2DVars.BIT_GROUND | B2DVars.BIT_PLAYER;
 		
 		body.createFixture(fdef).setUserData("player");
 		
@@ -60,16 +60,15 @@ public class Player extends B2DObject{
 		shape.setAsBox(13 / B2DVars.PPM, 2 / B2DVars.PPM, new Vector2(0, -26 / B2DVars.PPM), 0);
 		fdef.shape = shape;
 		fdef.filter.categoryBits = B2DVars.BIT_PLAYER;
-		fdef.filter.maskBits = B2DVars.BIT_GROUND;
+		fdef.filter.maskBits = B2DVars.BIT_GROUND | B2DVars.BIT_PLAYER;
 		fdef.isSensor = true;
 		body.createFixture(fdef).setUserData("foot");
 		body.setUserData(this);
 		
-		shape.dispose();
 		
-		pc = new PlayerCharacter(Play.legsRun,
-								 Play.torsoAnim,
-								 Play.arms,
+		pc = new PlayerCharacter(Play.legsRun.getCopy(),
+								 Play.torsoAnim.getCopy(),
+								 Play.arms.getCopy(),
 								 new Vector2(8,16), //torsoPin
 								 new Vector2(4,4), //armPin
 								 body);
@@ -90,12 +89,11 @@ public class Player extends B2DObject{
 		Vector2 vel = body.getLinearVelocity();
 		Vector2 pos = body.getPosition();
 		
-		if(grounded) 
+		if(grounded){
 			lastGroundTime = System.nanoTime();
-		else
-			if(System.nanoTime() - lastGroundTime < 100000000)
-				grounded = true;
-		
+		}else{
+			if(System.nanoTime() - lastGroundTime < 100000000) grounded = true;
+		}
 		if(Math.abs(vel.x) > PLAYER_MAX_VELOCITY){ 
 			vel.x = Math.signum(vel.x) * PLAYER_MAX_VELOCITY;
 			body.setLinearVelocity(vel.x,vel.y);
@@ -135,9 +133,7 @@ public class Player extends B2DObject{
 		pc.setArmRotation(armDegrees);
 		pc.setLegsDelay(Math.abs(1 / (body.getLinearVelocity().x * B2DVars.ANIMATION_MAX_SPEED)));
 		pc.setFlip(mousePos.x < (Game.V_WIDTH*Game.SCALE)/2);
-		
-		//System.out.println(armDegrees + 90);
-		
+				
 		if(body.getLinearVelocity().x == 0 && body.getLinearVelocity().y == 0){ // stopped boddy
 			//pc.setLegsFrame(8);
 			pc.setLegsDelay(0);
