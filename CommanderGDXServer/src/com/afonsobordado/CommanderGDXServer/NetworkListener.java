@@ -67,6 +67,7 @@ public class NetworkListener extends Listener{
     	} else if (object instanceof NetworkPlayer){
     		NetworkPlayer np = (NetworkPlayer) object;
     		LocalServerPlayer p  = GDXServer.playerList.get(np.id);
+    		if(p.connectionID != connection.getID()) return;
     		
     		p.armAngle = np.armAngle;
     		p.linearVelocity = np.linearVelocity;

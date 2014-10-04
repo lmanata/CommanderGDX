@@ -6,6 +6,7 @@ import com.afonsobordado.CommanderGDX.packets.PacketConsoleMessage;
 import com.afonsobordado.CommanderGDX.packets.PacketDeclined;
 import com.afonsobordado.CommanderGDX.packets.PacketDisconnect;
 import com.afonsobordado.CommanderGDX.packets.PacketNewPlayer;
+import com.afonsobordado.CommanderGDX.packets.NetworkObject.NetworkPlayer;
 import com.afonsobordado.CommanderGDX.states.IPmenu;
 import com.afonsobordado.CommanderGDX.states.Play;
 import com.esotericsoftware.kryonet.Connection;
@@ -47,6 +48,14 @@ public class NetworkListener extends Listener{
 			
 			Play.playerList.put(pnp.np.id, lcp); //using the same id as the server prevents many array traversals
 			System.out.println("A Brave warrior has joined the struggle");
+		} else if (object instanceof NetworkPlayer){
+			NetworkPlayer np = (NetworkPlayer) object;
+			LocalClientPlayer lcp = Play.playerList.get(np.id);
+			if(lcp == null) return; //we dont have the object yet
+			
+			lcp.linearVelocity = np.linearVelocity;
+			lcp.pos = np.pos;
+			lcp.armAngle = np.armAngle;
 			
 		} else if (object instanceof PacketDisconnect){
 			PacketDisconnect pd = (PacketDisconnect) object;

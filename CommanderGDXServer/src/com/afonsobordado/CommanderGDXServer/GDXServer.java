@@ -54,7 +54,7 @@ public class GDXServer {
 	    server.addListener(new NetworkListener());
 		
 		for(;;){
-			if(System.currentTimeMillis() % 1000 == 0){
+			if(System.currentTimeMillis() % 50 == 0){
 				for(LocalServerPlayer lsp: GDXServer.playerList.values()){
 					System.out.println(lsp.name + ": " + lsp.id + " : X: " + lsp.pos.x + " Y: " + lsp.pos.y + " TimeOut: " + (System.currentTimeMillis()-lsp.lastPacketTime)); 
 					
@@ -64,9 +64,12 @@ public class GDXServer {
 						pd.np = lsp.getNetworkPlayer();
 						pd.reason = "Timeout";
 						server.sendToAllTCP(pd);
-						
 						GDXServer.playerList.remove(lsp.id);
+						continue;
 					}
+					
+					server.sendToAllUDP(lsp.getNetworkPlayer());
+					
 				}
 			}
 		}

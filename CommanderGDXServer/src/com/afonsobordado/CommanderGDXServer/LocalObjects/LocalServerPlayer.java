@@ -14,6 +14,7 @@ public class LocalServerPlayer extends NetworkPlayer{
 		this.armAngle = armAngle;
 		this.linearVelocity = linearVelocity;
 		this.connectionID = connectionID;
+		this.lastPacketTime = System.currentTimeMillis();
 	}
 	
 	public NetworkPlayer getNetworkPlayer(){

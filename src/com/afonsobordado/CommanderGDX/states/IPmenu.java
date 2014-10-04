@@ -36,7 +36,7 @@ public class IPmenu extends GameState{
 	public void update(float dt) {
 		if(IPmenu.play){
 			play=false;
-			gsm.pushState(gsm.PLAY);
+			gsm.pushState(GameStateManager.PLAY);
 		}
 	}
 
