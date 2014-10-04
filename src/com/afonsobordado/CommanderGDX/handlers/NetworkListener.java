@@ -41,21 +41,27 @@ public class NetworkListener extends Listener{
 			IPmenu.play=false;
 			//pop back to the menu and present a decline reason
 		} else if (object instanceof PacketNewPlayer){
-			if(Play.playerList == null) return; //just to make sure we don't receive random packets and cause null pointer exceptions
-			
 			PacketNewPlayer pnp = (PacketNewPlayer) object;
-			LocalClientPlayer lcp = new  LocalClientPlayer(pnp.np);
+			if(Play.playerList == null) return; //just to make sure we don't receive random packets and cause null pointer exception
+			if(pnp.np.id == Play.player.id) return; //this is the local player, we shouldn't get this anyway
+			
+			LocalClientPlayer lcp = new  LocalClientPlayer(pnp.np,Play.getWorld());
 			
 			Play.playerList.put(pnp.np.id, lcp); //using the same id as the server prevents many array traversals
 			System.out.println("A Brave warrior has joined the struggle");
 		} else if (object instanceof NetworkPlayer){
 			NetworkPlayer np = (NetworkPlayer) object;
+			
+			if(np.id == Play.player.id){
+				//check for inaccuracies
+				return;
+			}
+			
 			LocalClientPlayer lcp = Play.playerList.get(np.id);
+
 			if(lcp == null) return; //we dont have the object yet
 			
-			lcp.linearVelocity = np.linearVelocity;
-			lcp.pos = np.pos;
-			lcp.armAngle = np.armAngle;
+			lcp.updateNetworkPlayer(np);
 			
 		} else if (object instanceof PacketDisconnect){
 			PacketDisconnect pd = (PacketDisconnect) object;

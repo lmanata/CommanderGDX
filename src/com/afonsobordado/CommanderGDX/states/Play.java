@@ -6,6 +6,7 @@ import com.afonsobordado.CommanderGDX.Game;
 import com.afonsobordado.CommanderGDX.entities.UI.HUD;
 import com.afonsobordado.CommanderGDX.entities.player.LocalClientPlayer;
 import com.afonsobordado.CommanderGDX.entities.player.Player;
+import com.afonsobordado.CommanderGDX.handlers.Animation;
 import com.afonsobordado.CommanderGDX.handlers.GameStateManager;
 import com.afonsobordado.CommanderGDX.handlers.MyContactListener;
 import com.afonsobordado.CommanderGDX.packets.NetworkObject.NetworkPlayer;
@@ -14,6 +15,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.FPSLogger;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell;
@@ -36,7 +39,7 @@ public class Play extends GameState{
 	private Box2DDebugRenderer b2dr;
 	private OrthographicCamera b2dCam;
 	
-	private World world;
+	private static World world;
 	
 	private MyContactListener cl;
 	
@@ -52,9 +55,31 @@ public class Play extends GameState{
 	private HUD hud;
 	public static String mapName = "level1";
 	
+	//animations
+	public static Animation legsRun;
+	public static Animation torsoAnim;
+	public static Animation arms;
 	
 	public Play(GameStateManager gsm) {
 		super(gsm);
+		
+		TextureRegion[] torsoAnimTR = new TextureRegion[8];
+		for(int i = 0;i<8;i++) 
+			torsoAnimTR[i] = new TextureRegion(Game.aManager.get("res/animations/soldier/torso/torso"+i+".png", Texture.class));
+		
+		TextureRegion[] legsRunTR = new TextureRegion[8];
+		for(int i=0;i<8;i++)
+			legsRunTR[i] = new TextureRegion(Game.aManager.get("res/animations/soldier/legsRun/legsRun"+i+".png", Texture.class));
+		
+		TextureRegion[] armsTR = new TextureRegion[30];
+		for(int i=0; i < 30; i++) 
+			armsTR[i] = new TextureRegion(Game.aManager.get("res/animations/soldier/arms/"+i+".png", Texture.class));
+		
+		
+		Play.legsRun = new Animation(legsRunTR);
+		Play.torsoAnim = new Animation(torsoAnimTR);
+		Play.arms = new Animation(armsTR);
+		
 		world = new World(new Vector2(0, -9.81f), true);
 		world.setContactListener(cl = new MyContactListener());
 		player = new Player(world);
@@ -64,13 +89,11 @@ public class Play extends GameState{
 		}
 		
 		playerList = new ConcurrentHashMap<Integer, LocalClientPlayer>(16, 0.9f, 2);
-
-		
-		//create player
-
 		
 		createTiles(); //fix this //tiled map
 		hud = new HUD(player);
+		
+
 	    
 		if(debug){
 			b2dr = new Box2DDebugRenderer();
@@ -106,6 +129,9 @@ public class Play extends GameState{
 		Game.client.sendTCP(np);
 		
 		player.update(dt);
+		for(LocalClientPlayer lcp: playerList.values()){
+			lcp.update(dt);
+		}
 		
 		
 		Array<Body> bodies = cl.getBodiesToRemove();
@@ -133,6 +159,9 @@ public class Play extends GameState{
 		//draw players
 		sb.setProjectionMatrix(cam.combined);
 		player.render(sb);
+		for(LocalClientPlayer lcp: playerList.values()){
+			lcp.render(sb);
+		}
 		
 		//draw hud
 		sb.setProjectionMatrix(hudCam.combined);
@@ -217,6 +246,10 @@ public class Play extends GameState{
 				}
 			}
 			
+	}
+	
+	public static World getWorld(){
+		return world;
 	}
 	
 	

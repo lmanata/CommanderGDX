@@ -7,6 +7,7 @@ import com.afonsobordado.CommanderGDX.entities.characters.PlayerCharacter;
 import com.afonsobordado.CommanderGDX.entities.objects.B2DObject;
 import com.afonsobordado.CommanderGDX.handlers.Animation;
 import com.afonsobordado.CommanderGDX.handlers.InputHandler;
+import com.afonsobordado.CommanderGDX.states.Play;
 import com.afonsobordado.CommanderGDX.vars.B2DVars;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
@@ -64,22 +65,11 @@ public class Player extends B2DObject{
 		body.createFixture(fdef).setUserData("foot");
 		body.setUserData(this);
 		
-		TextureRegion[] torsoAnim = new TextureRegion[8];
-		for(int i = 0;i<8;i++) 
-			torsoAnim[i] = new TextureRegion(Game.aManager.get("res/animations/soldier/torso/torso"+i+".png", Texture.class));
+		shape.dispose();
 		
-		TextureRegion[] legsRun = new TextureRegion[8];
-		for(int i=0;i<8;i++)
-			legsRun[i] = new TextureRegion(Game.aManager.get("res/animations/soldier/legsRun/legsRun"+i+".png", Texture.class));
-		
-		TextureRegion[] arms = new TextureRegion[30];
-		for(int i=0; i < 30; i++) 
-			arms[i] = new TextureRegion(Game.aManager.get("res/animations/soldier/arms/"+i+".png", Texture.class));
-		
-		
-		pc = new PlayerCharacter(new Animation(legsRun),
-								 new Animation(torsoAnim),
-								 new Animation(arms),
+		pc = new PlayerCharacter(Play.legsRun,
+								 Play.torsoAnim,
+								 Play.arms,
 								 new Vector2(8,16), //torsoPin
 								 new Vector2(4,4), //armPin
 								 body);

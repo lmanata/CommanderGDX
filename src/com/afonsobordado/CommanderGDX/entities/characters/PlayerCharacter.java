@@ -54,7 +54,7 @@ public class PlayerCharacter {
 	}
 	
 	public void render(SpriteBatch sb) {
-		
+
 		sb.draw(legs.getFrame(),
 				body.getPosition().x * B2DVars.PPM - legs.getFrame().getRegionWidth() / 2,
 				(body.getPosition().y * B2DVars.PPM - legs.getFrame().getRegionHeight() / 2) - (torso.getFrame().getRegionHeight() /2));

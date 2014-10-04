@@ -46,7 +46,7 @@ public class IPmenu extends GameState{
 		   
 		      if(!timerIsOn) {
 		    	try {
-					Game.client.connect(15000, Game.ipAddr, 54555, 54777); // the ports and timeout should be global consts
+					Game.client.connect(15000, Game.ipAddr, 1337, 1337); // the ports and timeout should be global consts
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
@@ -77,8 +77,6 @@ public class IPmenu extends GameState{
 		           Timer.instance().clear();
 		           //we should push the menu state
 		           gsm.pushState(gsm.PLAY);
-		      }else{
-		    	  
 		      }
 	}
 

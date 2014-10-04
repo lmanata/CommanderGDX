@@ -27,7 +27,7 @@ public class GDXServer {
 	public static void main(String[] args){
 		//World world = new World(new Vector2(0, -9.81f), true); 
 		
-		playerList = new ConcurrentHashMap<Integer, LocalServerPlayer>(16, 0.9f, 2);
+		playerList = new ConcurrentHashMap<Integer, LocalServerPlayer>(16, 0.9f, 2);// 2 concurrent threads is a worst case scenario
 	    server = new Server();
 	    server.getKryo().register(PacketConsoleMessage.class);
 	    server.getKryo().register(PacketHello.class);
@@ -41,7 +41,7 @@ public class GDXServer {
 	    server.start();
 	    
 	    try {
-			server.bind(54555, 54777);
+			server.bind(1337, 1337);
 		} catch (IOException e) {
 			System.err.println("Could not bind to port!\n"
 							+  "You may have another service is using it.\n");
@@ -56,7 +56,7 @@ public class GDXServer {
 		for(;;){
 			if(System.currentTimeMillis() % 50 == 0){
 				for(LocalServerPlayer lsp: GDXServer.playerList.values()){
-					System.out.println(lsp.name + ": " + lsp.id + " : X: " + lsp.pos.x + " Y: " + lsp.pos.y + " TimeOut: " + (System.currentTimeMillis()-lsp.lastPacketTime)); 
+					//System.out.println(lsp.name + ": " + lsp.id + " : X: " + lsp.pos.x + " Y: " + lsp.pos.y + " TimeOut: " + (System.currentTimeMillis()-lsp.lastPacketTime)); 
 					
 					if( (System.currentTimeMillis()-lsp.lastPacketTime) > GameVars.PLAYER_TIMEOUT){ //poll the timeout
 
