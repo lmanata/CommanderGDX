@@ -66,12 +66,12 @@ public class Player extends B2DObject{
 		body.setUserData(this);
 		
 		
-		pc = new PlayerCharacter(Play.legsRun.getCopy(),
-								 Play.torsoAnim.getCopy(),
-								 Play.arms.getCopy(),
+		pc = new PlayerCharacter(new Animation(Play.legsRunTR),
+								 new Animation(Play.torsoAnimTR),
+								 new Animation(Play.armsTR),
 								 new Vector2(8,16), //torsoPin
 								 new Vector2(4,4), //armPin
-								 body);
+								 this.body);
 	}
 	
 	public Player(Body body) {
@@ -132,8 +132,8 @@ public class Player extends B2DObject{
 		pc.setTorsoFrame( (int) InputHandler.mouseY / (Game.V_HEIGHT / 7)  );
 		pc.setArmRotation(armDegrees);
 		pc.setLegsDelay(Math.abs(1 / (body.getLinearVelocity().x * B2DVars.ANIMATION_MAX_SPEED)));
-		pc.setFlip(mousePos.x < (Game.V_WIDTH*Game.SCALE)/2);
-				
+		pc.setFlip(Math.abs(armDegrees) >= 90);	
+		
 		if(body.getLinearVelocity().x == 0 && body.getLinearVelocity().y == 0){ // stopped boddy
 			//pc.setLegsFrame(8);
 			pc.setLegsDelay(0);

@@ -1,6 +1,7 @@
 package com.afonsobordado.CommanderGDX.entities.characters;
 
 import com.afonsobordado.CommanderGDX.handlers.Animation;
+import com.afonsobordado.CommanderGDX.states.Play;
 import com.afonsobordado.CommanderGDX.vars.B2DVars;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
@@ -54,17 +55,16 @@ public class PlayerCharacter {
 	}
 	
 	public void render(SpriteBatch sb) {
+	//	System.out.println(body + " : " + isFlip + " : ");
 
 		sb.draw(legs.getFrame(),
 				body.getPosition().x * B2DVars.PPM - legs.getFrame().getRegionWidth() / 2,
 				(body.getPosition().y * B2DVars.PPM - legs.getFrame().getRegionHeight() / 2) - (torso.getFrame().getRegionHeight() /2));
 		
 		
-		
 		sb.draw(torso.getFrame(),
 				body.getPosition().x * B2DVars.PPM - legs.getFrame().getRegionWidth() / 2,
 				body.getPosition().y * B2DVars.PPM - legs.getFrame().getRegionHeight() / 2);
-		
 		
 		
 		float armX = (body.getPosition().x * B2DVars.PPM - legs.getFrame().getRegionWidth() / 2) +//origianl torso pos
@@ -76,17 +76,17 @@ public class PlayerCharacter {
 					torsoPin.y +
 					armPin.y; 
 		
+		//if(this.equals(Play.player.pc)) System.out.println(isFlip);
 		sb.draw(arm.getFrame(),
 				armX,
 				armY,
-				((isFlip) ? arm.getFrame().getRegionWidth() - armPin.x : armPin.x) ,
+				((isFlip) ? (arm.getFrame().getRegionWidth() - armPin.x) : armPin.x) ,
 				arm.getFrame().getRegionHeight()-armPin.y,
 				arm.getFrame().getRegionWidth(),
 				arm.getFrame().getRegionHeight(),
 				1,
 				1,
 				armRotation - ((isFlip) ? 180 : 0));
-		
 		
 	}
 	

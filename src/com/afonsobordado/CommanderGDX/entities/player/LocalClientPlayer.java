@@ -1,6 +1,8 @@
 package com.afonsobordado.CommanderGDX.entities.player;
 
 import com.afonsobordado.CommanderGDX.entities.characters.PlayerCharacter;
+import com.afonsobordado.CommanderGDX.handlers.Animation;
+import com.afonsobordado.CommanderGDX.packets.PacketNewPlayer;
 import com.afonsobordado.CommanderGDX.packets.NetworkObject.NetworkPlayer;
 import com.afonsobordado.CommanderGDX.states.Play;
 import com.afonsobordado.CommanderGDX.vars.B2DVars;
@@ -8,9 +10,9 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
-import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.World;
 
 public class LocalClientPlayer{
@@ -21,22 +23,22 @@ public class LocalClientPlayer{
 	private Body body;
 	private PlayerCharacter pc;
 	
-	public LocalClientPlayer(NetworkPlayer np,World world) {
-		this.armAngle = np.armAngle;
-		this.id = np.id;
-		this.name = np.name;
+	public LocalClientPlayer(PacketNewPlayer pnp,World world) {
+		this.armAngle = pnp.np.armAngle;
+		this.id = pnp.np.id;
+		this.name = pnp.np.name;
 		
 		createBody(world);
 		
-		pc = new PlayerCharacter(Play.legsRun.getCopy(),
-								 Play.torsoAnim.getCopy(),
-								 Play.arms.getCopy(),
+		pc = new PlayerCharacter(new Animation(Play.legsRunTR),
+								 new Animation(Play.torsoAnimTR),
+								 new Animation(Play.armsTR),
 								 new Vector2(8,16), //torsoPin
 								 new Vector2(4,4), //armPin
-								 body);
+								 this.body);
 		
-		body.setLinearVelocity(np.linearVelocity);
-		body.setTransform(np.pos, body.getAngle());
+		body.setLinearVelocity(pnp.np.linearVelocity);
+		body.setTransform(pnp.np.pos, body.getAngle());
 		body.setUserData(this); //circular refrences
 	}
 	
@@ -89,12 +91,10 @@ public class LocalClientPlayer{
 	}
 	
 	public void update(float dt){
-		//pc.setArmRotation(armAngle);
 		pc.setArmRotation(armAngle);
 		pc.setFlip(Math.abs(armAngle) >= 90);
 		pc.setLegsDelay(Math.abs(1 / (body.getLinearVelocity().x * B2DVars.ANIMATION_MAX_SPEED)));
 		pc.setTorsoFrame((int) (Math.abs((armAngle-90))%180) / 25 );
-	
 		pc.update(dt);
 	}
 	

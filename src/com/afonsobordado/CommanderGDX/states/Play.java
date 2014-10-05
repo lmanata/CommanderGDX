@@ -55,29 +55,25 @@ public class Play extends GameState{
 	public static String mapName = "level1";
 	
 	//animations
-	public static Animation legsRun;
-	public static Animation torsoAnim;
-	public static Animation arms;
+	public static TextureRegion[] torsoAnimTR;
+	public static TextureRegion[] legsRunTR;
+	public static TextureRegion[] armsTR; 
 	
 	public Play(GameStateManager gsm) {
 		super(gsm);
 		
-		TextureRegion[] torsoAnimTR = new TextureRegion[8];
+		torsoAnimTR = new TextureRegion[8];
 		for(int i = 0;i<8;i++) 
 			torsoAnimTR[i] = new TextureRegion(Game.aManager.get("res/animations/soldier/torso/torso"+i+".png", Texture.class));
 		
-		TextureRegion[] legsRunTR = new TextureRegion[8];
+		legsRunTR = new TextureRegion[8];
 		for(int i=0;i<8;i++)
 			legsRunTR[i] = new TextureRegion(Game.aManager.get("res/animations/soldier/legsRun/legsRun"+i+".png", Texture.class));
 		
-		TextureRegion[] armsTR = new TextureRegion[30];
+		armsTR = new TextureRegion[30];
 		for(int i=0; i < 30; i++) 
 			armsTR[i] = new TextureRegion(Game.aManager.get("res/animations/soldier/arms/"+i+".png", Texture.class));
 		
-		
-		Play.legsRun = new Animation(legsRunTR);
-		Play.torsoAnim = new Animation(torsoAnimTR);
-		Play.arms = new Animation(armsTR);
 		
 		world = new World(new Vector2(0, -9.81f), true);
 		world.setContactListener(cl = new MyContactListener());
@@ -120,6 +116,8 @@ public class Play extends GameState{
 			world.step(dt, 6, 2);
 		}
 		
+		player.update(dt);
+		
 		NetworkPlayer np = new NetworkPlayer(player.getId(),
 											 player.getName(),
 											 player.getBody().getPosition(),
@@ -128,11 +126,10 @@ public class Play extends GameState{
 
 		Game.client.sendTCP(np);
 		
-		player.update(dt);
+		
 		//if(System.currentTimeMillis()%33 == 0)System.out.println(playerList.size());
 		for(LocalClientPlayer lcp: playerList.values()){
 			lcp.update(dt);
-			
 		}
 		
 		
