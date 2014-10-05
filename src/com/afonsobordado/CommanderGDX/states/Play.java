@@ -132,6 +132,7 @@ public class Play extends GameState{
 		//if(System.currentTimeMillis()%33 == 0)System.out.println(playerList.size());
 		for(LocalClientPlayer lcp: playerList.values()){
 			lcp.update(dt);
+			
 		}
 		
 		

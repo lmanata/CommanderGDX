@@ -62,7 +62,7 @@ public class Player extends B2DObject{
 		fdef.filter.categoryBits = B2DVars.BIT_PLAYER;
 		fdef.filter.maskBits = B2DVars.BIT_GROUND | B2DVars.BIT_PLAYER;
 		fdef.isSensor = true;
-		body.createFixture(fdef).setUserData("foot");
+		body.createFixture(fdef).setUserData("footPlayer");
 		body.setUserData(this);
 		
 		

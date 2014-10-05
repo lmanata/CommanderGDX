@@ -70,7 +70,6 @@ public class NetworkListener extends Listener{
 			//LocalClientPlayer lcp = Play.playerList.get(pd.np.id);
 			//lcp.destroy();
 			Play.playerList.remove(pd.np.id).destroy();
-			
 		}
 		
    }

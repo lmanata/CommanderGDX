@@ -3,6 +3,7 @@ package com.afonsobordado.CommanderGDXServer;
 import com.afonsobordado.CommanderGDX.packets.PacketAccepted;
 import com.afonsobordado.CommanderGDX.packets.PacketConsoleMessage;
 import com.afonsobordado.CommanderGDX.packets.PacketDeclined;
+import com.afonsobordado.CommanderGDX.packets.PacketDisconnect;
 import com.afonsobordado.CommanderGDX.packets.PacketHello;
 import com.afonsobordado.CommanderGDX.packets.PacketNewPlayer;
 import com.afonsobordado.CommanderGDXServer.LocalObjects.LocalServerPlayer;
@@ -77,6 +78,11 @@ public class NetworkListener extends Listener{
     		p.linearVelocity = np.linearVelocity;
     		p.pos = np.pos;
     		p.lastPacketTime = System.currentTimeMillis();
+    	} else if (object instanceof PacketDisconnect){
+    		//untested
+    		PacketDisconnect pd = (PacketDisconnect) object;
+    		GDXServer.playerList.remove(pd.np.id);
+    		GDXServer.server.sendToAllExceptTCP(connection.getID(), pd);
     	}
 	}
 }

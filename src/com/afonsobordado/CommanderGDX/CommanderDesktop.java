@@ -40,6 +40,7 @@ public class CommanderDesktop {
 		cfg.width = Game.V_WIDTH * Game.SCALE;
 		cfg.height = Game.V_HEIGHT * Game.SCALE;
 		cfg.vSyncEnabled = false;
+		cfg.resizable = false;
 		/*cfg.foregroundFPS = 80;*/
 		/*cfg.backgroundFPS = 0;*/
 		

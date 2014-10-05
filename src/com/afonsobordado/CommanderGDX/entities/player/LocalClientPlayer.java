@@ -43,6 +43,7 @@ public class LocalClientPlayer{
 	public void updateNetworkPlayer(NetworkPlayer np){
 		body.setLinearVelocity(np.linearVelocity);
 		body.setTransform(np.pos, body.getAngle());
+		this.armAngle = np.armAngle;
 	}
 	
 	public NetworkPlayer getNetworkPlayer(){
@@ -88,10 +89,11 @@ public class LocalClientPlayer{
 	}
 	
 	public void update(float dt){
+		//pc.setArmRotation(armAngle);
 		pc.setArmRotation(armAngle);
 		pc.setFlip(Math.abs(armAngle) >= 90);
 		pc.setLegsDelay(Math.abs(1 / (body.getLinearVelocity().x * B2DVars.ANIMATION_MAX_SPEED)));
-		pc.setTorsoFrame((int) ((armAngle+90)%180) / 25 );
+		pc.setTorsoFrame((int) (Math.abs((armAngle-90))%180) / 25 );
 	
 		pc.update(dt);
 	}

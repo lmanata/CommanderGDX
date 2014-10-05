@@ -26,8 +26,8 @@ public class MyContactListener implements ContactListener{
 		
 		if(fa == null || fb == null) return;
 		
-		if((fa.getUserData() != null && fa.getUserData().equals("foot")) || //if any is the foot
-		   (fb.getUserData() != null && fb.getUserData().equals("foot")) ){
+		if((fa.getUserData() != null && fa.getUserData().equals("footPlayer")) || //if any is the foot
+		   (fb.getUserData() != null && fb.getUserData().equals("footPlayer")) ){
 			numFootContacts++;
 		}
 
@@ -43,8 +43,8 @@ public class MyContactListener implements ContactListener{
 		
 		if(fa == null || fb == null) return;
 		
-		if((fa.getUserData() != null && fa.getUserData().equals("foot")) || //if any is the foot
-		   (fb.getUserData() != null && fb.getUserData().equals("foot")) ){
+		if((fa.getUserData() != null && fa.getUserData().equals("footPlayer")) || //if any is the foot
+		   (fb.getUserData() != null && fb.getUserData().equals("footPlayer")) ){
 			numFootContacts--;
 		}
 
