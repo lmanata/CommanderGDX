@@ -75,7 +75,7 @@ public class IPmenu extends GameState{
 		      } else if(Gdx.input.isTouched()) {
 		           Timer.instance().clear();
 		           //we should push the menu state
-		           gsm.pushState(gsm.PLAY);
+		           gsm.pushState(GameStateManager.PLAY);
 		      }
 	}
 

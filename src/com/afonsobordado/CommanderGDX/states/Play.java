@@ -6,7 +6,6 @@ import com.afonsobordado.CommanderGDX.Game;
 import com.afonsobordado.CommanderGDX.entities.UI.HUD;
 import com.afonsobordado.CommanderGDX.entities.player.LocalClientPlayer;
 import com.afonsobordado.CommanderGDX.entities.player.Player;
-import com.afonsobordado.CommanderGDX.handlers.Animation;
 import com.afonsobordado.CommanderGDX.handlers.GameStateManager;
 import com.afonsobordado.CommanderGDX.handlers.MyContactListener;
 import com.afonsobordado.CommanderGDX.packets.NetworkObject.NetworkPlayer;
@@ -15,8 +14,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.FPSLogger;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell;
@@ -35,6 +32,7 @@ import com.badlogic.gdx.utils.Array;
 public class Play extends GameState{
 
 	private boolean debug = true;
+	@SuppressWarnings("unused") //we use the fps object if debug is true
 	private FPSLogger fps;
 	private Box2DDebugRenderer b2dr;
 	private OrthographicCamera b2dCam;

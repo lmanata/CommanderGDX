@@ -1,7 +1,6 @@
 package com.afonsobordado.CommanderGDX.entities.characters;
 
 import com.afonsobordado.CommanderGDX.handlers.Animation;
-import com.afonsobordado.CommanderGDX.states.Play;
 import com.afonsobordado.CommanderGDX.vars.B2DVars;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;

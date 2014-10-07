@@ -1,7 +1,6 @@
 package com.afonsobordado.CommanderGDX.handlers;
 
 import com.afonsobordado.CommanderGDX.vars.KeyboardVars;
-import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputAdapter;
 
 public class InputProcessor extends InputAdapter{

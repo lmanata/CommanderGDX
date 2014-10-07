@@ -1,7 +1,5 @@
 package com.afonsobordado.CommanderGDX;
 
-import org.lwjgl.LWJGLException;
-
 import com.afonsobordado.CommanderGDX.handlers.GameStateManager;
 import com.afonsobordado.CommanderGDX.handlers.InputHandler;
 import com.afonsobordado.CommanderGDX.handlers.InputProcessor;
@@ -12,10 +10,8 @@ import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.esotericsoftware.kryonet.Client;
 

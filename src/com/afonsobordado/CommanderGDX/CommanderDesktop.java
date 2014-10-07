@@ -1,13 +1,5 @@
 package com.afonsobordado.CommanderGDX;
 
-import java.nio.IntBuffer;
-
-import org.lwjgl.BufferUtils;
-import org.lwjgl.LWJGLException;
-import org.lwjgl.input.Mouse;
-
-import com.badlogic.gdx.Application.ApplicationType;
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 
