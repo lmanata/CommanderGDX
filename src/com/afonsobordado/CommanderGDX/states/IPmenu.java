@@ -3,12 +3,11 @@ package com.afonsobordado.CommanderGDX.states;
 import java.io.IOException;
 import java.math.BigInteger;
 import java.security.SecureRandom;
-import java.util.Random;
-import java.util.Scanner;
 
 import com.afonsobordado.CommanderGDX.Game;
 import com.afonsobordado.CommanderGDX.handlers.GameStateManager;
 import com.afonsobordado.CommanderGDX.packets.PacketHello;
+import com.afonsobordado.CommanderGDX.vars.CVars;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.utils.Timer;
@@ -46,9 +45,9 @@ public class IPmenu extends GameState{
 		   
 		      if(!timerIsOn) {
 		    	try {
-					Game.client.connect(15000, Game.ipAddr, 1337, 1337); // the ports and timeout should be global consts
+					Game.client.connect(5000, Game.ipAddr, CVars.SERVER_TCP_PORT, CVars.SERVER_UDP_PORT); 
 				} catch (IOException e) {
-					e.printStackTrace();
+					System.out.println(e.getMessage());
 				}
 		    	
 		    	  
@@ -71,7 +70,7 @@ public class IPmenu extends GameState{
 		            	//push menu
 		            }
 
-		         }, 15);
+		         }, 5);
 		            
 		      } else if(Gdx.input.isTouched()) {
 		           Timer.instance().clear();

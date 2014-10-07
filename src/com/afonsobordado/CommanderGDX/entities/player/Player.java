@@ -148,14 +148,14 @@ public class Player extends B2DObject{
 		pc.setLegsDelay(Math.abs(1 / (body.getLinearVelocity().x * B2DVars.ANIMATION_MAX_SPEED)));
 		pc.setFlip(Math.abs(armDegrees) >= 90);	
 		
-		armDegrees += 90;
-		armDegrees += ((armDegrees<0)   ? 360: 0);
-		if(armDegrees>180){
-			armDegrees -=  180; //this might seem counter-intuitive but trust me, its right
-			armDegrees = 180-armDegrees;
+		float armDegreesTemp = armDegrees+90; // we need to create a temp var so that the original armDegrees is sent over the network
+		armDegreesTemp  += ((armDegreesTemp <0)   ? 360: 0);
+		if(armDegreesTemp >180){
+			armDegreesTemp  -=  180; //this might seem counter-intuitive but trust me, its right
+			armDegreesTemp  = 180-armDegreesTemp ;
 		}
 
-		pc.setTorsoFrame((int) (7-(armDegrees/22))); //TODO: needs smoothing
+		pc.setTorsoFrame((int) (7-(armDegreesTemp /22))); //TODO: needs smoothing
 		//System.out.println((int) (7-(armDegrees/22)));
 		
 		if(body.getLinearVelocity().x == 0 && body.getLinearVelocity().y == 0){ // stopped boddy

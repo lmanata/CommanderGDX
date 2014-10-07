@@ -12,25 +12,6 @@ import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 
 public class CommanderDesktop {
-	public static org.lwjgl.input.Cursor emptyCursor;
-	
-	public static void setHWCursorVisible(boolean visible) throws LWJGLException {
-		if (Gdx.app.getType() != ApplicationType.Desktop && Gdx.app instanceof LwjglApplication)
-			return;
-		if (emptyCursor == null) {
-			if (Mouse.isCreated()) {
-				int min = org.lwjgl.input.Cursor.getMinCursorSize();
-				IntBuffer tmp = BufferUtils.createIntBuffer(min * min);
-				emptyCursor = new org.lwjgl.input.Cursor(min, min, min / 2, min / 2, 1, tmp, null);
-			} else {
-				throw new LWJGLException(
-						"Could not create empty cursor before Mouse object is created");
-			}
-		}
-		if (Mouse.isInsideWindow())
-			Mouse.setNativeCursor(visible ? null : emptyCursor);
-	}
-
 	public static void main(String[] args){
 		
 		LwjglApplicationConfiguration cfg =

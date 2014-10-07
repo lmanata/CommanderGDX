@@ -20,14 +20,14 @@ import com.badlogic.gdx.physics.box2d.World;
 
 public class LocalClientPlayer{
 
-	public float armAngle;
+	public float armDegrees;
 	public int id;
 	public String name;
 	private Body body;
 	private PlayerCharacter pc;
 	
 	public LocalClientPlayer(PacketNewPlayer pnp,World world) {
-		this.armAngle = pnp.np.armAngle;
+		this.armDegrees = pnp.np.armAngle;
 		this.id = pnp.np.id;
 		this.name = pnp.np.name;
 		
@@ -65,14 +65,14 @@ public class LocalClientPlayer{
 	public void updateNetworkPlayer(NetworkPlayer np){
 		body.setLinearVelocity(np.linearVelocity);
 		body.setTransform(np.pos, body.getAngle());
-		this.armAngle = np.armAngle;
+		this.armDegrees = np.armAngle;
 	}
 	
 	public NetworkPlayer getNetworkPlayer(){
 		return new NetworkPlayer(id,
 								 name,
 								 body.getPosition(),
-								 armAngle,
+								 armDegrees,
 								 body.getLinearVelocity());
 	}
 	
@@ -111,11 +111,18 @@ public class LocalClientPlayer{
 	}
 	
 	public void update(float dt){
-		pc.setArmRotation(armAngle);
-		pc.setFlip(Math.abs(armAngle) >= 90);
+		pc.setArmRotation(armDegrees);
+		pc.setFlip(Math.abs(armDegrees) >= 90);
 		pc.setLegsDelay(Math.abs(1 / (body.getLinearVelocity().x * B2DVars.ANIMATION_MAX_SPEED)));
-		pc.setTorsoFrame((int) (Math.abs((armAngle-90))%180) / 25 );
-		//System.out.println((int) (Math.abs((armAngle-90))%180) / 25);
+		
+		float armDegreesTemp = armDegrees+90; // we need to create a temp var so that the original armDegrees is sent over the network
+		armDegreesTemp  += ((armDegreesTemp <0)   ? 360: 0);
+		if(armDegreesTemp >180){
+			armDegreesTemp  -=  180; //this might seem counter-intuitive but trust me, its right
+			armDegreesTemp  = 180-armDegreesTemp ;
+		}
+
+		pc.setTorsoFrame((int) (7-(armDegreesTemp /22))); //TODO: needs smoothing
 		
 		if(body.getLinearVelocity().x == 0 && body.getLinearVelocity().y == 0){ // stopped boddy
 			//pc.setLegsFrame(8);

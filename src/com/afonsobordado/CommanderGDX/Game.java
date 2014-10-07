@@ -2,7 +2,6 @@ package com.afonsobordado.CommanderGDX;
 
 import org.lwjgl.LWJGLException;
 
-import com.afonsobordado.CommanderGDX.entities.mouse.MouseAim;
 import com.afonsobordado.CommanderGDX.handlers.GameStateManager;
 import com.afonsobordado.CommanderGDX.handlers.InputHandler;
 import com.afonsobordado.CommanderGDX.handlers.InputProcessor;
@@ -13,6 +12,7 @@ import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -44,7 +44,6 @@ public class Game implements ApplicationListener{
 	private GameStateManager gsm;
 	
 	public static AssetManager aManager;
-	public static MouseAim mouse;
 	public static Client client;
 	public static NetworkListener networkListener;
 	
@@ -85,10 +84,11 @@ public class Game implements ApplicationListener{
 		loadAssets(); // will block the aplication until is done loading
 		
 		
-		mouse = new MouseAim(TextureRegion.split(Game.aManager.get("res/images/crystal.png", Texture.class), 16, 16)[0], 1/12f);
-		try {	
-			CommanderDesktop.setHWCursorVisible(false);
-		} catch (LWJGLException e) {e.printStackTrace();}
+		/*Pixmap pm = new Pixmap(Gdx.files.internal("res/images/crystal.png"));
+        int xHotSpot = pm.getWidth() / 2;
+        int yHotSpot = pm.getHeight() / 2;
+        Gdx.input.setCursorImage(pm, xHotSpot, yHotSpot);
+        pm.dispose();*/
 		
 		sb = new SpriteBatch();
 		cam = new OrthographicCamera();
@@ -105,9 +105,7 @@ public class Game implements ApplicationListener{
 	public void render() {
 		Gdx.graphics.setTitle(TITLE + " -- FPS: " + Gdx.graphics.getFramesPerSecond());
 		gsm.update(Gdx.graphics.getDeltaTime());
-		mouse.update(Gdx.graphics.getDeltaTime());
 		gsm.render();
-		mouse.render(sb);
 		InputHandler.update();
 	}
 	

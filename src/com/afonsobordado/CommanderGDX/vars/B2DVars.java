@@ -16,4 +16,6 @@ public class B2DVars {
 	public static final float PLAYER_WALK_FORCE = 0.1f;
 
 	public static final int ANIMATION_MAX_SPEED = 6;
+	
+
 }
