@@ -45,9 +45,11 @@ public class PlayerCharacter {
 		if(isFlip && !torso.getFrame().isFlipX()) torso.getFrame().flip(true, false);
 		if(isFlip && !arm.getFrame().isFlipX()) arm.getFrame().flip(true, false);
 		
+		
 		if(!isFlip && legs.getFrame().isFlipX()) legs.getFrame().flip(true, false);
 		if(!isFlip && torso.getFrame().isFlipX()) torso.getFrame().flip(true, false);
 		if(!isFlip && arm.getFrame().isFlipX()) arm.getFrame().flip(true, false);
+		
 		/*flip if required*/
 		
 		legs.update(dt);		
@@ -55,8 +57,6 @@ public class PlayerCharacter {
 	}
 	
 	public void render(SpriteBatch sb) {
-	//	System.out.println(body + " : " + isFlip + " : ");
-
 		sb.draw(legs.getFrame(),
 				body.getPosition().x * B2DVars.PPM - legs.getFrame().getRegionWidth() / 2,
 				(body.getPosition().y * B2DVars.PPM - legs.getFrame().getRegionHeight() / 2) - (torso.getFrame().getRegionHeight() /2));

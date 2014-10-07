@@ -55,24 +55,12 @@ public class Play extends GameState{
 	public static String mapName = "level1";
 	
 	//animations
-	public static TextureRegion[] torsoAnimTR;
-	public static TextureRegion[] legsRunTR;
-	public static TextureRegion[] armsTR; 
+
 	
 	public Play(GameStateManager gsm) {
 		super(gsm);
 		
-		torsoAnimTR = new TextureRegion[8];
-		for(int i = 0;i<8;i++) 
-			torsoAnimTR[i] = new TextureRegion(Game.aManager.get("res/animations/soldier/torso/torso"+i+".png", Texture.class));
 		
-		legsRunTR = new TextureRegion[8];
-		for(int i=0;i<8;i++)
-			legsRunTR[i] = new TextureRegion(Game.aManager.get("res/animations/soldier/legsRun/legsRun"+i+".png", Texture.class));
-		
-		armsTR = new TextureRegion[30];
-		for(int i=0; i < 30; i++) 
-			armsTR[i] = new TextureRegion(Game.aManager.get("res/animations/soldier/arms/"+i+".png", Texture.class));
 		
 		
 		world = new World(new Vector2(0, -9.81f), true);

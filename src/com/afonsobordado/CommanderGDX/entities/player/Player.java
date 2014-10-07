@@ -9,7 +9,6 @@ import com.afonsobordado.CommanderGDX.handlers.Animation;
 import com.afonsobordado.CommanderGDX.handlers.InputHandler;
 import com.afonsobordado.CommanderGDX.states.Play;
 import com.afonsobordado.CommanderGDX.vars.B2DVars;
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -66,9 +65,26 @@ public class Player extends B2DObject{
 		body.setUserData(this);
 		
 		
-		pc = new PlayerCharacter(new Animation(Play.legsRunTR),
-								 new Animation(Play.torsoAnimTR),
-								 new Animation(Play.armsTR),
+		TextureRegion[] torsoAnimTR;
+		TextureRegion[] legsRunTR;
+		TextureRegion[] armsTR;
+		
+		torsoAnimTR = new TextureRegion[8];
+		for(int i = 0;i<8;i++) 
+			torsoAnimTR[i] = new TextureRegion(Game.aManager.get("res/animations/soldier/torso/torso"+i+".png", Texture.class));
+		
+		legsRunTR = new TextureRegion[8];
+		for(int i=0;i<8;i++)
+			legsRunTR[i] = new TextureRegion(Game.aManager.get("res/animations/soldier/legsRun/legsRun"+i+".png", Texture.class));
+		
+		armsTR = new TextureRegion[30];
+		for(int i=0; i < 30; i++) 
+			armsTR[i] = new TextureRegion(Game.aManager.get("res/animations/soldier/arms/"+i+".png", Texture.class));
+		
+		
+		pc = new PlayerCharacter(new Animation(legsRunTR),
+								 new Animation(torsoAnimTR),
+								 new Animation(armsTR),
 								 new Vector2(8,16), //torsoPin
 								 new Vector2(4,4), //armPin
 								 this.body);
@@ -125,14 +141,22 @@ public class Player extends B2DObject{
 	public void update(float dt){
 
 		Vector2 pos = new Vector2((Game.V_WIDTH*Game.SCALE)/2, (Game.V_HEIGHT*Game.SCALE)/2); 
-		
 		Vector2 mousePos = new Vector2(InputHandler.mouseX, (Game.V_HEIGHT*Game.SCALE) - InputHandler.mouseY);
 		armDegrees = (float) Math.toDegrees(Math.atan2((mousePos.y - pos.y), (mousePos.x - pos.x)));
-		
-		pc.setTorsoFrame( (int) InputHandler.mouseY / (Game.V_HEIGHT / 7)  );
+
 		pc.setArmRotation(armDegrees);
 		pc.setLegsDelay(Math.abs(1 / (body.getLinearVelocity().x * B2DVars.ANIMATION_MAX_SPEED)));
 		pc.setFlip(Math.abs(armDegrees) >= 90);	
+		
+		armDegrees += 90;
+		armDegrees += ((armDegrees<0)   ? 360: 0);
+		if(armDegrees>180){
+			armDegrees -=  180; //this might seem counter-intuitive but trust me, its right
+			armDegrees = 180-armDegrees;
+		}
+
+		pc.setTorsoFrame((int) (7-(armDegrees/22))); //TODO: needs smoothing
+		//System.out.println((int) (7-(armDegrees/22)));
 		
 		if(body.getLinearVelocity().x == 0 && body.getLinearVelocity().y == 0){ // stopped boddy
 			//pc.setLegsFrame(8);

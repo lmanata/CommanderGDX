@@ -1,12 +1,15 @@
 package com.afonsobordado.CommanderGDX.entities.player;
 
+import com.afonsobordado.CommanderGDX.Game;
 import com.afonsobordado.CommanderGDX.entities.characters.PlayerCharacter;
 import com.afonsobordado.CommanderGDX.handlers.Animation;
 import com.afonsobordado.CommanderGDX.packets.PacketNewPlayer;
 import com.afonsobordado.CommanderGDX.packets.NetworkObject.NetworkPlayer;
 import com.afonsobordado.CommanderGDX.states.Play;
 import com.afonsobordado.CommanderGDX.vars.B2DVars;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
@@ -30,9 +33,26 @@ public class LocalClientPlayer{
 		
 		createBody(world);
 		
-		pc = new PlayerCharacter(new Animation(Play.legsRunTR),
-								 new Animation(Play.torsoAnimTR),
-								 new Animation(Play.armsTR),
+		TextureRegion[] torsoAnimTR;
+		TextureRegion[] legsRunTR;
+		TextureRegion[] armsTR;
+		
+		torsoAnimTR = new TextureRegion[8];
+		for(int i = 0;i<8;i++) 
+			torsoAnimTR[i] = new TextureRegion(Game.aManager.get("res/animations/soldier/torso/torso"+i+".png", Texture.class));
+		
+		legsRunTR = new TextureRegion[8];
+		for(int i=0;i<8;i++)
+			legsRunTR[i] = new TextureRegion(Game.aManager.get("res/animations/soldier/legsRun/legsRun"+i+".png", Texture.class));
+		
+		armsTR = new TextureRegion[30];
+		for(int i=0; i < 30; i++) 
+			armsTR[i] = new TextureRegion(Game.aManager.get("res/animations/soldier/arms/"+i+".png", Texture.class));
+		
+		
+		pc = new PlayerCharacter(new Animation(legsRunTR),
+								 new Animation(torsoAnimTR),
+								 new Animation(armsTR),
 								 new Vector2(8,16), //torsoPin
 								 new Vector2(4,4), //armPin
 								 this.body);
@@ -95,6 +115,19 @@ public class LocalClientPlayer{
 		pc.setFlip(Math.abs(armAngle) >= 90);
 		pc.setLegsDelay(Math.abs(1 / (body.getLinearVelocity().x * B2DVars.ANIMATION_MAX_SPEED)));
 		pc.setTorsoFrame((int) (Math.abs((armAngle-90))%180) / 25 );
+		//System.out.println((int) (Math.abs((armAngle-90))%180) / 25);
+		
+		if(body.getLinearVelocity().x == 0 && body.getLinearVelocity().y == 0){ // stopped boddy
+			//pc.setLegsFrame(8);
+			pc.setLegsDelay(0);
+		}else if(body.getLinearVelocity().x != 0 && body.getLinearVelocity().y != 0){ // jumping body
+			//pc.setLegsFrame(4); //this is just a random one that looks good while on air
+			pc.setLegsDelay(0);
+		}else{
+			// if the body has speed against the legs animations
+			pc.setFoward(!( (pc.isFlip() && body.getLinearVelocity().x >= 0) || (!pc.isFlip() && body.getLinearVelocity().x < 0) ));
+		}
+		
 		pc.update(dt);
 	}
 	
