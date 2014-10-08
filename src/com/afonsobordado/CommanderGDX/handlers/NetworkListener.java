@@ -50,25 +50,13 @@ public class NetworkListener extends Listener{
 			Play.playerList.put(pnp.np.id, lcp); //using the same id as the server prevents many array traversals
 		} else if (object instanceof NetworkPlayer){
 			NetworkPlayer np = (NetworkPlayer) object;
-			try{
-			if(np.id == Play.player.id){
-				//check for inaccuracies
-				return;
-			}
-			}catch(NullPointerException e){
-				e.printStackTrace();
-				System.out.println("Packet: " + np);
-				System.out.println("ID: " + np.id);
-				System.out.println("armAngle: " + np.armAngle);
-				System.out.println("name: " + np.name);
-				System.out.println("linearVelocity: " + np.linearVelocity);
-				System.out.println("linearVelocityX: " + np.linearVelocity.x);
-				System.out.println("linearVelocityY: " + np.linearVelocity.y);
-				System.out.println("Position: " + np.pos);
-				System.out.println("PositionX: " + np.pos.x);
-				System.out.println("PositionY: " + np.pos.y);
-				
-			}
+			
+			if(Play.player == null) return;//there is a chance that we receive a NetworkPacket before the player is created
+				if(np.id == Play.player.id){
+					//check for inaccuracies
+					return;
+				}
+			
 			LocalClientPlayer lcp = Play.playerList.get(np.id);
 
 			if(lcp == null) return; //we dont have the object yet
