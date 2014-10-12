@@ -9,6 +9,7 @@ public class Weapon {
 	private short coolDown;
 	private long nextTimeShoot;
 	private boolean canShoot;
+	private Bullet bullet;
 	
 	public Weapon(Animation animation, short coolDown){
 		this.animation = animation;
