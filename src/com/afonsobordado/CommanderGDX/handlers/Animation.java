@@ -67,6 +67,12 @@ public class Animation {
 			currentFrame = frame;
 		}
 	}
+	public void flipAllFrames(boolean x, boolean y){
+		for(TextureRegion frame: frames){
+			frame.flip(x, y);
+		}
+	}
+	
 	public TextureRegion getFrame(){return frames[currentFrame];}
 	public float getDelay() {return delay;}
 	public void setDelay(float delay) {this.delay = delay;}
@@ -75,5 +81,6 @@ public class Animation {
 	public boolean isFowards() {return fowards;}
 	public void setFowards(boolean fowards) {this.fowards = fowards;}
 	public Animation getCopy(){return new Animation(frames);}
+
 	
 }

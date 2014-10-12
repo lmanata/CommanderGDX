@@ -129,6 +129,7 @@ public class Play extends GameState{
 	
 	public void render() {
 		//clear
+		Gdx.gl20.glClearColor(1,0,0,1);
 		Gdx.gl20.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		
 		//camera to follow player
@@ -138,8 +139,8 @@ public class Play extends GameState{
 		cam.update();
 		
 		//draw tile map
-		tmr.setView(cam);
-		tmr.render();
+		/*tmr.setView(cam);
+		tmr.render();*/
 		
 		//draw players
 		sb.setProjectionMatrix(cam.combined);
@@ -149,8 +150,8 @@ public class Play extends GameState{
 		}
 		
 		//draw hud
-		sb.setProjectionMatrix(hudCam.combined);
-		hud.render(sb);
+		/*sb.setProjectionMatrix(hudCam.combined);
+		hud.render(sb);*/
 		
 		if(debug){
 			//fps.log();

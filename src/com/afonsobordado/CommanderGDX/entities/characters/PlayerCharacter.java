@@ -1,5 +1,6 @@
 package com.afonsobordado.CommanderGDX.entities.characters;
 
+import com.afonsobordado.CommanderGDX.entities.weapons.Weapon;
 import com.afonsobordado.CommanderGDX.handlers.Animation;
 import com.afonsobordado.CommanderGDX.vars.B2DVars;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -7,24 +8,37 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 
 public class PlayerCharacter {
+	private Animation legsIdle;
+	private Animation legsJump;
 	private Animation legs;
 	private Animation torso;
 	private Animation arm;
 	private Vector2 torsoPin;
 	private Vector2 armPin;
+	private Vector2 weaponPin; //where the weapon should be pinned in relation to the end of the arm
 	private float armRotation;
 
+	
+	
 	private boolean isFlip;
+	private boolean isAir;
 
-
+	private boolean isIdle;
+	
+	
+	private Weapon weapon;
 	private Body body;
 	
 	
-	public PlayerCharacter(Animation legs,
+	public PlayerCharacter(Animation legsIdle,
+						   Animation legsJump,
+						   Animation legs,
 						   Animation torso,
 						   Animation arm,
 						   Vector2 torsoPin,
 						   Vector2 armPin,
+						   Vector2 weaponPin,
+						   Weapon weapon,
 						   Body body)
 	{
 		this.legs = legs;
@@ -32,7 +46,11 @@ public class PlayerCharacter {
 		this.arm = arm;
 		this.torsoPin = torsoPin;
 		this.armPin = armPin;
+		this.weaponPin = weaponPin;
 		this.body = body;
+		this.weapon = weapon;
+		this.legsIdle = legsIdle;
+		this.legsJump = legsJump;
 		arm.setFrame(8);
 		isFlip = false;
 
@@ -40,14 +58,19 @@ public class PlayerCharacter {
 	
 	
 	public void update(float dt){
-		if(isFlip && !legs.getFrame().isFlipX()) legs.getFrame().flip(true, false);
-		if(isFlip && !torso.getFrame().isFlipX()) torso.getFrame().flip(true, false);
-		if(isFlip && !arm.getFrame().isFlipX()) arm.getFrame().flip(true, false);
+		if(isFlip && !legs.getFrame().isFlipX()) legs.flipAllFrames(true, false);
+		if(isFlip && !torso.getFrame().isFlipX()) torso.flipAllFrames(true, false);
+		if(isFlip && !arm.getFrame().isFlipX()) arm.flipAllFrames(true, false);
+		if(isFlip && !legsIdle.getFrame().isFlipX()) legsIdle.flipAllFrames(true, false);
+		if(isFlip && !legsJump.getFrame().isFlipX()) legsJump.flipAllFrames(true, false);
+		if(isFlip && !weapon.getFrame().isFlipX()) weapon.getAnimation().flipAllFrames(true, false);
 		
-		
-		if(!isFlip && legs.getFrame().isFlipX()) legs.getFrame().flip(true, false);
-		if(!isFlip && torso.getFrame().isFlipX()) torso.getFrame().flip(true, false);
-		if(!isFlip && arm.getFrame().isFlipX()) arm.getFrame().flip(true, false);
+		if(!isFlip && legs.getFrame().isFlipX()) legs.flipAllFrames(true, false);
+		if(!isFlip && torso.getFrame().isFlipX()) torso.flipAllFrames(true, false);
+		if(!isFlip && arm.getFrame().isFlipX()) arm.flipAllFrames(true, false);
+		if(!isFlip && legsIdle.getFrame().isFlipX()) legsIdle.flipAllFrames(true, false);
+		if(!isFlip && legsJump.getFrame().isFlipX()) legsJump.flipAllFrames(true, false);
+		if(!isFlip && weapon.getFrame().isFlipX()) weapon.getAnimation().flipAllFrames(true, false);
 		
 		/*flip if required*/
 		
@@ -56,36 +79,79 @@ public class PlayerCharacter {
 	}
 	
 	public void render(SpriteBatch sb) {
-		sb.draw(legs.getFrame(),
-				body.getPosition().x * B2DVars.PPM - legs.getFrame().getRegionWidth() / 2,
-				(body.getPosition().y * B2DVars.PPM - legs.getFrame().getRegionHeight() / 2) - (torso.getFrame().getRegionHeight() /2));
+		Vector2 drawPos = new Vector2(body.getPosition().x * B2DVars.PPM - legs.getFrame().getRegionWidth() / 2,
+									 (body.getPosition().y * B2DVars.PPM) - ((torso.getFrame().getRegionHeight()+legs.getFrame().getRegionHeight())/2) );
+		if(isIdle){
+			sb.draw(legsIdle.getFrame(),
+					drawPos.x,
+					drawPos.y);
+		}else if(isAir){
+			sb.draw(legsJump.getFrame(),
+					drawPos.x,
+					drawPos.y);
+		}else{
+			sb.draw(legs.getFrame(),
+					drawPos.x,
+					drawPos.y);
+		}
+		
+		drawPos.y += legs.getFrame().getRegionHeight();
 		
 		
 		sb.draw(torso.getFrame(),
-				body.getPosition().x * B2DVars.PPM - legs.getFrame().getRegionWidth() / 2,
-				body.getPosition().y * B2DVars.PPM - legs.getFrame().getRegionHeight() / 2);
+				drawPos.x,
+				drawPos.y);
 		
+		drawPos.y += (torsoPin.y-armPin.y);
 		
-		float armX = (body.getPosition().x * B2DVars.PPM - legs.getFrame().getRegionWidth() / 2) +//origianl torso pos
-				   torsoPin.x - // with this the corner of our image would go on the torso pin pos
-				   armPin.x - // we now offset by the arm pin, so they match
-				   ((isFlip) ? arm.getFrame().getRegionWidth()/2 : 0);
+		if(!isFlip){
+			drawPos.x += (torsoPin.x-armPin.x); 
+		}else{
+			drawPos.x += (torso.getFrame().getRegionWidth() - arm.getFrame().getRegionWidth()) - (armPin.x); //doubt this code
+		}
 		
-		float armY = (body.getPosition().y * B2DVars.PPM - legs.getFrame().getRegionHeight() / 2) - // same as above
-					torsoPin.y +
-					armPin.y; 
-		
-		//if(this.equals(Play.player.pc)) System.out.println(isFlip);
 		sb.draw(arm.getFrame(),
-				armX,
-				armY,
+				drawPos.x,
+				drawPos.y,
 				((isFlip) ? (arm.getFrame().getRegionWidth() - armPin.x) : armPin.x) ,
-				arm.getFrame().getRegionHeight()-armPin.y,
+				armPin.y,
 				arm.getFrame().getRegionWidth(),
 				arm.getFrame().getRegionHeight(),
 				1,
 				1,
 				armRotation - ((isFlip) ? 180 : 0));
+		
+		//http://math.stackexchange.com/questions/475917/how-to-find-position-of-a-point-based-on-known-angle-radius-and-center-of-rotat
+		
+		
+		/*float tempArmRot = armRotation + ((armRotation<0) ? 360 : 0);
+		
+		drawPos.x += arm.getFrame().getRegionWidth() * Math.cos(Math.toRadians(tempArmRot));
+		drawPos.y += arm.getFrame().getRegionWidth() * Math.sin(Math.toRadians(tempArmRot));
+		
+		sb.draw(weapon.getFrame(),
+				drawPos.x,
+				drawPos.y,
+				weaponPin.x,
+				weaponPin.y,
+				weapon.getFrame().getRegionWidth(),
+				weapon.getFrame().getRegionHeight(),
+				1,
+				1,
+				0);
+		
+		/*sb.draw(weapon.getFrame(),
+				0,
+				0,
+				weaponPin.x,
+				weaponPin.y,
+				weapon.getFrame().getRegionWidth(),
+				weapon.getFrame().getRegionHeight(),
+				1,
+				1,
+				armRotation);*/
+		
+
 		
 	}
 	
@@ -126,5 +192,14 @@ public class PlayerCharacter {
 	public boolean isFoward(){
 		return legs.isFowards();
 	}
+	public void setAir(boolean isAir) {
+		this.isAir = isAir;
+	}
+
+
+	public void setIdle(boolean isIdle) {
+		this.isIdle = isIdle;
+	}
+
 	
 }

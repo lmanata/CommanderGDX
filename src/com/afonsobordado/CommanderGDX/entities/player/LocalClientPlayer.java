@@ -2,6 +2,7 @@ package com.afonsobordado.CommanderGDX.entities.player;
 
 import com.afonsobordado.CommanderGDX.Game;
 import com.afonsobordado.CommanderGDX.entities.characters.PlayerCharacter;
+import com.afonsobordado.CommanderGDX.entities.weapons.Weapon;
 import com.afonsobordado.CommanderGDX.handlers.Animation;
 import com.afonsobordado.CommanderGDX.packets.PacketNewPlayer;
 import com.afonsobordado.CommanderGDX.packets.NetworkObject.NetworkPlayer;
@@ -24,6 +25,7 @@ public class LocalClientPlayer{
 	public String name;
 	private Body body;
 	private PlayerCharacter pc;
+	private Weapon weapon;
 	
 	public LocalClientPlayer(PacketNewPlayer pnp,World world) {
 		this.armDegrees = pnp.np.armAngle;
@@ -50,10 +52,14 @@ public class LocalClientPlayer{
 		
 		
 		pc = new PlayerCharacter(new Animation(legsRunTR),
+				new Animation(legsRunTR),
+				new Animation(legsRunTR),
 								 new Animation(torsoAnimTR),
 								 new Animation(armsTR),
 								 new Vector2(8,16), //torsoPin
 								 new Vector2(4,4), //armPin
+								 new Vector2(0,0), //weaponPin
+								 this.weapon,
 								 this.body);
 		
 		body.setLinearVelocity(pnp.np.linearVelocity);

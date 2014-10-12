@@ -5,6 +5,7 @@ package com.afonsobordado.CommanderGDX.entities.player;
 import com.afonsobordado.CommanderGDX.Game;
 import com.afonsobordado.CommanderGDX.entities.characters.PlayerCharacter;
 import com.afonsobordado.CommanderGDX.entities.objects.B2DObject;
+import com.afonsobordado.CommanderGDX.entities.weapons.Weapon;
 import com.afonsobordado.CommanderGDX.handlers.Animation;
 import com.afonsobordado.CommanderGDX.handlers.InputHandler;
 import com.afonsobordado.CommanderGDX.vars.B2DVars;
@@ -29,6 +30,7 @@ public class Player extends B2DObject{
 	public boolean grounded;
 	private long lastGroundTime;
 	private PlayerCharacter pc;
+	private Weapon weapon;
 	public int id;
 
 	private float armDegrees;
@@ -47,7 +49,7 @@ public class Player extends B2DObject{
 		body = world.createBody(bdef);
 		body.setBullet(true);
 		
-		shape.setAsBox(13 / B2DVars.PPM, 26 / B2DVars.PPM);
+		shape.setAsBox(13 / B2DVars.PPM, (float) (29 / B2DVars.PPM));
 		fdef.shape = shape;
 		fdef.filter.categoryBits = B2DVars.BIT_PLAYER;
 		fdef.filter.maskBits = B2DVars.BIT_GROUND | B2DVars.BIT_PLAYER;
@@ -55,7 +57,7 @@ public class Player extends B2DObject{
 		body.createFixture(fdef).setUserData("player");
 		
 		//create foot sensor
-		shape.setAsBox(13 / B2DVars.PPM, 2 / B2DVars.PPM, new Vector2(0, -26 / B2DVars.PPM), 0);
+		shape.setAsBox(13 / B2DVars.PPM, 2 / B2DVars.PPM, new Vector2(0, (float) (-29 / B2DVars.PPM)), 0);
 		fdef.shape = shape;
 		fdef.filter.categoryBits = B2DVars.BIT_PLAYER;
 		fdef.filter.maskBits = B2DVars.BIT_GROUND | B2DVars.BIT_PLAYER;
@@ -64,28 +66,42 @@ public class Player extends B2DObject{
 		body.setUserData(this);
 		
 		
-		TextureRegion[] torsoAnimTR;
-		TextureRegion[] legsRunTR;
-		TextureRegion[] armsTR;
 		
-		torsoAnimTR = new TextureRegion[8];
-		for(int i = 0;i<8;i++) 
-			torsoAnimTR[i] = new TextureRegion(Game.aManager.get("res/animations/soldier/torso/torso"+i+".png", Texture.class));
 		
-		legsRunTR = new TextureRegion[8];
+		
+		
+		TextureRegion[] torsoAnimTR = new TextureRegion[5];
+		TextureRegion[] legsRunTR = new TextureRegion[8];
+		TextureRegion[] armsTR = new TextureRegion[1];
+		TextureRegion[] weaponTR = new TextureRegion[1];
+		TextureRegion[] legsIdleTR = new TextureRegion[1];
+		TextureRegion[] legsJumpTR = new TextureRegion[1];
+
+
+
+		
+		for(int i = 0;i<5;i++) 
+			torsoAnimTR[i] = new TextureRegion(Game.aManager.get("res/animations/test/chest/00"+i+".png", Texture.class));
+		
 		for(int i=0;i<8;i++)
-			legsRunTR[i] = new TextureRegion(Game.aManager.get("res/animations/soldier/legsRun/legsRun"+i+".png", Texture.class));
+			legsRunTR[i] = new TextureRegion(Game.aManager.get("res/animations/test/legs/00"+i+".png", Texture.class));
 		
-		armsTR = new TextureRegion[30];
-		for(int i=0; i < 30; i++) 
-			armsTR[i] = new TextureRegion(Game.aManager.get("res/animations/soldier/arms/"+i+".png", Texture.class));
+		armsTR[0] = new TextureRegion(Game.aManager.get("res/animations/soldier/arms/001.png", Texture.class));
+		weaponTR[0] = new TextureRegion(Game.aManager.get("res/animations/soldier/weapons/001.png",Texture.class));
+		legsIdleTR[0] = new TextureRegion(Game.aManager.get("res/animations/test/legs/idle.png", Texture.class));
+		legsJumpTR[0] = new TextureRegion(Game.aManager.get("res/animations/test/legs/jump.png", Texture.class));
+
 		
-		
-		pc = new PlayerCharacter(new Animation(legsRunTR),
+		weapon = new Weapon(new Animation(weaponTR), (short) 1);
+		pc = new PlayerCharacter(new Animation(legsIdleTR),
+								 new Animation(legsJumpTR),
+								 new Animation(legsRunTR),
 								 new Animation(torsoAnimTR),
 								 new Animation(armsTR),
-								 new Vector2(8,16), //torsoPin
-								 new Vector2(4,4), //armPin
+								 new Vector2(8,18), //torsoPin
+								 new Vector2(4,8), //armPin
+								 new Vector2(14,3), //weaponPin
+								 this.weapon,
 								 this.body);
 	}
 	
@@ -157,19 +173,20 @@ public class Player extends B2DObject{
 		pc.setTorsoFrame((int) (7-(armDegreesTemp /22))); //TODO: needs smoothing
 		//System.out.println((int) (7-(armDegrees/22)));
 		
-		if(body.getLinearVelocity().x == 0 && body.getLinearVelocity().y == 0){ // stopped boddy
-			//pc.setLegsFrame(8);
-			pc.setLegsDelay(0);
-		}else if(body.getLinearVelocity().x != 0 && body.getLinearVelocity().y != 0){ // jumping body
-			//pc.setLegsFrame(4); //this is just a random one that looks good while on air
-			pc.setLegsDelay(0);
+		if(body.getLinearVelocity().x >= -0.05 && body.getLinearVelocity().x <= 0.05  &&body.getLinearVelocity().y == 0){ // stopped boddy
+			pc.setAir(false);
+			pc.setIdle(true);
+		}else if(body.getLinearVelocity().y <= -0.01 || body.getLinearVelocity().y >= 0.01){ // jumping body
+			pc.setIdle(false);
+			pc.setAir(true);
 		}else{
-			// if the body has speed against the legs animations
+			pc.setAir(false);
+			pc.setIdle(false);
 			pc.setFoward(!((pc.isFlip() && body.getLinearVelocity().x >= 0) || (!pc.isFlip() && body.getLinearVelocity().x < 0)));
 		}
 		
 
-		
+		weapon.update(dt);
 		
 		//animation.update(dt);
 		pc.update(dt);
