@@ -109,25 +109,22 @@ public class PlayerCharacter {
 		}else{
 			drawPos.x += (torso.getFrame().getRegionWidth() - arm.getFrame().getRegionWidth()) - (armPin.x); //doubt this code
 		}
-		
-		sb.draw(arm.getFrame(),
-				drawPos.x,
-				drawPos.y,
-				((isFlip) ? (arm.getFrame().getRegionWidth() - armPin.x) : armPin.x) ,
-				armPin.y,
-				arm.getFrame().getRegionWidth(),
-				arm.getFrame().getRegionHeight(),
-				1,
-				1,
-				armRotation - ((isFlip) ? 180 : 0));
+		Vector2 armDrawPos = drawPos.cpy(); //we need to render the weapon first, so save this
+
 		
 		//http://math.stackexchange.com/questions/475917/how-to-find-position-of-a-point-based-on-known-angle-radius-and-center-of-rotat
 		
 		
-		/*float tempArmRot = armRotation + ((armRotation<0) ? 360 : 0);
+		float tempArmRot = armRotation + ((armRotation<0) ? 360 : 0);
 		
-		drawPos.x += arm.getFrame().getRegionWidth() * Math.cos(Math.toRadians(tempArmRot));
-		drawPos.y += arm.getFrame().getRegionWidth() * Math.sin(Math.toRadians(tempArmRot));
+		drawPos.y += ((arm.getFrame().getRegionWidth()-weaponPin.y) * Math.sin(Math.toRadians(tempArmRot))) + weaponPin.y; //TODO: fixmeplzpzlzplzpzlzpzlzplzpzl
+		
+		if(!isFlip)
+			drawPos.x += (arm.getFrame().getRegionWidth() * Math.cos(Math.toRadians(tempArmRot))) - weaponPin.x; //TODO: fixmeplzpzlzplzpzlzpzlzplzpzl
+		else
+			drawPos.x += (weaponPin.x*Math.cos(Math.toRadians(tempArmRot))); //TODO: fixmeplzpzlzplzpzlzpzlzplzpzl
+			
+		
 		
 		sb.draw(weapon.getFrame(),
 				drawPos.x,
@@ -138,18 +135,19 @@ public class PlayerCharacter {
 				weapon.getFrame().getRegionHeight(),
 				1,
 				1,
-				0);
+				armRotation - ((isFlip) ? 180 : 0));
 		
-		/*sb.draw(weapon.getFrame(),
-				0,
-				0,
-				weaponPin.x,
-				weaponPin.y,
-				weapon.getFrame().getRegionWidth(),
-				weapon.getFrame().getRegionHeight(),
+		
+		sb.draw(arm.getFrame(),
+				armDrawPos.x,
+				armDrawPos.y,
+				((isFlip) ? (arm.getFrame().getRegionWidth() - armPin.x) : armPin.x) ,
+				armPin.y,
+				arm.getFrame().getRegionWidth(),
+				arm.getFrame().getRegionHeight(),
 				1,
 				1,
-				armRotation);*/
+				armRotation - ((isFlip) ? 180 : 0));
 		
 
 		

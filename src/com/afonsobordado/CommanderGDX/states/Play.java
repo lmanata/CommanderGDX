@@ -31,7 +31,7 @@ import com.badlogic.gdx.utils.Array;
 
 public class Play extends GameState{
 
-	private boolean debug = true;
+	private boolean debug = false;
 	@SuppressWarnings("unused") //we use the fps object if debug is true
 	private FPSLogger fps;
 	private Box2DDebugRenderer b2dr;
@@ -129,7 +129,7 @@ public class Play extends GameState{
 	
 	public void render() {
 		//clear
-		Gdx.gl20.glClearColor(1,0,0,1);
+		Gdx.gl20.glClearColor(0,0,(float) 0.5,1);
 		Gdx.gl20.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		
 		//camera to follow player
@@ -139,8 +139,8 @@ public class Play extends GameState{
 		cam.update();
 		
 		//draw tile map
-		/*tmr.setView(cam);
-		tmr.render();*/
+		tmr.setView(cam);
+		tmr.render();
 		
 		//draw players
 		sb.setProjectionMatrix(cam.combined);

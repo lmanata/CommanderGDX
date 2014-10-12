@@ -98,9 +98,9 @@ public class Player extends B2DObject{
 								 new Animation(legsRunTR),
 								 new Animation(torsoAnimTR),
 								 new Animation(armsTR),
-								 new Vector2(8,18), //torsoPin
+								 new Vector2(8,16), //torsoPin
 								 new Vector2(4,8), //armPin
-								 new Vector2(14,3), //weaponPin
+								 new Vector2(16,3), //weaponPin
 								 this.weapon,
 								 this.body);
 	}
