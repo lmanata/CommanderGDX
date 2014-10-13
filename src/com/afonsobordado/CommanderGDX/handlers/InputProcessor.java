@@ -31,4 +31,25 @@ public class InputProcessor extends InputAdapter{
 		InputHandler.scrolled = amount;
 		return false;
 	}
+
+   public boolean touchDown (int x, int y, int pointer, int button) {
+	   InputHandler.moveMouse(x, y);
+	   if(button == 0) InputHandler.setKey(InputHandler.MOUSE_1, true);
+	   if(button == 1) InputHandler.setKey(InputHandler.MOUSE_2, true);
+      return false;
+   }
+
+
+   public boolean touchUp (int x, int y, int pointer, int button) {
+	   InputHandler.moveMouse(x, y);
+	   if(button == 0) InputHandler.setKey(InputHandler.MOUSE_1, false);
+	   if(button == 1) InputHandler.setKey(InputHandler.MOUSE_2, false);
+      return false;
+   }
+
+
+   public boolean touchDragged (int x, int y, int pointer) {
+	   InputHandler.moveMouse(x, y);
+      return false;
+   }
 }

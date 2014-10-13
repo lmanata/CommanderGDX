@@ -141,6 +141,9 @@ public class Player extends B2DObject{
 			body.applyLinearImpulse(B2DVars.PLAYER_WALK_FORCE, 0, pos.x, pos.y, true);
 
 		}
+		
+		if(InputHandler.isDown(InputHandler.MOUSE_1)) weapon.shoot();
+		if(InputHandler.isDown(InputHandler.MOUSE_2)) weapon.shoot();
 
 		
 		

@@ -21,9 +21,10 @@ public class Bullet extends B2DObject{
 		this.speed = speed;
 		this.effects = effects;
 		this.lifespan = lifespan;
-		this.body =  body;
 		this.lifespanEnabled = (lifespan!=0);
 		toRemove = false;
+		
+		this.body =  body;// create a new body based on the animation
 		body.setUserData(this);
 	}
 	

@@ -34,31 +34,37 @@ public class LocalClientPlayer{
 		
 		createBody(world);
 		
-		TextureRegion[] torsoAnimTR;
-		TextureRegion[] legsRunTR;
-		TextureRegion[] armsTR;
+		TextureRegion[] torsoAnimTR = new TextureRegion[5];
+		TextureRegion[] legsRunTR = new TextureRegion[8];
+		TextureRegion[] armsTR = new TextureRegion[1];
+		TextureRegion[] weaponTR = new TextureRegion[1];
+		TextureRegion[] legsIdleTR = new TextureRegion[1];
+		TextureRegion[] legsJumpTR = new TextureRegion[1];
+
+
+
 		
-		torsoAnimTR = new TextureRegion[8];
-		for(int i = 0;i<8;i++) 
-			torsoAnimTR[i] = new TextureRegion(Game.aManager.get("res/animations/soldier/torso/torso"+i+".png", Texture.class));
+		for(int i = 0;i<5;i++) 
+			torsoAnimTR[i] = new TextureRegion(Game.aManager.get("res/animations/test/chest/00"+i+".png", Texture.class));
 		
-		legsRunTR = new TextureRegion[8];
 		for(int i=0;i<8;i++)
-			legsRunTR[i] = new TextureRegion(Game.aManager.get("res/animations/soldier/legsRun/legsRun"+i+".png", Texture.class));
+			legsRunTR[i] = new TextureRegion(Game.aManager.get("res/animations/test/legs/00"+i+".png", Texture.class));
 		
-		armsTR = new TextureRegion[30];
-		for(int i=0; i < 30; i++) 
-			armsTR[i] = new TextureRegion(Game.aManager.get("res/animations/soldier/arms/"+i+".png", Texture.class));
+		armsTR[0] = new TextureRegion(Game.aManager.get("res/animations/soldier/arms/001.png", Texture.class));
+		weaponTR[0] = new TextureRegion(Game.aManager.get("res/animations/soldier/weapons/001.png",Texture.class));
+		legsIdleTR[0] = new TextureRegion(Game.aManager.get("res/animations/test/legs/idle.png", Texture.class));
+		legsJumpTR[0] = new TextureRegion(Game.aManager.get("res/animations/test/legs/jump.png", Texture.class));
+
 		
-		
-		pc = new PlayerCharacter(new Animation(legsRunTR),
-				new Animation(legsRunTR),
-				new Animation(legsRunTR),
+		weapon = new Weapon(new Animation(weaponTR), (short) 1);
+		pc = new PlayerCharacter(new Animation(legsIdleTR),
+								 new Animation(legsJumpTR),
+								 new Animation(legsRunTR),
 								 new Animation(torsoAnimTR),
 								 new Animation(armsTR),
 								 new Vector2(8,16), //torsoPin
-								 new Vector2(4,4), //armPin
-								 new Vector2(0,0), //weaponPin
+								 new Vector2(4,8), //armPin
+								 new Vector2(16,3), //weaponPin
 								 this.weapon,
 								 this.body);
 		
@@ -93,7 +99,7 @@ public class LocalClientPlayer{
 		body = world.createBody(bdef);
 		body.setBullet(true);
 		
-		shape.setAsBox(13 / B2DVars.PPM, 26 / B2DVars.PPM);
+		shape.setAsBox(13 / B2DVars.PPM, (float) (29 / B2DVars.PPM));
 		fdef.shape = shape;
 		fdef.filter.categoryBits = B2DVars.BIT_PLAYER;
 		fdef.filter.maskBits = B2DVars.BIT_GROUND | B2DVars.BIT_PLAYER;
@@ -101,12 +107,13 @@ public class LocalClientPlayer{
 		body.createFixture(fdef).setUserData("player");
 		
 		//create foot sensor
-		shape.setAsBox(13 / B2DVars.PPM, 2 / B2DVars.PPM, new Vector2(0, -26 / B2DVars.PPM), 0);
+		shape.setAsBox(13 / B2DVars.PPM, 2 / B2DVars.PPM, new Vector2(0, (float) (-29 / B2DVars.PPM)), 0);
 		fdef.shape = shape;
 		fdef.filter.categoryBits = B2DVars.BIT_PLAYER;
 		fdef.filter.maskBits = B2DVars.BIT_GROUND | B2DVars.BIT_PLAYER;
 		fdef.isSensor = true;
-		body.createFixture(fdef).setUserData("foot");
+		body.createFixture(fdef).setUserData("footPlayer");
+		body.setUserData(this);
 	}
 	
 	public void render(SpriteBatch sb) {

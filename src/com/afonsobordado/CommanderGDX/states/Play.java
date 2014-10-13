@@ -31,7 +31,7 @@ import com.badlogic.gdx.utils.Array;
 
 public class Play extends GameState{
 
-	private boolean debug = false;
+	private boolean debug = true;
 	@SuppressWarnings("unused") //we use the fps object if debug is true
 	private FPSLogger fps;
 	private Box2DDebugRenderer b2dr;
@@ -112,8 +112,6 @@ public class Play extends GameState{
 
 		Game.client.sendTCP(np);
 		
-		
-		//if(System.currentTimeMillis()%33 == 0)System.out.println(playerList.size());
 		for(LocalClientPlayer lcp: playerList.values()){
 			lcp.update(dt);
 		}

@@ -21,7 +21,7 @@ public class Game implements ApplicationListener{
 	public static final String TITLE = "CommanderGDX";
 	public static final int V_WIDTH = 640;
 	public static final int V_HEIGHT = 480;
-	public static final int SCALE = 2;
+	public static final int SCALE = 1;
 	
 	public static final float STEP = 1 / 60f;
 	
