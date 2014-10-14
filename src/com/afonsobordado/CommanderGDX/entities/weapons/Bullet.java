@@ -19,26 +19,32 @@ public class Bullet {
 	private float lifespan;
 	private boolean lifespanEnabled;
 	private boolean toRemove;
+	private float angle;
 	
 	public Bullet(Animation anim,
+				  Vector2 barrelPos,
+				  float angle,
 				  float speed,
 				  short effects,
 				  float lifespan){
 		
+		this.angle=angle;
 		this.animation = anim;
 		this.speed = speed;
 		this.effects = effects;
 		this.lifespan = lifespan;
 		this.lifespanEnabled = (lifespan!=0);
 		toRemove = false;
+		System.out.println(angle);
 		
 		BodyDef bdef  = new BodyDef();
 		FixtureDef fdef = new FixtureDef();
 		PolygonShape shape  = new PolygonShape();
 		
-		bdef.position.set(100 / B2DVars.PPM,200 / B2DVars.PPM);
+		bdef.position.set(barrelPos.x / B2DVars.PPM,barrelPos.y / B2DVars.PPM);
 		bdef.type = BodyType.DynamicBody;
-		bdef.linearVelocity.set(20,0);
+		bdef.linearVelocity.set((float) (speed * Math.cos(Math.toRadians(angle))),
+								(float) (speed * Math.sin(Math.toRadians(angle))));
 		
 		body = Play.getWorld().createBody(bdef);
 		body.setBullet(true);
@@ -49,7 +55,7 @@ public class Bullet {
 		fdef.filter.maskBits = B2DVars.BIT_GROUND | B2DVars.BIT_PLAYER;
 		
 		body.createFixture(fdef).setUserData("bullet");
-		body.setGravityScale(0.5f);
+		body.setGravityScale(0.25f);
 		body.setUserData(this);
 	}
 	
@@ -65,7 +71,14 @@ public class Bullet {
 		sb.begin();
 		sb.draw(animation.getFrame(),
 			   (body.getPosition().x * B2DVars.PPM) - animation.getFrame().getRegionWidth()/2,
-			   (body.getPosition().y * B2DVars.PPM) - animation.getFrame().getRegionHeight()/2);
+			   (body.getPosition().y * B2DVars.PPM) - animation.getFrame().getRegionHeight()/2,
+			   animation.getFrame().getRegionWidth()/2,
+			   animation.getFrame().getRegionHeight()/2,
+			   animation.getFrame().getRegionWidth(),
+			   animation.getFrame().getRegionHeight(),
+			   1,
+			   1,
+			   angle);
 		sb.end();
 	}
 	

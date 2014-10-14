@@ -88,7 +88,7 @@ public class Player {
 		legsJumpTR[0] = new TextureRegion(Game.aManager.get("res/animations/test/legs/jump.png", Texture.class));
 
 		
-		weapon = new Weapon(new Animation(weaponTR), (long) 1000000000);
+		weapon = new Weapon(new Animation(weaponTR), (long) 100000000);
 		pc = new PlayerCharacter(new Animation(legsIdleTR),
 								 new Animation(legsJumpTR),
 								 new Animation(legsRunTR),
@@ -145,7 +145,7 @@ public class Player {
 	 
 	public void render(SpriteBatch sb) {
 		sb.begin();
-		pc.render(sb);
+		weapon.setBarrelPos(pc.render(sb));
 		sb.end();
 	}
 	
@@ -181,7 +181,7 @@ public class Player {
 			pc.setFoward(!((pc.isFlip() && body.getLinearVelocity().x >= 0) || (!pc.isFlip() && body.getLinearVelocity().x < 0)));
 		}
 		
-
+		weapon.setAngle(armDegrees);
 		weapon.update(dt);
 		
 		//animation.update(dt);

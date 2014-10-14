@@ -15,7 +15,7 @@ public class CommanderDesktop {
 		cfg.vSyncEnabled = false;
 		cfg.fullscreen = false;
 		cfg.resizable = false;
-		/*cfg.foregroundFPS = 60;*/
+		/*cfg.foregroundFPS = 0;*/
 		/*cfg.backgroundFPS = 0;*/ // posibly setting to -1 solves the window drag problem, not tested
 		
 		new LwjglApplication(new Game(), cfg);
