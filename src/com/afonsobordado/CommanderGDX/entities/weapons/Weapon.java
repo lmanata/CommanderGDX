@@ -1,17 +1,20 @@
 package com.afonsobordado.CommanderGDX.entities.weapons;
 
+import com.afonsobordado.CommanderGDX.Game;
 import com.afonsobordado.CommanderGDX.handlers.Animation;
+import com.afonsobordado.CommanderGDX.states.Play;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 public class Weapon {
 	private Animation animation;
 	private short effects; //we should only implement this later on, but its good to know what we need
-	private short coolDown;
+	private long coolDown;
 	private long nextTimeShoot;
 	private boolean canShoot;
-	private Bullet bullet;
+	//private Bullet bullet;
 	
-	public Weapon(Animation animation, short coolDown){
+	public Weapon(Animation animation, long coolDown){
 		this.animation = animation;
 		this.coolDown = coolDown;
 		nextTimeShoot = System.nanoTime();
@@ -19,13 +22,20 @@ public class Weapon {
 	}
 	
 	public void update(float dt){
-		canShoot = (nextTimeShoot<=System.nanoTime());
+		canShoot = (System.nanoTime()>=nextTimeShoot);
+		System.out.println(canShoot);
 		animation.update(dt);
 	}
 	public void shoot(){
 		if(canShoot){
 			nextTimeShoot=System.nanoTime()+coolDown;
-			//generate object
+			TextureRegion[] bulletTR = new TextureRegion[3];
+			for(int i=0; i < 3; i++) 
+				bulletTR[i] = new TextureRegion(Game.aManager.get("res/animations/bullet/"+i+".png", Texture.class));
+			Play.bulletList.put(Play.bulletList.size()+1,new Bullet(new Animation(bulletTR),
+																	(float)100,
+																	(short) 0,
+																	(float) 0));
 			//send packet
 		}
 	}

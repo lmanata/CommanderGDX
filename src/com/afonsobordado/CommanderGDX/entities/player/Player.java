@@ -1,10 +1,9 @@
 package com.afonsobordado.CommanderGDX.entities.player;
 
 
-
+import static com.afonsobordado.CommanderGDX.vars.B2DVars.PLAYER_MAX_VELOCITY;
 import com.afonsobordado.CommanderGDX.Game;
 import com.afonsobordado.CommanderGDX.entities.characters.PlayerCharacter;
-import com.afonsobordado.CommanderGDX.entities.objects.B2DObject;
 import com.afonsobordado.CommanderGDX.entities.weapons.Weapon;
 import com.afonsobordado.CommanderGDX.handlers.Animation;
 import com.afonsobordado.CommanderGDX.handlers.InputHandler;
@@ -14,19 +13,16 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
-
-//STATIC GLOBALS
-
-
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.World;
 
-import static com.afonsobordado.CommanderGDX.vars.B2DVars.PLAYER_MAX_VELOCITY;
 
-public class Player extends B2DObject{
+
+public class Player {
+	private Body body;
 	public boolean grounded;
 	private long lastGroundTime;
 	private PlayerCharacter pc;
@@ -92,7 +88,7 @@ public class Player extends B2DObject{
 		legsJumpTR[0] = new TextureRegion(Game.aManager.get("res/animations/test/legs/jump.png", Texture.class));
 
 		
-		weapon = new Weapon(new Animation(weaponTR), (short) 1);
+		weapon = new Weapon(new Animation(weaponTR), (long) 1000000000);
 		pc = new PlayerCharacter(new Animation(legsIdleTR),
 								 new Animation(legsJumpTR),
 								 new Animation(legsRunTR),
@@ -105,9 +101,6 @@ public class Player extends B2DObject{
 								 this.body);
 	}
 	
-	public Player(Body body) {
-		super(body);
-	}
 	
 	public void handleInput(){
 		
@@ -220,5 +213,9 @@ public class Player extends B2DObject{
 	public void setName(String name) {
 		this.name = name;
 	}
+
+
+	public Body getBody() {return body;}
+	public Vector2 getPostion(){return body.getPosition();}
 	
 }

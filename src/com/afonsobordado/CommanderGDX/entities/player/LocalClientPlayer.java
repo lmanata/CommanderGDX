@@ -104,7 +104,7 @@ public class LocalClientPlayer{
 		fdef.filter.categoryBits = B2DVars.BIT_PLAYER;
 		fdef.filter.maskBits = B2DVars.BIT_GROUND | B2DVars.BIT_PLAYER;
 		
-		body.createFixture(fdef).setUserData("player");
+		body.createFixture(fdef).setUserData("lcp");
 		
 		//create foot sensor
 		shape.setAsBox(13 / B2DVars.PPM, 2 / B2DVars.PPM, new Vector2(0, (float) (-29 / B2DVars.PPM)), 0);
@@ -112,7 +112,7 @@ public class LocalClientPlayer{
 		fdef.filter.categoryBits = B2DVars.BIT_PLAYER;
 		fdef.filter.maskBits = B2DVars.BIT_GROUND | B2DVars.BIT_PLAYER;
 		fdef.isSensor = true;
-		body.createFixture(fdef).setUserData("footPlayer");
+		body.createFixture(fdef).setUserData("footLcp");
 		body.setUserData(this);
 	}
 	

@@ -75,6 +75,9 @@ public class Game implements ApplicationListener{
 		for(int i=0; i < 5; i++) //8 sprites on the animation
 			aManager.load("res/animations/test/chest/00"+i+".png", Texture.class);
 		
+		for(int i=0; i < 3; i++) //8 sprites on the animation
+			aManager.load("res/animations/bullet/"+i+".png", Texture.class);
+		
 		/*for(int i=0; i < 30; i++) //30 arm sprites
 			aManager.load("res/animations/soldier/arms/"+i+".png", Texture.class);*/
 		aManager.load("res/animations/soldier/weapons/001.png", Texture.class);

@@ -6,6 +6,7 @@ import com.afonsobordado.CommanderGDX.Game;
 import com.afonsobordado.CommanderGDX.entities.UI.HUD;
 import com.afonsobordado.CommanderGDX.entities.player.LocalClientPlayer;
 import com.afonsobordado.CommanderGDX.entities.player.Player;
+import com.afonsobordado.CommanderGDX.entities.weapons.Bullet;
 import com.afonsobordado.CommanderGDX.handlers.GameStateManager;
 import com.afonsobordado.CommanderGDX.handlers.MyContactListener;
 import com.afonsobordado.CommanderGDX.packets.NetworkObject.NetworkPlayer;
@@ -48,6 +49,8 @@ public class Play extends GameState{
 	public static Player player; // this is the local controllable player
 
 	public static ConcurrentHashMap<Integer, LocalClientPlayer> playerList; // will probably be changed to clientPlayer or something like that
+	public static ConcurrentHashMap<Integer, Bullet> bulletList; // change to object list plz
+
 	
 	private HUD hud;
 	public static String mapName = "level1";
@@ -70,7 +73,8 @@ public class Play extends GameState{
 		}
 		
 		playerList = new ConcurrentHashMap<Integer, LocalClientPlayer>(16, 0.9f, 2);
-		
+		bulletList = new ConcurrentHashMap<Integer, Bullet>(16, 0.9f, 2);
+
 		createTiles(); //fix this //tiled map
 		hud = new HUD(player);
 		
@@ -115,6 +119,15 @@ public class Play extends GameState{
 		for(LocalClientPlayer lcp: playerList.values()){
 			lcp.update(dt);
 		}
+
+		for(Bullet b: bulletList.values()){
+			if(b.toRemove()){
+				world.destroyBody(b.getBody());
+				bulletList.remove(b);
+			}else{
+				b.update(dt);
+			}
+		}
 		
 		
 		Array<Body> bodies = cl.getBodiesToRemove();
@@ -145,6 +158,10 @@ public class Play extends GameState{
 		player.render(sb);
 		for(LocalClientPlayer lcp: playerList.values()){
 			lcp.render(sb);
+		}
+		
+		for(Bullet b: bulletList.values()){
+			b.render(sb);
 		}
 		
 		//draw hud
