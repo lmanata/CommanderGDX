@@ -2,6 +2,7 @@ package com.afonsobordado.CommanderGDX.entities.weapons;
 
 import com.afonsobordado.CommanderGDX.Game;
 import com.afonsobordado.CommanderGDX.handlers.Animation;
+import com.afonsobordado.CommanderGDX.packets.PacketBullet;
 import com.afonsobordado.CommanderGDX.states.Play;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -36,12 +37,21 @@ public class Weapon {
 			TextureRegion[] bulletTR = new TextureRegion[3];
 			for(int i=0; i < 3; i++) 
 				bulletTR[i] = new TextureRegion(Game.aManager.get("res/animations/bullet/"+i+".png", Texture.class));
+			
 			Play.bulletList.put(Play.bulletList.size()+1,new Bullet(new Animation(bulletTR),
 																	barrelPos,
 																	angle,
 																	(float)10,
 																	(short) 0,
 																	(float) 0));
+			PacketBullet pb = new PacketBullet();
+			pb.angle = angle;
+			pb.pos = barrelPos;
+			pb.speed = (float)10;
+			pb.effects = (short) 0;
+			pb.lifespan = (float) 0;
+			Game.client.sendUDP(pb);
+			
 			//send packet
 		}
 	}

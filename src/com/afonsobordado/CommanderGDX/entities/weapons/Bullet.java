@@ -35,7 +35,6 @@ public class Bullet {
 		this.lifespan = lifespan;
 		this.lifespanEnabled = (lifespan!=0);
 		toRemove = false;
-		System.out.println(angle);
 		
 		BodyDef bdef  = new BodyDef();
 		FixtureDef fdef = new FixtureDef();
@@ -49,7 +48,7 @@ public class Bullet {
 		body = Play.getWorld().createBody(bdef);
 		body.setBullet(true);
 		
-		shape.setAsBox((float) (4.2 / B2DVars.PPM), (float) (4.2 / B2DVars.PPM));
+		shape.setAsBox((float) ((anim.getFrame().getRegionHeight()/2) / B2DVars.PPM), (float) ((anim.getFrame().getRegionHeight()/2) / B2DVars.PPM));
 		fdef.shape = shape;
 		fdef.filter.categoryBits = B2DVars.BIT_PLAYER;
 		fdef.filter.maskBits = B2DVars.BIT_GROUND | B2DVars.BIT_PLAYER;

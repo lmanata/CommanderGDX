@@ -1,7 +1,10 @@
 package com.afonsobordado.CommanderGDX.handlers;
 
+import com.afonsobordado.CommanderGDX.Game;
 import com.afonsobordado.CommanderGDX.entities.player.LocalClientPlayer;
+import com.afonsobordado.CommanderGDX.entities.weapons.Bullet;
 import com.afonsobordado.CommanderGDX.packets.PacketAccepted;
+import com.afonsobordado.CommanderGDX.packets.PacketBullet;
 import com.afonsobordado.CommanderGDX.packets.PacketConsoleMessage;
 import com.afonsobordado.CommanderGDX.packets.PacketDeclined;
 import com.afonsobordado.CommanderGDX.packets.PacketDisconnect;
@@ -9,6 +12,8 @@ import com.afonsobordado.CommanderGDX.packets.PacketNewPlayer;
 import com.afonsobordado.CommanderGDX.packets.NetworkObject.NetworkPlayer;
 import com.afonsobordado.CommanderGDX.states.IPmenu;
 import com.afonsobordado.CommanderGDX.states.Play;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 
@@ -70,6 +75,19 @@ public class NetworkListener extends Listener{
 			LocalClientPlayer lcp = Play.playerList.get(pd.np.id);
 			lcp.destroy();
 			Play.playerList.remove(pd.np.id);
+		} else if (object instanceof PacketBullet){
+			
+			PacketBullet pb = (PacketBullet) object;
+			TextureRegion[] bulletTR = new TextureRegion[3];
+			for(int i=0; i < 3; i++) 
+				bulletTR[i] = new TextureRegion(Game.aManager.get("res/animations/bullet/"+i+".png", Texture.class));
+			
+			Play.bulletList.put(Play.bulletList.size()+1,new Bullet(new Animation(bulletTR),
+																	pb.pos,
+																	pb.angle,
+																	pb.speed,
+																	pb.effects,
+																	pb.lifespan));
 		}
 		
    }

@@ -1,6 +1,7 @@
 package com.afonsobordado.CommanderGDXServer;
 
 import com.afonsobordado.CommanderGDX.packets.PacketAccepted;
+import com.afonsobordado.CommanderGDX.packets.PacketBullet;
 import com.afonsobordado.CommanderGDX.packets.PacketConsoleMessage;
 import com.afonsobordado.CommanderGDX.packets.PacketDeclined;
 import com.afonsobordado.CommanderGDX.packets.PacketDisconnect;
@@ -83,6 +84,11 @@ public class NetworkListener extends Listener{
     		PacketDisconnect pd = (PacketDisconnect) object;
     		GDXServer.playerList.remove(pd.np.id);
     		GDXServer.server.sendToAllExceptTCP(connection.getID(), pd);
+    	} else if (object instanceof PacketBullet){
+    		//add to some sort of list
+    		//verify validity of the bullet position
+    		PacketBullet pb = (PacketBullet) object;
+    		GDXServer.server.sendToAllExceptUDP(connection.getID(), pb);
     	}
 	}
 }

@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.concurrent.ConcurrentHashMap;
 
 import com.afonsobordado.CommanderGDX.packets.PacketAccepted;
+import com.afonsobordado.CommanderGDX.packets.PacketBullet;
 import com.afonsobordado.CommanderGDX.packets.PacketConsoleMessage;
 import com.afonsobordado.CommanderGDX.packets.PacketDeclined;
 import com.afonsobordado.CommanderGDX.packets.PacketDisconnect;
@@ -38,6 +39,7 @@ public class GDXServer {
 	    server.getKryo().register(NetworkPlayer.class);
 	    server.getKryo().register(PacketNewPlayer.class);
 	    server.getKryo().register(PacketDisconnect.class);
+	    server.getKryo().register(PacketBullet.class);
 	    server.start();
 	    
 	    try {
