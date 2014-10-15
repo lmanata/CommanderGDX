@@ -4,6 +4,7 @@ import com.afonsobordado.CommanderGDX.Game;
 import com.afonsobordado.CommanderGDX.handlers.Animation;
 import com.afonsobordado.CommanderGDX.packets.PacketBullet;
 import com.afonsobordado.CommanderGDX.states.Play;
+import com.afonsobordado.CommanderGDX.vars.B2DVars;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
@@ -14,7 +15,7 @@ public class Weapon {
 	private long coolDown;
 	private long nextTimeShoot;
 	private boolean canShoot;
-	private Vector2 barrelPos;
+	private Vector2 bodyPos;
 	private float angle;
 	//private Bullet bullet;
 	
@@ -23,7 +24,7 @@ public class Weapon {
 		this.coolDown = coolDown;
 		nextTimeShoot = System.nanoTime();
 		canShoot=true;
-		barrelPos=new Vector2();
+		bodyPos=new Vector2();
 		angle = 0f;
 	}
 	
@@ -38,15 +39,17 @@ public class Weapon {
 			for(int i=0; i < 3; i++) 
 				bulletTR[i] = new TextureRegion(Game.aManager.get("res/animations/bullet/"+i+".png", Texture.class));
 			
+			Vector2 tmp = new Vector2((float) ((bodyPos.x * B2DVars.PPM) + (animation.getFrame().getRegionWidth()+12)*Math.cos(Math.toRadians(angle))),
+									  (float) ((bodyPos.y * B2DVars.PPM) + (animation.getFrame().getRegionHeight()+12)*Math.sin(Math.toRadians(angle))));
 			Play.bulletList.put(Play.bulletList.size()+1,new Bullet(new Animation(bulletTR),
-																	barrelPos,
+																	tmp,
 																	angle,
 																	(float)10,
 																	(short) 0,
 																	(float) 0));
 			PacketBullet pb = new PacketBullet();
 			pb.angle = angle;
-			pb.pos = barrelPos;
+			pb.pos = tmp;
 			pb.speed = (float)10;
 			pb.effects = (short) 0;
 			pb.lifespan = (float) 0;
@@ -59,11 +62,14 @@ public class Weapon {
 	
 	public TextureRegion getFrame(){return animation.getFrame();}
 	public Animation getAnimation(){return animation;}
-	public void setBarrelPos(Vector2 bp) {barrelPos = bp;}
 	public void setAngle(float angle){this.angle = angle;}
 	
 	public static short BIT_FIRE = 0x1;
 	public static short BIT_SLOW = 0x2;
+
+	public void setBodyPos(Vector2 position) {
+		this.bodyPos = position;
+	}
 
 
 }

@@ -78,7 +78,7 @@ public class PlayerCharacter {
 		
 	}
 	
-	public Vector2 render(SpriteBatch sb) {
+	public void render(SpriteBatch sb) {
 		Vector2 drawPos = new Vector2(body.getPosition().x * B2DVars.PPM - legs.getFrame().getRegionWidth() / 2,
 									 (body.getPosition().y * B2DVars.PPM) - ((torso.getFrame().getRegionHeight()+legs.getFrame().getRegionHeight())/2) );
 		if(isIdle){
@@ -148,12 +148,6 @@ public class PlayerCharacter {
 				1,
 				1,
 				armRotation - ((isFlip) ? 180 : 0));
-		
-		if(!isFlip)
-		drawPos.x += (weapon.getFrame().getRegionWidth() /2) * Math.cos(Math.toRadians(tempArmRot));
-		
-		drawPos.y += (weapon.getFrame().getRegionHeight()/2) * Math.sin(Math.toRadians(tempArmRot));
-		return drawPos;
 		
 	}
 	

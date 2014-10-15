@@ -145,7 +145,7 @@ public class Player {
 	 
 	public void render(SpriteBatch sb) {
 		sb.begin();
-		weapon.setBarrelPos(pc.render(sb));
+		pc.render(sb);
 		sb.end();
 	}
 	
@@ -181,6 +181,7 @@ public class Player {
 			pc.setFoward(!((pc.isFlip() && body.getLinearVelocity().x >= 0) || (!pc.isFlip() && body.getLinearVelocity().x < 0)));
 		}
 		
+		weapon.setBodyPos(body.getPosition());
 		weapon.setAngle(armDegrees);
 		weapon.update(dt);
 		
