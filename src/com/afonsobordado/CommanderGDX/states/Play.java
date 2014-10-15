@@ -73,7 +73,7 @@ public class Play extends GameState{
 		}
 		
 		playerList = new ConcurrentHashMap<Integer, LocalClientPlayer>(16, 0.9f, 2);
-		bulletList = new ConcurrentHashMap<Integer, Bullet>(16, 0.9f, 2);
+		bulletList = new ConcurrentHashMap<Integer, Bullet>()/*(16, 0.9f, 2)*/;
 
 		createTiles(); //fix this //tiled map
 		hud = new HUD(player);
@@ -119,18 +119,17 @@ public class Play extends GameState{
 		for(LocalClientPlayer lcp: playerList.values()){
 			lcp.update(dt);
 		}
-
+		Array<Body> bodies = cl.getBodiesToRemove();
 		for(Bullet b: bulletList.values()){
 			if(b.toRemove()){
-				world.destroyBody(b.getBody());
-				bulletList.remove(b);
+				bodies.add(b.getBody());
+				bulletList.remove(b.getID());
+				
 			}else{
 				b.update(dt);
 			}
 		}
 		
-		
-		Array<Body> bodies = cl.getBodiesToRemove();
 		for(Body b: bodies){
 			world.destroyBody(b);
 		}

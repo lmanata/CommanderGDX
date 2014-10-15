@@ -30,6 +30,7 @@ public class MyContactListener implements ContactListener{
 		   (fb.getUserData() != null && fb.getUserData().equals("footPlayer")) ){
 			numFootContacts++;
 		}
+		
 
 		
 	}

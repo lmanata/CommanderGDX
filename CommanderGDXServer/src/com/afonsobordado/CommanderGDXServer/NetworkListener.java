@@ -16,6 +16,7 @@ import com.esotericsoftware.kryonet.Listener;
 public class NetworkListener extends Listener{
 	public void received (Connection connection, Object object) {
 		if(object == null) return;
+		if(connection == null) System.out.println("connection is null");
 		
         if (object instanceof PacketConsoleMessage){
         	PacketConsoleMessage pcm = (PacketConsoleMessage) object;
@@ -73,6 +74,10 @@ public class NetworkListener extends Listener{
     	} else if (object instanceof NetworkPlayer){
     		NetworkPlayer np = (NetworkPlayer) object;
     		LocalServerPlayer p  = GDXServer.playerList.get(np.id);
+    		if(p == null){
+    			GDXServer.playerList.remove(np.id);
+    			return;
+    		}
     		if(p.connectionID != connection.getID()) return;
     		
     		p.armAngle = np.armAngle;

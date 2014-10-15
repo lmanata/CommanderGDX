@@ -6,6 +6,7 @@ import com.afonsobordado.CommanderGDX.entities.weapons.Weapon;
 import com.afonsobordado.CommanderGDX.handlers.Animation;
 import com.afonsobordado.CommanderGDX.packets.PacketNewPlayer;
 import com.afonsobordado.CommanderGDX.packets.NetworkObject.NetworkPlayer;
+import com.afonsobordado.CommanderGDX.states.Play;
 import com.afonsobordado.CommanderGDX.vars.B2DVars;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -31,8 +32,9 @@ public class LocalClientPlayer{
 		this.armDegrees = pnp.np.armAngle;
 		this.id = pnp.np.id;
 		this.name = pnp.np.name;
-		
-		createBody(world);
+		synchronized(Play.getWorld()){
+			createBody(world);
+		}
 		
 		TextureRegion[] torsoAnimTR = new TextureRegion[5];
 		TextureRegion[] legsRunTR = new TextureRegion[8];

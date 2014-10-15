@@ -12,22 +12,24 @@ import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 
 public class Bullet {
+	private int ID;
 	private Body body;
 	private Animation animation;
 	private float speed;
 	private short effects;
-	private float lifespan;
+	private long lifespan;
 	private boolean lifespanEnabled;
 	private boolean toRemove;
 	private float angle;
 	
-	public Bullet(Animation anim,
+	public Bullet(int id,
+				  Animation anim,
 				  Vector2 barrelPos,
 				  float angle,
 				  float speed,
 				  short effects,
-				  float lifespan){
-		
+				  long lifespan){
+		this.ID = id;
 		this.angle=angle;
 		this.animation = anim;
 		this.speed = speed;
@@ -45,22 +47,24 @@ public class Bullet {
 		bdef.linearVelocity.set((float) (speed * Math.cos(Math.toRadians(angle))),
 								(float) (speed * Math.sin(Math.toRadians(angle))));
 		
-		body = Play.getWorld().createBody(bdef);
-		body.setBullet(true);
-		
 		shape.setAsBox((float) ((anim.getFrame().getRegionHeight()/2) / B2DVars.PPM), (float) ((anim.getFrame().getRegionHeight()/2) / B2DVars.PPM));
 		fdef.shape = shape;
 		fdef.filter.categoryBits = B2DVars.BIT_PLAYER;
 		fdef.filter.maskBits = B2DVars.BIT_GROUND | B2DVars.BIT_PLAYER;
 		
-		body.createFixture(fdef).setUserData("bullet");
-		body.setGravityScale(0.25f);
-		body.setUserData(this);
+		synchronized(Play.getWorld()){
+			body = Play.getWorld().createBody(bdef);
+			body.setBullet(true);
+			body.createFixture(fdef).setUserData("bullet");
+			body.setGravityScale(0.25f);
+			body.setUserData(this);
+			System.out.println(body.getUserData());
+		}
 	}
 	
 	public void update(float dt){
 		animation.update(dt);
-		this.lifespan-=dt;
+		this.lifespan-=(dt*1000000000);
 		if(lifespanEnabled) toRemove = ((this.lifespan) < 0);
 			
 		
@@ -82,10 +86,6 @@ public class Bullet {
 	}
 	
 	public boolean toRemove(){ return toRemove;}
-
-
-
-	public Body getBody() {
-		return body;
-	}
+	public Body getBody() {return body;}
+	public int getID(){return ID;}
 }

@@ -88,7 +88,7 @@ public class Player {
 		legsJumpTR[0] = new TextureRegion(Game.aManager.get("res/animations/test/legs/jump.png", Texture.class));
 
 		
-		weapon = new Weapon(new Animation(weaponTR), (long) 100000000);
+		weapon = new Weapon(new Animation(weaponTR), (long) /*500000000*/500000000);
 		pc = new PlayerCharacter(new Animation(legsIdleTR),
 								 new Animation(legsJumpTR),
 								 new Animation(legsRunTR),

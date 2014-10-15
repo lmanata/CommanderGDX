@@ -7,5 +7,5 @@ public class PacketBullet {
 	  public float angle;
 	  public float speed;
 	  public short effects;
-	  public float lifespan;
+	  public long lifespan;
 }

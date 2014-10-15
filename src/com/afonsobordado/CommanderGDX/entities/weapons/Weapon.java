@@ -41,19 +41,20 @@ public class Weapon {
 			
 			Vector2 tmp = new Vector2((float) ((bodyPos.x * B2DVars.PPM) + (animation.getFrame().getRegionWidth()+12)*Math.cos(Math.toRadians(angle))),
 									  (float) ((bodyPos.y * B2DVars.PPM) + (animation.getFrame().getRegionHeight()+12)*Math.sin(Math.toRadians(angle))));
-			Play.bulletList.put(Play.bulletList.size()+1,new Bullet(new Animation(bulletTR),
+			Play.bulletList.put(Play.bulletList.size()+1,new Bullet(Play.bulletList.size()+1,
+																	new Animation(bulletTR),
 																	tmp,
 																	angle,
-																	(float)10,
+																	(float)5,
 																	(short) 0,
-																	(float) 0));
-			PacketBullet pb = new PacketBullet();
+																	(long) 1000000000));
+			/*PacketBullet pb = new PacketBullet();
 			pb.angle = angle;
 			pb.pos = tmp;
-			pb.speed = (float)10;
+			pb.speed = (float)5;
 			pb.effects = (short) 0;
-			pb.lifespan = (float) 0;
-			Game.client.sendUDP(pb);
+			pb.lifespan = (long) 1000000000;
+			Game.client.sendUDP(pb);*/
 			
 			//send packet
 		}

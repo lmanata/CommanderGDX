@@ -73,7 +73,9 @@ public class NetworkListener extends Listener{
 		} else if (object instanceof PacketDisconnect){
 			PacketDisconnect pd = (PacketDisconnect) object;
 			LocalClientPlayer lcp = Play.playerList.get(pd.np.id);
-			lcp.destroy();
+			
+			if(lcp != null)	lcp.destroy();
+
 			Play.playerList.remove(pd.np.id);
 		} else if (object instanceof PacketBullet){
 			
@@ -82,7 +84,8 @@ public class NetworkListener extends Listener{
 			for(int i=0; i < 3; i++) 
 				bulletTR[i] = new TextureRegion(Game.aManager.get("res/animations/bullet/"+i+".png", Texture.class));
 			
-			Play.bulletList.put(Play.bulletList.size()+1,new Bullet(new Animation(bulletTR),
+			Play.bulletList.put(Play.bulletList.size()+1,new Bullet(Play.bulletList.size()+1,
+																	new Animation(bulletTR),
 																	pb.pos,
 																	pb.angle,
 																	pb.speed,
