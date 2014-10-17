@@ -19,9 +19,9 @@ public class Weapon {
 	private float angle;
 	//private Bullet bullet;
 	
-	public Weapon(Animation animation, long coolDown){
+	public Weapon(Animation animation, float bulletsPerSec){
 		this.animation = animation;
-		this.coolDown = coolDown;
+		this.coolDown = (long) (1000000000 / bulletsPerSec);
 		nextTimeShoot = System.nanoTime();
 		canShoot=true;
 		bodyPos=new Vector2();
@@ -41,20 +41,20 @@ public class Weapon {
 			
 			Vector2 tmp = new Vector2((float) ((bodyPos.x * B2DVars.PPM) + (animation.getFrame().getRegionWidth()+12)*Math.cos(Math.toRadians(angle))),
 									  (float) ((bodyPos.y * B2DVars.PPM) + (animation.getFrame().getRegionHeight()+12)*Math.sin(Math.toRadians(angle))));
-			Play.bulletList.put(Play.bulletList.size()+1,new Bullet(Play.bulletList.size()+1,
-																	new Animation(bulletTR),
-																	tmp,
-																	angle,
-																	(float)5,
-																	(short) 0,
-																	(long) 1000000000));
-			/*PacketBullet pb = new PacketBullet();
+			Play.bulletList.add(new Bullet(new Animation(bulletTR),
+											tmp,
+											angle,
+											(float) 20,
+											(short) 0,
+											(long) 000000000));
+			
+			PacketBullet pb = new PacketBullet();
 			pb.angle = angle;
 			pb.pos = tmp;
-			pb.speed = (float)5;
+			pb.speed = (float)20;
 			pb.effects = (short) 0;
-			pb.lifespan = (long) 1000000000;
-			Game.client.sendUDP(pb);*/
+			pb.lifespan = (long) 000000000;
+			Game.client.sendUDP(pb);
 			
 			//send packet
 		}

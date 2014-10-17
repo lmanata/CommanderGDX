@@ -49,7 +49,7 @@ public class Play extends GameState{
 	public static Player player; // this is the local controllable player
 
 	public static ConcurrentHashMap<Integer, LocalClientPlayer> playerList; // will probably be changed to clientPlayer or something like that
-	public static ConcurrentHashMap<Integer, Bullet> bulletList; // change to object list plz
+	public static Array<Bullet> bulletList; // change to object list plz
 
 	
 	private HUD hud;
@@ -73,7 +73,7 @@ public class Play extends GameState{
 		}
 		
 		playerList = new ConcurrentHashMap<Integer, LocalClientPlayer>(16, 0.9f, 2);
-		bulletList = new ConcurrentHashMap<Integer, Bullet>()/*(16, 0.9f, 2)*/;
+		bulletList = new Array<Bullet>();
 
 		createTiles(); //fix this //tiled map
 		hud = new HUD(player);
@@ -119,22 +119,23 @@ public class Play extends GameState{
 		for(LocalClientPlayer lcp: playerList.values()){
 			lcp.update(dt);
 		}
-		Array<Body> bodies = cl.getBodiesToRemove();
-		for(Bullet b: bulletList.values()){
+
+		
+		for(int i=0; i<bulletList.size;i++){
+			Bullet b = bulletList.get(i);
 			if(b.toRemove()){
-				bodies.add(b.getBody());
-				bulletList.remove(b.getID());
-				
+				world.destroyBody(b.getBody());
+				bulletList.removeIndex(i);
 			}else{
 				b.update(dt);
 			}
 		}
 		
+		Array<Body> bodies = cl.getBodiesToRemove();
 		for(Body b: bodies){
 			world.destroyBody(b);
 		}
 		bodies.clear();
-		
 	}
 	
 	public void render() {
@@ -159,7 +160,7 @@ public class Play extends GameState{
 			lcp.render(sb);
 		}
 		
-		for(Bullet b: bulletList.values()){
+		for(Bullet b: bulletList){
 			b.render(sb);
 		}
 		

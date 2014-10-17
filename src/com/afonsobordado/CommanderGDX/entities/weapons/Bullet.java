@@ -12,7 +12,6 @@ import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 
 public class Bullet {
-	private int ID;
 	private Body body;
 	private Animation animation;
 	private float speed;
@@ -22,14 +21,12 @@ public class Bullet {
 	private boolean toRemove;
 	private float angle;
 	
-	public Bullet(int id,
-				  Animation anim,
+	public Bullet(Animation anim,
 				  Vector2 barrelPos,
 				  float angle,
 				  float speed,
 				  short effects,
 				  long lifespan){
-		this.ID = id;
 		this.angle=angle;
 		this.animation = anim;
 		this.speed = speed;
@@ -58,7 +55,6 @@ public class Bullet {
 			body.createFixture(fdef).setUserData("bullet");
 			body.setGravityScale(0.25f);
 			body.setUserData(this);
-			System.out.println(body.getUserData());
 		}
 	}
 	
@@ -85,7 +81,9 @@ public class Bullet {
 		sb.end();
 	}
 	
+	public void setRemove(boolean b) {toRemove=b;}
 	public boolean toRemove(){ return toRemove;}
 	public Body getBody() {return body;}
-	public int getID(){return ID;}
+
+	
 }

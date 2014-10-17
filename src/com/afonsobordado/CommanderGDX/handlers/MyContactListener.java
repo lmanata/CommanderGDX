@@ -1,5 +1,6 @@
 package com.afonsobordado.CommanderGDX.handlers;
 
+import com.afonsobordado.CommanderGDX.entities.weapons.Bullet;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Contact;
 import com.badlogic.gdx.physics.box2d.ContactImpulse;
@@ -30,6 +31,14 @@ public class MyContactListener implements ContactListener{
 		   (fb.getUserData() != null && fb.getUserData().equals("footPlayer")) ){
 			numFootContacts++;
 		}
+
+		if(fa.getUserData() != null && fa.getUserData().equals("bullet"))
+			((Bullet) fa.getBody().getUserData()).setRemove(true);
+		
+		if(fb.getUserData() != null && fb.getUserData().equals("bullet"))
+			((Bullet) fb.getBody().getUserData()).setRemove(true);
+		
+					
 		
 
 		

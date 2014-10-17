@@ -28,8 +28,10 @@ public class NetworkListener extends Listener{
 		} else if (object instanceof PacketAccepted){
 			PacketAccepted pa = (PacketAccepted) object;
 			//set some variables, that come with packetaccepted
-			IPmenu.play=true;
+
 			
+			IPmenu.play=true;
+
 			synchronized(this){
 				try {
 					this.wait();
@@ -37,9 +39,9 @@ public class NetworkListener extends Listener{
 					e.printStackTrace();
 				}
 			}
-
 			Play.player.id = pa.id;
 			Play.mapName = pa.mapName;
+
 			
 		} else if (object instanceof PacketDeclined){
 			IPmenu.declineReason = ((PacketDeclined) object).reason;
@@ -56,19 +58,22 @@ public class NetworkListener extends Listener{
 		} else if (object instanceof NetworkPlayer){
 			NetworkPlayer np = (NetworkPlayer) object;
 			
-			if(Play.player == null) return;//there is a chance that we receive a NetworkPacket before the player is created
-				if(np.id == Play.player.id){
-					//check for inaccuracies
-					return;
-				}
+			if(Play.player == null || Play.playerList == null) return;//there is a chance that we receive a NetworkPacket before we are ready
+			
+			if(np.id == Play.player.id){
+				//check for inaccuracies
+				return;
+			}
 			
 			LocalClientPlayer lcp = Play.playerList.get(np.id);
-
+			
 			if(lcp == null) return; //we dont have the object yet
 			
 			synchronized(Play.getWorld()){
 				lcp.updateNetworkPlayer(np);
 			}
+
+
 			
 		} else if (object instanceof PacketDisconnect){
 			PacketDisconnect pd = (PacketDisconnect) object;
@@ -84,13 +89,12 @@ public class NetworkListener extends Listener{
 			for(int i=0; i < 3; i++) 
 				bulletTR[i] = new TextureRegion(Game.aManager.get("res/animations/bullet/"+i+".png", Texture.class));
 			
-			Play.bulletList.put(Play.bulletList.size()+1,new Bullet(Play.bulletList.size()+1,
-																	new Animation(bulletTR),
-																	pb.pos,
-																	pb.angle,
-																	pb.speed,
-																	pb.effects,
-																	pb.lifespan));
+			Play.bulletList.add(new Bullet(new Animation(bulletTR),
+											pb.pos,
+											pb.angle,
+											pb.speed,
+											pb.effects,
+											pb.lifespan));
 		}
 		
    }
