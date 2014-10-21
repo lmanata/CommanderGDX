@@ -17,11 +17,15 @@ public class Weapon {
 	private boolean canShoot;
 	private Vector2 bodyPos;
 	private float angle;
+	private long bulletLifespan;
+	private float bulletSpeed;
 	//private Bullet bullet;
 	
-	public Weapon(Animation animation, float bulletsPerSec){
+	public Weapon(Animation animation, float bulletsPerSec, float bulletLifespan, float bulletSpeed){ //all time args are given in seconds, and transleted into nanoseconds on the constructor
 		this.animation = animation;
 		this.coolDown = (long) (1000000000 / bulletsPerSec);
+		this.bulletLifespan = (long) (bulletLifespan * 1000000000);
+		this.bulletSpeed = bulletSpeed;
 		nextTimeShoot = System.nanoTime();
 		canShoot=true;
 		bodyPos=new Vector2();
@@ -39,21 +43,21 @@ public class Weapon {
 			for(int i=0; i < 3; i++) 
 				bulletTR[i] = new TextureRegion(Game.aManager.get("res/animations/bullet/"+i+".png", Texture.class));
 			
-			Vector2 tmp = new Vector2((float) ((bodyPos.x * B2DVars.PPM) + (animation.getFrame().getRegionWidth()+12)*Math.cos(Math.toRadians(angle))),
-									  (float) ((bodyPos.y * B2DVars.PPM) + (animation.getFrame().getRegionHeight()+12)*Math.sin(Math.toRadians(angle))));
+			Vector2 tmp = new Vector2((float) ((bodyPos.x * B2DVars.PPM) + (animation.getFrame().getRegionWidth()  + 8)*Math.cos(Math.toRadians(angle))),	//fixme
+									  (float) ((bodyPos.y * B2DVars.PPM) + (animation.getFrame().getRegionHeight() + 30)*Math.sin(Math.toRadians(angle)))); //fixme
 			Play.bulletList.add(new Bullet(new Animation(bulletTR),
 											tmp,
 											angle,
-											(float) 20,
-											(short) 0,
-											(long) 000000000));
+											bulletSpeed,
+											effects,
+											bulletLifespan));
 			
 			PacketBullet pb = new PacketBullet();
 			pb.angle = angle;
 			pb.pos = tmp;
-			pb.speed = (float)20;
-			pb.effects = (short) 0;
-			pb.lifespan = (long) 000000000;
+			pb.speed = bulletSpeed;
+			pb.effects = effects;
+			pb.lifespan = bulletLifespan;
 			Game.client.sendUDP(pb);
 			
 			//send packet

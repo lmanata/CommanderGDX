@@ -58,7 +58,7 @@ public class LocalClientPlayer{
 		legsJumpTR[0] = new TextureRegion(Game.aManager.get("res/animations/test/legs/jump.png", Texture.class));
 
 		
-		weapon = new Weapon(new Animation(weaponTR), (short) 1);
+		weapon = new Weapon(new Animation(weaponTR), 1f, 1f, 20f);
 		pc = new PlayerCharacter(new Animation(legsIdleTR),
 								 new Animation(legsJumpTR),
 								 new Animation(legsRunTR),

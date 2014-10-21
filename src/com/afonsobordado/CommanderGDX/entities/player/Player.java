@@ -2,11 +2,13 @@ package com.afonsobordado.CommanderGDX.entities.player;
 
 
 import static com.afonsobordado.CommanderGDX.vars.B2DVars.PLAYER_MAX_VELOCITY;
+
 import com.afonsobordado.CommanderGDX.Game;
 import com.afonsobordado.CommanderGDX.entities.characters.PlayerCharacter;
 import com.afonsobordado.CommanderGDX.entities.weapons.Weapon;
 import com.afonsobordado.CommanderGDX.handlers.Animation;
 import com.afonsobordado.CommanderGDX.handlers.InputHandler;
+import com.afonsobordado.CommanderGDX.packets.NetworkObject.NetworkPlayer;
 import com.afonsobordado.CommanderGDX.vars.B2DVars;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -14,9 +16,9 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
-import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.World;
 
 
@@ -88,7 +90,7 @@ public class Player {
 		legsJumpTR[0] = new TextureRegion(Game.aManager.get("res/animations/test/legs/jump.png", Texture.class));
 
 		
-		weapon = new Weapon(new Animation(weaponTR), 13.75f);
+		weapon = new Weapon(new Animation(weaponTR), 13.75f, 1, 20f);
 		pc = new PlayerCharacter(new Animation(legsIdleTR),
 								 new Animation(legsJumpTR),
 								 new Animation(legsRunTR),
@@ -113,6 +115,8 @@ public class Player {
 		Vector2 vel = body.getLinearVelocity();
 		Vector2 pos = body.getPosition();
 		
+		
+		
 		if(grounded){
 			lastGroundTime = System.nanoTime();
 		}else{
@@ -135,8 +139,8 @@ public class Player {
 
 		}
 		
-		if(InputHandler.isDown(InputHandler.MOUSE_1)) weapon.shoot();
-		if(InputHandler.isDown(InputHandler.MOUSE_2)) weapon.shoot();
+		/*if(InputHandler.isDown(InputHandler.MOUSE_1))*/ weapon.shoot();
+		if(InputHandler.isDown(InputHandler.MOUSE_2)) System.gc();
 
 		
 		
@@ -218,5 +222,12 @@ public class Player {
 
 	public Body getBody() {return body;}
 	public Vector2 getPostion(){return body.getPosition();}
+	public NetworkPlayer getNetworkPacket(){
+		return new NetworkPlayer(id,
+				 				 name,
+				 				 body.getPosition(),
+				 				 armDegrees,
+				 				 body.getLinearVelocity());
+	}
 	
 }

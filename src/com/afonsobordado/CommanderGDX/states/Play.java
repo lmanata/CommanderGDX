@@ -108,13 +108,9 @@ public class Play extends GameState{
 		
 		player.update(dt);
 		
-		NetworkPlayer np = new NetworkPlayer(player.getId(),
-											 player.getName(),
-											 player.getBody().getPosition(),
-											 player.getArmDegrees(),
-											 player.getBody().getLinearVelocity());
 
-		Game.client.sendTCP(np);
+
+		Game.client.sendTCP(player.getNetworkPacket());
 		
 		for(LocalClientPlayer lcp: playerList.values()){
 			lcp.update(dt);
