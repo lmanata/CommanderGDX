@@ -9,9 +9,7 @@ import com.afonsobordado.CommanderGDX.packets.NetworkObject.NetworkPlayer;
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
-import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
@@ -20,9 +18,9 @@ import com.esotericsoftware.kryonet.Client;
 public class Game implements ApplicationListener{
 
 	public static final String TITLE = "CommanderGDX";
-	public static final int V_WIDTH = 640;
-	public static final int V_HEIGHT = 480;
-	public static final int SCALE = 1;
+	public static final int V_WIDTH = 160;
+	public static final int V_HEIGHT = 120;
+	public static final int SCALE = 6;
 	
 	public static final float STEP = 1 / 60f;
 	
@@ -71,18 +69,17 @@ public class Game implements ApplicationListener{
 		aManager.load("res/images/hud.png", Texture.class);
 		aManager.load("res/images/crystal.png", Texture.class);
 		
-		for(int i=0; i < 8; i++) //8 is the number of images the torso animation has
+		for(int i=0; i < 8; ++i) //8 is the number of images the torso animation has
 			aManager.load("res/animations/test/legs/00"+i+".png", Texture.class);
 		
-		for(int i=0; i < 5; i++) //8 sprites on the animation
+		for(int i=0; i < 5; ++i) //8 sprites on the animation
 			aManager.load("res/animations/test/chest/00"+i+".png", Texture.class);
 		
-		for(int i=0; i < 3; i++) //8 sprites on the animation
+		for(int i=0; i < 3; ++i) //8 sprites on the animation
 			aManager.load("res/animations/bullet/"+i+".png", Texture.class);
+		for(int i=0; i < 3; ++i)
+			aManager.load("res/animations/soldier/weapons/00"+i+".png", Texture.class);
 		
-		/*for(int i=0; i < 30; i++) //30 arm sprites
-			aManager.load("res/animations/soldier/arms/"+i+".png", Texture.class);*/
-		aManager.load("res/animations/soldier/weapons/001.png", Texture.class);
 		aManager.load("res/animations/soldier/arms/001.png", Texture.class);
 		aManager.load("res/animations/test/legs/idle.png", Texture.class);
 		aManager.load("res/animations/test/legs/jump.png", Texture.class);

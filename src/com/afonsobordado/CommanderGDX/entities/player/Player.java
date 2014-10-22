@@ -20,6 +20,7 @@ import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.utils.Array;
 
 
 
@@ -30,11 +31,17 @@ public class Player {
 	private PlayerCharacter pc;
 	private Weapon weapon;
 	public int id;
-
+	
+	private Array<Weapon> weapons;
+	private short currentWeapon;
+	
 	private float armDegrees;
 	private String name;
 	
 	public Player(World world){
+	
+		weapons = new Array<Weapon>();
+		currentWeapon = 0;
 		
 		BodyDef bdef  = new BodyDef();
 		FixtureDef fdef = new FixtureDef();
@@ -85,22 +92,29 @@ public class Player {
 			legsRunTR[i] = new TextureRegion(Game.aManager.get("res/animations/test/legs/00"+i+".png", Texture.class));
 		
 		armsTR[0] = new TextureRegion(Game.aManager.get("res/animations/soldier/arms/001.png", Texture.class));
-		weaponTR[0] = new TextureRegion(Game.aManager.get("res/animations/soldier/weapons/001.png",Texture.class));
+		
 		legsIdleTR[0] = new TextureRegion(Game.aManager.get("res/animations/test/legs/idle.png", Texture.class));
 		legsJumpTR[0] = new TextureRegion(Game.aManager.get("res/animations/test/legs/jump.png", Texture.class));
 
+		weaponTR[0] = new TextureRegion(Game.aManager.get("res/animations/soldier/weapons/002.png",Texture.class));
+		weapons.add(new Weapon(new Animation(weaponTR), 13.75f, 1, 20f,new Vector2(18,10)));
 		
-		weapon = new Weapon(new Animation(weaponTR), 13.75f, 1, 20f);
+		weaponTR = new TextureRegion[1];
+		weaponTR[0] = new TextureRegion(Game.aManager.get("res/animations/soldier/weapons/000.png",Texture.class));
+		weapons.add(new Weapon(new Animation(weaponTR), 0f, 2, 10f,new Vector2(18,10)));
+		
+		
 		pc = new PlayerCharacter(new Animation(legsIdleTR),
 								 new Animation(legsJumpTR),
 								 new Animation(legsRunTR),
 								 new Animation(torsoAnimTR),
 								 new Animation(armsTR),
-								 new Vector2(8,16), //torsoPin
+								 new Vector2(13,12), //torsoPin
 								 new Vector2(4,8), //armPin
-								 new Vector2(16,3), //weaponPin
-								 this.weapon,
+								 this.weapons.get(currentWeapon),
 								 this.body);
+		
+		
 	}
 	
 	
@@ -139,8 +153,14 @@ public class Player {
 
 		}
 		
-		/*if(InputHandler.isDown(InputHandler.MOUSE_1))*/ weapon.shoot();
-		if(InputHandler.isDown(InputHandler.MOUSE_2)) System.gc();
+		if(InputHandler.isDown(InputHandler.MOUSE_1)){
+			if(InputHandler.isPressed(InputHandler.MOUSE_1)) 
+				weapons.get(currentWeapon).shoot(true);
+			else
+				weapons.get(currentWeapon).shoot(false);
+		}
+		
+		if(InputHandler.isPressed(InputHandler.MOUSE_2)) switchNextWeapon();
 
 		
 		
@@ -185,9 +205,9 @@ public class Player {
 			pc.setFoward(!((pc.isFlip() && body.getLinearVelocity().x >= 0) || (!pc.isFlip() && body.getLinearVelocity().x < 0)));
 		}
 		
-		weapon.setBodyPos(body.getPosition());
-		weapon.setAngle(armDegrees);
-		weapon.update(dt);
+		weapons.get(currentWeapon).setBodyPos(body.getPosition());
+		weapons.get(currentWeapon).setAngle(armDegrees);
+		weapons.get(currentWeapon).update(dt);
 		
 		//animation.update(dt);
 		pc.update(dt);
@@ -230,4 +250,8 @@ public class Player {
 				 				 body.getLinearVelocity());
 	}
 	
+	public void switchNextWeapon(){
+		currentWeapon = (short) ((currentWeapon+1) % weapons.size);
+		pc.setWeapon(weapons.get(currentWeapon));
+	}
 }

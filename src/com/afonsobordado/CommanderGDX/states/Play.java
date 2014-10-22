@@ -8,8 +8,8 @@ import com.afonsobordado.CommanderGDX.entities.player.LocalClientPlayer;
 import com.afonsobordado.CommanderGDX.entities.player.Player;
 import com.afonsobordado.CommanderGDX.entities.weapons.Bullet;
 import com.afonsobordado.CommanderGDX.handlers.GameStateManager;
+import com.afonsobordado.CommanderGDX.handlers.InputHandler;
 import com.afonsobordado.CommanderGDX.handlers.MyContactListener;
-import com.afonsobordado.CommanderGDX.packets.NetworkObject.NetworkPlayer;
 import com.afonsobordado.CommanderGDX.vars.B2DVars;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.FPSLogger;
@@ -92,6 +92,7 @@ public class Play extends GameState{
 	}
 
 	public void handleInput() {
+		if(InputHandler.isPressed(InputHandler.BUTTON_Z))	debug = !debug;
 		player.grounded = cl.isPlayerOnGround();
 		player.handleInput();
 		

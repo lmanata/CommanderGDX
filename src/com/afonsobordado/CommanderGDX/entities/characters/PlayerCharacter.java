@@ -15,7 +15,7 @@ public class PlayerCharacter {
 	private Animation arm;
 	private Vector2 torsoPin;
 	private Vector2 armPin;
-	private Vector2 weaponPin; //where the weapon should be pinned in relation to the end of the arm
+	private Vector2 weaponPin; 
 	private float armRotation;
 
 	
@@ -37,7 +37,6 @@ public class PlayerCharacter {
 						   Animation arm,
 						   Vector2 torsoPin,
 						   Vector2 armPin,
-						   Vector2 weaponPin,
 						   Weapon weapon,
 						   Body body)
 	{
@@ -46,7 +45,7 @@ public class PlayerCharacter {
 		this.arm = arm;
 		this.torsoPin = torsoPin;
 		this.armPin = armPin;
-		this.weaponPin = weaponPin;
+		this.weaponPin = weapon.getPin();
 		this.body = body;
 		this.weapon = weapon;
 		this.legsIdle = legsIdle;
@@ -148,6 +147,7 @@ public class PlayerCharacter {
 				1,
 				1,
 				armRotation - ((isFlip) ? 180 : 0));
+
 		
 	}
 	
@@ -197,5 +197,9 @@ public class PlayerCharacter {
 		this.isIdle = isIdle;
 	}
 
+	public void setWeapon(Weapon weapon){ 
+		this.weapon = weapon;
+		this.weaponPin = weapon.getPin();
+	}
 	
 }

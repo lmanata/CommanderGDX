@@ -58,7 +58,7 @@ public class LocalClientPlayer{
 		legsJumpTR[0] = new TextureRegion(Game.aManager.get("res/animations/test/legs/jump.png", Texture.class));
 
 		
-		weapon = new Weapon(new Animation(weaponTR), 1f, 1f, 20f);
+		weapon = new Weapon(new Animation(weaponTR), 1f, 1f, 20f,new Vector2(18,10));
 		pc = new PlayerCharacter(new Animation(legsIdleTR),
 								 new Animation(legsJumpTR),
 								 new Animation(legsRunTR),
@@ -66,7 +66,6 @@ public class LocalClientPlayer{
 								 new Animation(armsTR),
 								 new Vector2(8,16), //torsoPin
 								 new Vector2(4,8), //armPin
-								 new Vector2(16,3), //weaponPin
 								 this.weapon,
 								 this.body);
 		
