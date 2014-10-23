@@ -6,6 +6,9 @@ import com.afonsobordado.CommanderGDX.vars.B2DVars;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.physics.box2d.Fixture;
+import com.badlogic.gdx.physics.box2d.PolygonShape;
+import com.badlogic.gdx.physics.box2d.Shape;
 
 public class PlayerCharacter {
 	private Animation legsIdle;
@@ -78,8 +81,17 @@ public class PlayerCharacter {
 	}
 	
 	public void render(SpriteBatch sb) {
-		Vector2 drawPos = new Vector2(body.getPosition().x * B2DVars.PPM - legs.getFrame().getRegionWidth() / 2,
-									 (body.getPosition().y * B2DVars.PPM) - ((torso.getFrame().getRegionHeight()+legs.getFrame().getRegionHeight())/2) );
+		Vector2 boxSize = new Vector2();
+		for(Fixture f: body.getFixtureList()){
+			if(f.getUserData().equals("player")){
+				PolygonShape s = (PolygonShape) f.getShape();
+				s.getVertex(0, boxSize);
+			}
+		}
+		
+		Vector2 drawPos = new Vector2(body.getPosition().x * B2DVars.PPM + boxSize.x * B2DVars.PPM ,
+									  body.getPosition().y * B2DVars.PPM + boxSize.y * B2DVars.PPM);
+		
 		if(isIdle){
 			sb.draw(legsIdle.getFrame(),
 					drawPos.x,

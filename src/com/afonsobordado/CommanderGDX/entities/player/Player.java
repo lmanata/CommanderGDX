@@ -54,15 +54,16 @@ public class Player {
 		body = world.createBody(bdef);
 		body.setBullet(true);
 		
-		shape.setAsBox(13 / B2DVars.PPM, (float) (29 / B2DVars.PPM));
+		shape.setAsBox(17.5f / B2DVars.PPM, (float) (32 / B2DVars.PPM));
 		fdef.shape = shape;
 		fdef.filter.categoryBits = B2DVars.BIT_PLAYER;
 		fdef.filter.maskBits = B2DVars.BIT_GROUND | B2DVars.BIT_PLAYER;
 		
+		
 		body.createFixture(fdef).setUserData("player");
 		
 		//create foot sensor
-		shape.setAsBox(13 / B2DVars.PPM, 2 / B2DVars.PPM, new Vector2(0, (float) (-29 / B2DVars.PPM)), 0);
+		shape.setAsBox(17.5f / B2DVars.PPM, 2 / B2DVars.PPM, new Vector2(0, (float) (-32 / B2DVars.PPM)), 0);
 		fdef.shape = shape;
 		fdef.filter.categoryBits = B2DVars.BIT_PLAYER;
 		fdef.filter.maskBits = B2DVars.BIT_GROUND | B2DVars.BIT_PLAYER;
