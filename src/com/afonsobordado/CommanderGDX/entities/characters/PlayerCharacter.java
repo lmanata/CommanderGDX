@@ -89,8 +89,8 @@ public class PlayerCharacter {
 			}
 		}
 		
-		Vector2 drawPos = new Vector2(body.getPosition().x * B2DVars.PPM + boxSize.x * B2DVars.PPM ,
-									  body.getPosition().y * B2DVars.PPM + boxSize.y * B2DVars.PPM);
+		Vector2 drawPos = new Vector2( (body.getPosition().x + boxSize.x) * B2DVars.PPM ,
+									   (body.getPosition().y + boxSize.y) * B2DVars.PPM);
 		
 		if(isIdle){
 			sb.draw(legsIdle.getFrame(),
@@ -118,7 +118,7 @@ public class PlayerCharacter {
 		if(!isFlip){
 			drawPos.x += (torsoPin.x-armPin.x); 
 		}else{
-			drawPos.x += (torso.getFrame().getRegionWidth() - arm.getFrame().getRegionWidth()) - (armPin.x); //doubt this code
+			drawPos.x += (torso.getFrame().getRegionWidth() - arm.getFrame().getRegionWidth() - torsoPin.x + armPin.x);
 		}
 		Vector2 armDrawPos = drawPos.cpy(); //we need to render the weapon first, so save this
 
@@ -137,7 +137,7 @@ public class PlayerCharacter {
 			
 		
 		
-		sb.draw(weapon.getFrame(),
+		/*sb.draw(weapon.getFrame(),
 				drawPos.x,
 				drawPos.y,
 				weaponPin.x,
@@ -146,7 +146,7 @@ public class PlayerCharacter {
 				weapon.getFrame().getRegionHeight(),
 				1,
 				1,
-				armRotation - ((isFlip) ? 180 : 0));
+				armRotation - ((isFlip) ? 180 : 0));*/
 		
 		
 		sb.draw(arm.getFrame(),
