@@ -102,7 +102,7 @@ public class Player {
 		
 		weaponTR = new TextureRegion[1];
 		weaponTR[0] = new TextureRegion(Game.aManager.get("res/animations/soldier/weapons/000.png",Texture.class));
-		weapons.add(new Weapon(new Animation(weaponTR), 0f, 2, 10f,new Vector2(18,5)));
+		weapons.add(new Weapon(new Animation(weaponTR), 0f, 2, 10f,new Vector2(4,5)));
 		
 		
 		pc = new PlayerCharacter(new Animation(legsIdleTR),
@@ -206,7 +206,6 @@ public class Player {
 			pc.setFoward(!((pc.isFlip() && body.getLinearVelocity().x >= 0) || (!pc.isFlip() && body.getLinearVelocity().x < 0)));
 		}
 		
-		weapons.get(currentWeapon).setBodyPos(body.getPosition());
 		weapons.get(currentWeapon).setAngle(armDegrees);
 		weapons.get(currentWeapon).update(dt);
 		

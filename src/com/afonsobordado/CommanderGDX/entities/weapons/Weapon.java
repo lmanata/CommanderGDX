@@ -15,7 +15,7 @@ public class Weapon {
 	private long coolDown;
 	private long nextTimeShoot;
 	private boolean canShoot;
-	private Vector2 bodyPos;
+	private Vector2 barrelPos;
 	private float angle;
 	private long bulletLifespan;
 	private float bulletSpeed;
@@ -29,7 +29,7 @@ public class Weapon {
 		this.bulletSpeed = bulletSpeed;
 		nextTimeShoot = System.nanoTime();
 		canShoot=true;
-		bodyPos=new Vector2();
+		barrelPos=new Vector2();
 		angle = 0f;
 		
 		if(bulletsPerSec != 0)
@@ -55,8 +55,10 @@ public class Weapon {
 		for(int i=0; i < 3; i++) 
 			bulletTR[i] = new TextureRegion(Game.aManager.get("res/animations/bullet/"+i+".png", Texture.class));
 		
-		Vector2 tmp = new Vector2((float) ((bodyPos.x * B2DVars.PPM) + (animation.getFrame().getRegionWidth()  + animation.getFrame().getRegionHeight())*Math.cos(Math.toRadians(angle))),	//fixme
+		/*Vector2 tmp = new Vector2((float) ((bodyPos.x * B2DVars.PPM) + (animation.getFrame().getRegionWidth()  + animation.getFrame().getRegionHeight())*Math.cos(Math.toRadians(angle))),	//fixme
 								  (float) ((bodyPos.y * B2DVars.PPM) + (animation.getFrame().getRegionHeight() + animation.getFrame().getRegionWidth())*Math.sin(Math.toRadians(angle)))); //fixme
+		*/
+		Vector2 tmp = barrelPos.cpy();
 		Play.bulletList.add(new Bullet(new Animation(bulletTR),
 										tmp,
 										angle,
@@ -81,8 +83,8 @@ public class Weapon {
 	public static short BIT_FIRE = 0x1;
 	public static short BIT_SLOW = 0x2;
 
-	public void setBodyPos(Vector2 position) {
-		this.bodyPos = position;
+	public void setBarrelPos(Vector2 position) {
+		this.barrelPos = position;
 	}
 
 	public Vector2 getPin() {

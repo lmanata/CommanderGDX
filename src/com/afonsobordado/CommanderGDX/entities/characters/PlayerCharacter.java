@@ -151,7 +151,17 @@ public class PlayerCharacter {
 				1,
 				1,
 				armRotation);
-
+		
+		if(isFlip){
+			//TODO: fix an weapon barrel offset error, most likely this is due to the barrel of the weapon not being the center of the image
+			drawPos.x -= weapon.getFrame().getRegionWidth() * Math.cos(Math.toRadians(armRotation));
+			drawPos.y -= weapon.getFrame().getRegionWidth() * Math.sin(Math.toRadians(armRotation));
+		}else{
+			drawPos.x += weapon.getFrame().getRegionWidth() * Math.cos(Math.toRadians(armRotation));
+			drawPos.y += weapon.getFrame().getRegionWidth() * Math.sin(Math.toRadians(armRotation));
+		}
+		/*drawPos.y += weapon.getFrame().getRegionWidth() * Math.sin(Math.toRadians(armRotation));/*/
+		weapon.setBarrelPos(drawPos);
 		
 	}
 	
