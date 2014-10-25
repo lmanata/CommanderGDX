@@ -18,9 +18,9 @@ import com.esotericsoftware.kryonet.Client;
 public class Game implements ApplicationListener{
 
 	public static final String TITLE = "CommanderGDX";
-	public static final int V_WIDTH = 800;
-	public static final int V_HEIGHT = 600;
-	public static final int SCALE = 1;
+	public static final int V_WIDTH = 400;
+	public static final int V_HEIGHT = 300;
+	public static final int SCALE = 3;
 	
 	public static final float STEP = 1 / 60f;
 	

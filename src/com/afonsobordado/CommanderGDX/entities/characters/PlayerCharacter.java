@@ -125,29 +125,21 @@ public class PlayerCharacter {
 		
 		//http://math.stackexchange.com/questions/475917/how-to-find-position-of-a-point-based-on-known-angle-radius-and-center-of-rotat
 		
+		armRotation -= ((isFlip) ? 180 : 0);
 		
-		float tempArmRot = armRotation + ((armRotation<0) ? 360 : 0);
-		
-		drawPos.y += ((arm.getFrame().getRegionWidth()-weaponPin.y) * Math.sin(Math.toRadians(tempArmRot))) + weaponPin.y; //TODO: fixmeplzpzlzplzpzlzpzlzplzpzl
-		
-		if(!isFlip)
-			drawPos.x += (arm.getFrame().getRegionWidth() * Math.cos(Math.toRadians(tempArmRot))) - weaponPin.x; //TODO: fixmeplzpzlzplzpzlzpzlzplzpzl
-		else
-			drawPos.x += (weaponPin.x*Math.cos(Math.toRadians(tempArmRot))); //TODO: fixmeplzpzlzplzpzlzpzlzplzpzl
-			
-		
-		
-		/*sb.draw(weapon.getFrame(),
-				drawPos.x,
-				drawPos.y,
-				weaponPin.x,
-				weaponPin.y,
+
+		drawPos.add(armPin);
+
+		sb.draw(weapon.getFrame(),
+				drawPos.x - ((isFlip) ? (weapon.getFrame().getRegionWidth() - weaponPin.x + armPin.x): 0),
+				drawPos.y - weapon.getFrame().getRegionHeight() + weaponPin.y, 
+				(isFlip) ? weapon.getFrame().getRegionWidth() : 0,
+				weapon.getFrame().getRegionHeight() - weaponPin.y,
 				weapon.getFrame().getRegionWidth(),
 				weapon.getFrame().getRegionHeight(),
 				1,
 				1,
-				armRotation - ((isFlip) ? 180 : 0));*/
-		
+				armRotation);
 		
 		sb.draw(arm.getFrame(),
 				armDrawPos.x,
@@ -158,7 +150,7 @@ public class PlayerCharacter {
 				arm.getFrame().getRegionHeight(),
 				1,
 				1,
-				armRotation - ((isFlip) ? 180 : 0));
+				armRotation);
 
 		
 	}
