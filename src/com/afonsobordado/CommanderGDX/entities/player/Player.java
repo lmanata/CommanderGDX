@@ -102,7 +102,7 @@ public class Player {
 		
 		weaponTR = new TextureRegion[1];
 		weaponTR[0] = new TextureRegion(Game.aManager.get("res/animations/soldier/weapons/000.png",Texture.class));
-		weapons.add(new Weapon(new Animation(weaponTR), 0f, 2, 10f,new Vector2(4,5)));
+		weapons.add(new Weapon(new Animation(weaponTR), 0f, 2, 10f,new Vector2(19,5)));
 		
 		
 		pc = new PlayerCharacter(new Animation(legsIdleTR),

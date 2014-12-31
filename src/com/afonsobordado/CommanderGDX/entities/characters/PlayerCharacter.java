@@ -160,7 +160,7 @@ public class PlayerCharacter {
 			drawPos.x += weapon.getFrame().getRegionWidth() * Math.cos(Math.toRadians(armRotation));
 			drawPos.y += weapon.getFrame().getRegionWidth() * Math.sin(Math.toRadians(armRotation));
 		}
-		/*drawPos.y += weapon.getFrame().getRegionWidth() * Math.sin(Math.toRadians(armRotation));/*/
+		//drawPos.y += weapon.getFrame().getRegionWidth() * Math.sin(Math.toRadians(armRotation));
 		weapon.setBarrelPos(drawPos);
 		
 	}
