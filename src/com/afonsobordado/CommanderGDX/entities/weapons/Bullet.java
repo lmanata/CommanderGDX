@@ -46,6 +46,7 @@ public class Bullet {
 		
 		shape.setAsBox((float) ((anim.getFrame().getRegionHeight()/2) / B2DVars.PPM), (float) ((anim.getFrame().getRegionHeight()/2) / B2DVars.PPM));
 		fdef.shape = shape;
+		fdef.density = 1;
 		fdef.filter.categoryBits = B2DVars.BIT_PLAYER;
 		fdef.filter.maskBits = B2DVars.BIT_GROUND | B2DVars.BIT_PLAYER;
 		
@@ -59,6 +60,9 @@ public class Bullet {
 	}
 	
 	public void update(float dt){
+		
+		angle = (float) Math.toDegrees(Math.atan2(body.getLinearVelocity().y, body.getLinearVelocity().x));
+		
 		animation.update(dt);
 		this.lifespan-=(dt*1000000000);
 		if(lifespanEnabled) toRemove = ((this.lifespan) < 0);
