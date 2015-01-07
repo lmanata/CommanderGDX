@@ -32,9 +32,9 @@ public class LocalClientPlayer{
 		this.armDegrees = pnp.np.armAngle;
 		this.id = pnp.np.id;
 		this.name = pnp.np.name;
-		synchronized(Play.getWorld()){
-			createBody(world);
-		}
+		Vector2 legSz=new Vector2(0f,0f);
+		Vector2 torsoSz = new Vector2(0f,0f);
+
 		
 		TextureRegion[] torsoAnimTR = new TextureRegion[5];
 		TextureRegion[] legsRunTR = new TextureRegion[8];
@@ -42,21 +42,52 @@ public class LocalClientPlayer{
 		TextureRegion[] weaponTR = new TextureRegion[1];
 		TextureRegion[] legsIdleTR = new TextureRegion[1];
 		TextureRegion[] legsJumpTR = new TextureRegion[1];
-
-
-
 		
-		for(int i = 0;i<5;i++) 
+		for(int i = 0;i<5;i++){
 			torsoAnimTR[i] = new TextureRegion(Game.aManager.get("res/animations/test/chest/00"+i+".png", Texture.class));
-		
-		for(int i=0;i<8;i++)
+			if(torsoAnimTR[i].getRegionHeight() > torsoSz.y) torsoSz.y = torsoAnimTR[i].getRegionHeight();
+			if(torsoAnimTR[i].getRegionWidth() > torsoSz.x) torsoSz.x = torsoAnimTR[i].getRegionWidth();
+		}
+		for(int i=0;i<8;i++){
 			legsRunTR[i] = new TextureRegion(Game.aManager.get("res/animations/test/legs/00"+i+".png", Texture.class));
-		
+			if(legsRunTR[i].getRegionHeight() > legSz.y) legSz.y = legsRunTR[i].getRegionHeight();
+			if(legsRunTR[i].getRegionWidth() > legSz.x) legSz.x = legsRunTR[i].getRegionWidth();
+		}
 		armsTR[0] = new TextureRegion(Game.aManager.get("res/animations/soldier/arms/001.png", Texture.class));
 		weaponTR[0] = new TextureRegion(Game.aManager.get("res/animations/soldier/weapons/001.png",Texture.class));
 		legsIdleTR[0] = new TextureRegion(Game.aManager.get("res/animations/test/legs/idle.png", Texture.class));
 		legsJumpTR[0] = new TextureRegion(Game.aManager.get("res/animations/test/legs/jump.png", Texture.class));
 
+		
+		synchronized(Play.getWorld()){
+			BodyDef bdef  = new BodyDef();
+			FixtureDef fdef = new FixtureDef();
+			PolygonShape shape  = new PolygonShape();
+			
+			bdef.position.set(100 / B2DVars.PPM,200 / B2DVars.PPM);
+			bdef.type = BodyType.DynamicBody;
+			bdef.linearVelocity.set(1,0);
+			
+			body = world.createBody(bdef);
+			body.setBullet(true);
+			
+			shape.setAsBox((legSz.x/2) / B2DVars.PPM, ((legSz.y + torsoSz.y)/2) / B2DVars.PPM);
+			fdef.shape = shape;
+			fdef.filter.categoryBits = B2DVars.BIT_PLAYER;
+			fdef.filter.maskBits = B2DVars.BIT_GROUND | B2DVars.BIT_PLAYER;
+			
+			body.createFixture(fdef).setUserData("lcp");
+			
+			//create foot sensor
+			shape.setAsBox((legSz.x/2) / B2DVars.PPM, 2 / B2DVars.PPM, new Vector2(0, (float) (-((legSz.y + torsoSz.y)/2) / B2DVars.PPM)), 0);
+			fdef.shape = shape;
+			fdef.filter.categoryBits = B2DVars.BIT_PLAYER;
+			fdef.filter.maskBits = B2DVars.BIT_GROUND | B2DVars.BIT_PLAYER;
+			fdef.isSensor = true;
+			body.createFixture(fdef).setUserData("footLcp");
+			body.setUserData(this);
+		}
+		
 		
 		weapon = new Weapon(new Animation(weaponTR), 1f, 1f, 20f,new Vector2(18,10));
 		pc = new PlayerCharacter(new Animation(legsIdleTR),
@@ -88,34 +119,7 @@ public class LocalClientPlayer{
 								 body.getLinearVelocity());
 	}
 	
-	private void createBody(World world){
-		BodyDef bdef  = new BodyDef();
-		FixtureDef fdef = new FixtureDef();
-		PolygonShape shape  = new PolygonShape();
-		
-		bdef.position.set(100 / B2DVars.PPM,200 / B2DVars.PPM);
-		bdef.type = BodyType.DynamicBody;
-		bdef.linearVelocity.set(1,0);
-		
-		body = world.createBody(bdef);
-		body.setBullet(true);
-		
-		shape.setAsBox(13 / B2DVars.PPM, (float) (29 / B2DVars.PPM));
-		fdef.shape = shape;
-		fdef.filter.categoryBits = B2DVars.BIT_PLAYER;
-		fdef.filter.maskBits = B2DVars.BIT_GROUND | B2DVars.BIT_PLAYER;
-		
-		body.createFixture(fdef).setUserData("lcp");
-		
-		//create foot sensor
-		shape.setAsBox(13 / B2DVars.PPM, 2 / B2DVars.PPM, new Vector2(0, (float) (-29 / B2DVars.PPM)), 0);
-		fdef.shape = shape;
-		fdef.filter.categoryBits = B2DVars.BIT_PLAYER;
-		fdef.filter.maskBits = B2DVars.BIT_GROUND | B2DVars.BIT_PLAYER;
-		fdef.isSensor = true;
-		body.createFixture(fdef).setUserData("footLcp");
-		body.setUserData(this);
-	}
+
 	
 	public void render(SpriteBatch sb) {
 		sb.begin();
@@ -136,16 +140,16 @@ public class LocalClientPlayer{
 		}
 
 		pc.setTorsoFrame((int) (7-(armDegreesTemp /22))); //TODO: needs smoothing
-		
-		if(body.getLinearVelocity().x == 0 && body.getLinearVelocity().y == 0){ // stopped boddy
-			//pc.setLegsFrame(8);
-			pc.setLegsDelay(0);
-		}else if(body.getLinearVelocity().x != 0 && body.getLinearVelocity().y != 0){ // jumping body
-			//pc.setLegsFrame(4); //this is just a random one that looks good while on air
-			pc.setLegsDelay(0);
+		if(body.getLinearVelocity().x >= -0.05 && body.getLinearVelocity().x <= 0.05  &&body.getLinearVelocity().y == 0){ // stopped boddy
+			pc.setAir(false);
+			pc.setIdle(true);
+		}else if(body.getLinearVelocity().y <= -0.01 || body.getLinearVelocity().y >= 0.01){ // jumping body
+			pc.setIdle(false);
+			pc.setAir(true);
 		}else{
-			// if the body has speed against the legs animations
-			pc.setFoward(!( (pc.isFlip() && body.getLinearVelocity().x >= 0) || (!pc.isFlip() && body.getLinearVelocity().x < 0) ));
+			pc.setAir(false);
+			pc.setIdle(false);
+			pc.setFoward(!((pc.isFlip() && body.getLinearVelocity().x >= 0) || (!pc.isFlip() && body.getLinearVelocity().x < 0)));
 		}
 		
 		pc.update(dt);

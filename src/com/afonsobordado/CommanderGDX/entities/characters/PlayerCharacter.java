@@ -83,10 +83,14 @@ public class PlayerCharacter {
 	public void render(SpriteBatch sb) {
 		Vector2 boxSize = new Vector2();
 		for(Fixture f: body.getFixtureList()){
-			if(f.getUserData().equals("player")){
+			if(f.getUserData().equals("player") ||
+			   f.getUserData().equals("lcp")){
+				
 				PolygonShape s = (PolygonShape) f.getShape();
 				s.getVertex(0, boxSize);
+				
 			}
+
 		}
 		
 		Vector2 drawPos = new Vector2( (body.getPosition().x + boxSize.x) * B2DVars.PPM ,
