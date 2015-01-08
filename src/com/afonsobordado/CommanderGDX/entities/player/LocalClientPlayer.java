@@ -28,10 +28,14 @@ public class LocalClientPlayer{
 	private PlayerCharacter pc;
 	private Weapon weapon;
 	
+	private NetworkPlayer nextPacket;
+	private int lerpCount = B2DVars.LERP_MAX_COUNT;
+	
 	public LocalClientPlayer(PacketNewPlayer pnp,World world) {
 		this.armDegrees = pnp.np.armAngle;
 		this.id = pnp.np.id;
 		this.name = pnp.np.name;
+		this.nextPacket = pnp.np;
 		Vector2 legSz=new Vector2(0f,0f);
 		Vector2 torsoSz = new Vector2(0f,0f);
 
@@ -106,9 +110,11 @@ public class LocalClientPlayer{
 	}
 	
 	public void updateNetworkPlayer(NetworkPlayer np){
-		body.setLinearVelocity(np.linearVelocity);
-		body.setTransform(np.pos, body.getAngle());
-		this.armDegrees = np.armAngle;
+		body.setLinearVelocity(nextPacket.linearVelocity);
+		body.setTransform(nextPacket.pos, body.getAngle());
+		this.armDegrees = nextPacket.armAngle;
+		this.lerpCount = B2DVars.LERP_MAX_COUNT;
+		this.nextPacket = np;
 	}
 	
 	public NetworkPlayer getNetworkPlayer(){
@@ -151,6 +157,18 @@ public class LocalClientPlayer{
 			pc.setIdle(false);
 			pc.setFoward(!((pc.isFlip() && body.getLinearVelocity().x >= 0) || (!pc.isFlip() && body.getLinearVelocity().x < 0)));
 		}
+		
+		Vector2 tmp = nextPacket.pos;
+		nextPacket.pos.lerp(body.getPosition(), lerpCount / B2DVars.LERP_MAX_COUNT );
+		this.body.setTransform(nextPacket.pos, this.body.getAngle());
+		nextPacket.pos = tmp;
+		
+		//(1-t)*v0 + t*v1; taken from wikipedia
+		armDegrees = (1-(1/lerpCount))*armDegrees + ((1/lerpCount)*nextPacket.armAngle);
+		
+		
+		
+		if(lerpCount-1 > 0) lerpCount--;
 		
 		pc.update(dt);
 	}

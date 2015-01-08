@@ -17,5 +17,9 @@ public class B2DVars {
 
 	public static final int ANIMATION_MAX_SPEED = 6;
 	
+	
+	//network vars
+	public static final int LERP_MAX_COUNT = 6;
+	
 
 }
