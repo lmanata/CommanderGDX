@@ -29,7 +29,6 @@ public class NetworkListener extends Listener{
 			PacketAccepted pa = (PacketAccepted) object;
 			//set some variables, that come with packetaccepted
 
-			
 			IPmenu.play=true;
 
 			synchronized(this){
@@ -41,6 +40,7 @@ public class NetworkListener extends Listener{
 			}
 			Play.player.id = pa.id;
 			Play.mapName = pa.mapName;
+			
 
 			
 		} else if (object instanceof PacketDeclined){

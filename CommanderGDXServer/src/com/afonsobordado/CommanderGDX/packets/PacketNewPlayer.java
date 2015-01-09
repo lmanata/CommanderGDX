@@ -7,4 +7,6 @@ public class PacketNewPlayer {
 	//this packet should be transmitted trough TCP to ensure arrival
 	
 	public NetworkPlayer np;
+	public String name; //TODO: this is not used in the client
+	public String weapon;
 }

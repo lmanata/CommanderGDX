@@ -22,13 +22,13 @@ public class NetworkListener extends Listener{
         	PacketConsoleMessage pcm = (PacketConsoleMessage) object;
         	System.out.println("[REMOTE]: " + pcm.message);
         	connection.sendTCP(pcm);
-    	} else if (object instanceof PacketHello){
+    	} else if (object instanceof PacketNewPlayer){
     		//conditions to check if we can accept or decline that client
     		String rejectReason = "";
-    		PacketHello ph = (PacketHello) object;
+    		PacketNewPlayer pnp = (PacketNewPlayer) object;
     		
     		for(NetworkPlayer p: GDXServer.playerList.values()){
-    			if(ph.name.equals(p.name)){
+    			if(pnp.name.equals(p.name)){
     				rejectReason = "Name Already Exists";
     				break;
     			}
@@ -50,19 +50,22 @@ public class NetworkListener extends Listener{
     		connection.sendTCP(pa);
     		
     		LocalServerPlayer newPlayer = new LocalServerPlayer(GDXServer.playerList.size(),
-																ph.name,
+																pnp.name,
 																new Vector2(0,0),
 																0f,
 																new Vector2(0,0),
-																connection.getID());
+																connection.getID(),
+																pnp.weapon);
     		
-    		PacketNewPlayer pnp = new PacketNewPlayer();
-    		pnp.np = newPlayer.getNetworkPlayer();
-    		GDXServer.server.sendToAllExceptTCP(connection.getID(), pnp);
+    		PacketNewPlayer outPnp = new PacketNewPlayer();
+    		outPnp.np = newPlayer.getNetworkPlayer();
+    		GDXServer.server.sendToAllExceptTCP(connection.getID(), outPnp);
     		
     		for(LocalServerPlayer lsp: GDXServer.playerList.values()){
-    			pnp.np = lsp.getNetworkPlayer();
-    			connection.sendTCP(pnp);
+    			outPnp.np = lsp.getNetworkPlayer();
+    			outPnp.name = lsp.name;
+    			outPnp.weapon = lsp.weapon;
+    			connection.sendTCP(outPnp);
     		}
     		
     		
@@ -70,8 +73,7 @@ public class NetworkListener extends Listener{
     		 *but i don't know how kryonet handles id's and if for some reason it can colide with a previous value*/
     		GDXServer.playerList.put(GDXServer.playerList.size(), newPlayer);
     		
-    		
-    	} else if (object instanceof NetworkPlayer){
+    	}else if (object instanceof NetworkPlayer){
     		NetworkPlayer np = (NetworkPlayer) object;
     		LocalServerPlayer p  = GDXServer.playerList.get(np.id);
     		if(p == null){

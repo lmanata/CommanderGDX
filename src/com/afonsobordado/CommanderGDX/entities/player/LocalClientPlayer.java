@@ -3,6 +3,7 @@ package com.afonsobordado.CommanderGDX.entities.player;
 import com.afonsobordado.CommanderGDX.Game;
 import com.afonsobordado.CommanderGDX.entities.characters.PlayerCharacter;
 import com.afonsobordado.CommanderGDX.entities.weapons.Weapon;
+import com.afonsobordado.CommanderGDX.entities.weapons.WeaponList;
 import com.afonsobordado.CommanderGDX.handlers.Animation;
 import com.afonsobordado.CommanderGDX.packets.PacketNewPlayer;
 import com.afonsobordado.CommanderGDX.packets.NetworkObject.NetworkPlayer;
@@ -36,6 +37,7 @@ public class LocalClientPlayer{
 		this.id = pnp.np.id;
 		this.name = pnp.np.name;
 		this.nextPacket = pnp.np;
+		this.weapon = WeaponList.get(pnp.weapon);
 		Vector2 legSz=new Vector2(0f,0f);
 		Vector2 torsoSz = new Vector2(0f,0f);
 
@@ -43,7 +45,6 @@ public class LocalClientPlayer{
 		TextureRegion[] torsoAnimTR = new TextureRegion[5];
 		TextureRegion[] legsRunTR = new TextureRegion[8];
 		TextureRegion[] armsTR = new TextureRegion[1];
-		TextureRegion[] weaponTR = new TextureRegion[1];
 		TextureRegion[] legsIdleTR = new TextureRegion[1];
 		TextureRegion[] legsJumpTR = new TextureRegion[1];
 		
@@ -58,45 +59,44 @@ public class LocalClientPlayer{
 			if(legsRunTR[i].getRegionWidth() > legSz.x) legSz.x = legsRunTR[i].getRegionWidth();
 		}
 		armsTR[0] = new TextureRegion(Game.aManager.get("res/animations/soldier/arms/001.png", Texture.class));
-		weaponTR[0] = new TextureRegion(Game.aManager.get("res/animations/soldier/weapons/001.png",Texture.class));
 		legsIdleTR[0] = new TextureRegion(Game.aManager.get("res/animations/test/legs/idle.png", Texture.class));
 		legsJumpTR[0] = new TextureRegion(Game.aManager.get("res/animations/test/legs/jump.png", Texture.class));
 
 		
 		
-			BodyDef bdef  = new BodyDef();
-			FixtureDef fdef = new FixtureDef();
-			PolygonShape shape  = new PolygonShape();
-			
-			bdef.position.set(100 / B2DVars.PPM,200 / B2DVars.PPM);
-			bdef.type = BodyType.DynamicBody;
-			bdef.linearVelocity.set(1,0);
-			
-			synchronized(Play.getWorld()){
-				body = world.createBody(bdef);
-			}
-			
-			body.setBullet(true);
-			
-			shape.setAsBox((legSz.x/2) / B2DVars.PPM, ((legSz.y + torsoSz.y)/2) / B2DVars.PPM);
-			fdef.shape = shape;
-			fdef.filter.categoryBits = B2DVars.BIT_PLAYER;
-			fdef.filter.maskBits = B2DVars.BIT_GROUND | B2DVars.BIT_PLAYER;
-			
-			body.createFixture(fdef).setUserData("lcp");
-			
-			//create foot sensor
-			shape.setAsBox((legSz.x/2) / B2DVars.PPM, 2 / B2DVars.PPM, new Vector2(0, (float) (-((legSz.y + torsoSz.y)/2) / B2DVars.PPM)), 0);
-			fdef.shape = shape;
-			fdef.filter.categoryBits = B2DVars.BIT_PLAYER;
-			fdef.filter.maskBits = B2DVars.BIT_GROUND | B2DVars.BIT_PLAYER;
-			fdef.isSensor = true;
-			body.createFixture(fdef).setUserData("footLcp");
-			body.setUserData(this);
+		BodyDef bdef  = new BodyDef();
+		FixtureDef fdef = new FixtureDef();
+		PolygonShape shape  = new PolygonShape();
+		
+		bdef.position.set(100 / B2DVars.PPM,200 / B2DVars.PPM);
+		bdef.type = BodyType.DynamicBody;
+		bdef.linearVelocity.set(1,0);
+		
+		synchronized(Play.getWorld()){
+			body = world.createBody(bdef);
+		}
+		
+		body.setBullet(true);
+		
+		shape.setAsBox((legSz.x/2) / B2DVars.PPM, ((legSz.y + torsoSz.y)/2) / B2DVars.PPM);
+		fdef.shape = shape;
+		fdef.filter.categoryBits = B2DVars.BIT_PLAYER;
+		fdef.filter.maskBits = B2DVars.BIT_GROUND | B2DVars.BIT_PLAYER;
+		
+		body.createFixture(fdef).setUserData("lcp");
+		
+		//create foot sensor
+		shape.setAsBox((legSz.x/2) / B2DVars.PPM, 2 / B2DVars.PPM, new Vector2(0, (float) (-((legSz.y + torsoSz.y)/2) / B2DVars.PPM)), 0);
+		fdef.shape = shape;
+		fdef.filter.categoryBits = B2DVars.BIT_PLAYER;
+		fdef.filter.maskBits = B2DVars.BIT_GROUND | B2DVars.BIT_PLAYER;
+		fdef.isSensor = true;
+		body.createFixture(fdef).setUserData("footLcp");
+		body.setUserData(this);
+	
 		
 		
-		
-		weapon = new Weapon(new Animation(weaponTR), 1f, 1f, 20f,new Vector2(18,10));
+
 		pc = new PlayerCharacter(new Animation(legsIdleTR),
 								 new Animation(legsJumpTR),
 								 new Animation(legsRunTR),

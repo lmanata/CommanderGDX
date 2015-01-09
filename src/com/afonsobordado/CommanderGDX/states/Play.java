@@ -7,6 +7,9 @@ import com.afonsobordado.CommanderGDX.entities.UI.HUD;
 import com.afonsobordado.CommanderGDX.entities.player.LocalClientPlayer;
 import com.afonsobordado.CommanderGDX.entities.player.Player;
 import com.afonsobordado.CommanderGDX.entities.weapons.Bullet;
+import com.afonsobordado.CommanderGDX.entities.weapons.Weapon;
+import com.afonsobordado.CommanderGDX.entities.weapons.WeaponList;
+import com.afonsobordado.CommanderGDX.handlers.Animation;
 import com.afonsobordado.CommanderGDX.handlers.GameStateManager;
 import com.afonsobordado.CommanderGDX.handlers.InputHandler;
 import com.afonsobordado.CommanderGDX.handlers.MyContactListener;
@@ -15,6 +18,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.FPSLogger;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell;
@@ -61,6 +66,12 @@ public class Play extends GameState{
 	public Play(GameStateManager gsm) {
 		super(gsm);
 		
+		
+		TextureRegion[] weaponTR = new TextureRegion[1];
+		weaponTR[0] = new TextureRegion(Game.aManager.get("res/animations/soldier/weapons/002.png",Texture.class));
+		WeaponList.add("ak47",new Weapon(new Animation(weaponTR), 13.75f, 1, 20f,new Vector2(18,10)));
+		weaponTR[0] = new TextureRegion(Game.aManager.get("res/animations/soldier/weapons/000.png",Texture.class));
+		WeaponList.add("usp-s",new Weapon(new Animation(weaponTR), 1f, 1f, 20f,new Vector2(18,10)));
 		
 		
 		
@@ -258,31 +269,3 @@ public class Play extends GameState{
 	
 	
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
