@@ -20,17 +20,19 @@ public class Weapon {
 	private long bulletLifespan;
 	private float bulletSpeed;
 	private Vector2 weaponPin;
-	//private Bullet bullet;
+	private Bullet bullet;
 	
-	public Weapon(Animation animation, float bulletsPerSec, float bulletLifespan, float bulletSpeed, Vector2 weaponPin){ //all time args are given in seconds, and transleted into nanoseconds on the constructor
+	public Weapon(Animation animation, float bulletsPerSec, float bulletLifespan, float bulletSpeed, Vector2 weaponPin, Bullet b){ //all time args are given in seconds, and transleted into nanoseconds on the constructor
 		this.weaponPin = weaponPin;
 		this.animation = animation;
 		this.bulletLifespan = (long) (bulletLifespan * 1000000000);
 		this.bulletSpeed = bulletSpeed;
+		this.bullet = b;
 		nextTimeShoot = System.nanoTime();
 		canShoot=true;
 		barrelPos=new Vector2();
 		angle = 0f;
+		
 		
 		if(bulletsPerSec != 0)
 			this.coolDown = (long) (1000000000 / bulletsPerSec);
@@ -51,35 +53,17 @@ public class Weapon {
 	}
 	private void shoot(){
 		nextTimeShoot=System.nanoTime()+coolDown;
-		TextureRegion[] bulletTR = new TextureRegion[3];
-		for(int i=0; i < 3; i++) 
-			bulletTR[i] = new TextureRegion(Game.aManager.get("res/animations/bullet/"+i+".png", Texture.class));
-		
-		/*Vector2 tmp = new Vector2((float) ((bodyPos.x * B2DVars.PPM) + (animation.getFrame().getRegionWidth()  + animation.getFrame().getRegionHeight())*Math.cos(Math.toRadians(angle))),	//fixme
-								  (float) ((bodyPos.y * B2DVars.PPM) + (animation.getFrame().getRegionHeight() + animation.getFrame().getRegionWidth())*Math.sin(Math.toRadians(angle)))); //fixme
-		*/
-		Vector2 tmp = barrelPos.cpy();
-		Play.bulletList.add(new Bullet(new Animation(bulletTR),
-										tmp,
-										angle,
-										bulletSpeed,
-										effects,
-										bulletLifespan));
-		
-		PacketBullet pb = new PacketBullet();
-		pb.angle = angle;
-		pb.pos = tmp;
-		pb.speed = bulletSpeed;
-		pb.effects = effects;
-		pb.lifespan = bulletLifespan;
+		PacketBullet pb = new PacketBullet(barrelPos.cpy(), bullet);
 		Game.client.sendUDP(pb);
 	}
 	
 	
 	public TextureRegion getFrame(){return animation.getFrame();}
 	public Animation getAnimation(){return animation;}
-	public void setAngle(float angle){this.angle = angle;}
-	
+	public void setAngle(float angle){
+		this.angle = angle;
+		this.bullet.setAngle(angle);
+	}
 	public static short BIT_FIRE = 0x1;
 	public static short BIT_SLOW = 0x2;
 

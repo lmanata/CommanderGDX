@@ -17,9 +17,12 @@ public class Bullet {
 	private float speed;
 	private short effects;
 	private long lifespan;
+
 	private boolean lifespanEnabled;
 	private boolean toRemove;
 	private float angle;
+	
+	private boolean liveBullet;
 	
 	public Bullet(Animation anim,
 				  Vector2 barrelPos,
@@ -34,6 +37,7 @@ public class Bullet {
 		this.lifespan = lifespan;
 		this.lifespanEnabled = (lifespan!=0);
 		toRemove = false;
+		liveBullet = true;
 		
 		BodyDef bdef  = new BodyDef();
 		FixtureDef fdef = new FixtureDef();
@@ -57,6 +61,16 @@ public class Bullet {
 			body.setGravityScale(0.25f);
 			body.setUserData(this);
 		}
+	}
+	
+	public Bullet(Animation anim, float speed,short effects, long lifespan){
+		this.animation = anim;
+		this.speed = speed;
+		this.effects = effects;
+		this.lifespan = lifespan;
+		this.lifespanEnabled = (lifespan!=0);
+		toRemove = true;
+		liveBullet = true;
 	}
 	
 	public void update(float dt){
@@ -88,6 +102,13 @@ public class Bullet {
 	public void setRemove(boolean b) {toRemove=b;}
 	public boolean toRemove(){ return toRemove;}
 	public Body getBody() {return body;}
+	public float getSpeed() {return speed;}
+	public long getLifespan() {return lifespan;}
+	public float getAngle() {return angle;}
+	public short getEffects() {return effects;}
+
+	public void setAngle(float angle) {this.angle = angle;}
+
 
 	
 }

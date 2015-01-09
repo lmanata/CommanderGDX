@@ -6,6 +6,7 @@ import static com.afonsobordado.CommanderGDX.vars.B2DVars.PLAYER_MAX_VELOCITY;
 import com.afonsobordado.CommanderGDX.Game;
 import com.afonsobordado.CommanderGDX.entities.characters.PlayerCharacter;
 import com.afonsobordado.CommanderGDX.entities.weapons.Weapon;
+import com.afonsobordado.CommanderGDX.entities.weapons.WeaponList;
 import com.afonsobordado.CommanderGDX.handlers.Animation;
 import com.afonsobordado.CommanderGDX.handlers.InputHandler;
 import com.afonsobordado.CommanderGDX.packets.NetworkObject.NetworkPlayer;
@@ -68,12 +69,7 @@ public class Player {
 		legsIdleTR[0] = new TextureRegion(Game.aManager.get("res/animations/test/legs/idle.png", Texture.class));
 		legsJumpTR[0] = new TextureRegion(Game.aManager.get("res/animations/test/legs/jump.png", Texture.class));
 
-		weaponTR[0] = new TextureRegion(Game.aManager.get("res/animations/soldier/weapons/002.png",Texture.class));
-		weapons.add(new Weapon(new Animation(weaponTR), 13.75f, 1, 20f,new Vector2(18,10)));
-		
-		weaponTR = new TextureRegion[1];
-		weaponTR[0] = new TextureRegion(Game.aManager.get("res/animations/soldier/weapons/000.png",Texture.class));
-		weapons.add(new Weapon(new Animation(weaponTR), 0f, 2, 10f,new Vector2(19,5)));
+
 		
 		
 		BodyDef bdef  = new BodyDef();
@@ -103,6 +99,10 @@ public class Player {
 		fdef.isSensor = true;
 		body.createFixture(fdef).setUserData("footPlayer");
 		body.setUserData(this);
+		
+		//THIS IS CLASS STUff
+		weapons.add(WeaponList.get("ak47"));
+		weapons.add(WeaponList.get("usp-s"));
 		
 		pc = new PlayerCharacter(new Animation(legsIdleTR),
 				 new Animation(legsJumpTR),

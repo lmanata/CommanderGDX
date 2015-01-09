@@ -59,6 +59,8 @@ public class NetworkListener extends Listener{
     		
     		PacketNewPlayer outPnp = new PacketNewPlayer();
     		outPnp.np = newPlayer.getNetworkPlayer();
+			outPnp.name = newPlayer.name;
+			outPnp.weapon = newPlayer.weapon;
     		GDXServer.server.sendToAllExceptTCP(connection.getID(), outPnp);
     		
     		for(LocalServerPlayer lsp: GDXServer.playerList.values()){
@@ -95,7 +97,7 @@ public class NetworkListener extends Listener{
     		//add to some sort of list
     		//verify validity of the bullet position
     		PacketBullet pb = (PacketBullet) object;
-    		GDXServer.server.sendToAllExceptUDP(connection.getID(), pb);
+    		GDXServer.server.sendToAllUDP(pb);
     	}
 	}
 }
