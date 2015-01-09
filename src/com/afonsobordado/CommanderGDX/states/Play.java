@@ -121,23 +121,28 @@ public class Play extends GameState{
 		for(int i=0; i<bulletList.size;i++){
 			Bullet b = bulletList.get(i);
 			if(b.toRemove()){
-				world.destroyBody(b.getBody());
-				bulletList.removeIndex(i);
+				synchronized(Play.getWorld()){
+					world.destroyBody(b.getBody());
+					bulletList.removeIndex(i);
+				}
 			}else{
 				b.update(dt);
 			}
 		}
 		
+		
 		Array<Body> bodies = cl.getBodiesToRemove();
 		for(Body b: bodies){
-			world.destroyBody(b);
+			synchronized(Play.getWorld()){
+				world.destroyBody(b);
+			}
 		}
 		bodies.clear();
 	}
 	
 	public void render() {
 		//clear
-		Gdx.gl20.glClearColor(0,0,(float) 0.5,1);
+		Gdx.gl20.glClearColor(0,0,0.5f,1);
 		Gdx.gl20.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		
 		//camera to follow player

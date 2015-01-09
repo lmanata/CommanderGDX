@@ -5,6 +5,7 @@ import com.badlogic.gdx.files.FileHandle;
 
 public class KeyboardVars {
 
+	public static int KEY_Q 	= Keys.Q;
 	public static int KEY_Z 	= Keys.Z;
 	public static int KEY_UP 	= Keys.W;
 	public static int KEY_LEFT	= Keys.A;

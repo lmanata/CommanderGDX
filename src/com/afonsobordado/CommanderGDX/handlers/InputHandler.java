@@ -7,7 +7,7 @@ public class InputHandler {
 	public static int mouseX,mouseY;
 	public static int scrolled;
 	
-	public static final int NUM_KEYS = 7;
+	public static final int NUM_KEYS = 8;
 	//TODO: we should name these by what they do not by what they are eg: BUTTON_Z = BUTTON_JUMP
 	
 
@@ -49,4 +49,5 @@ public class InputHandler {
 	public static final int BUTTON_Z = 4;
 	public static final int MOUSE_1 = 5;
 	public static final int MOUSE_2 = 6;
+	public static final int BUTTON_Q = 7;
 }

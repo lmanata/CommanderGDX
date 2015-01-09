@@ -12,6 +12,7 @@ public class InputProcessor extends InputAdapter{
 		if(k == KeyboardVars.KEY_RIGHT)		InputHandler.setKey(InputHandler.BUTTON_RIGHT, true);
 		if(k == KeyboardVars.KEY_DOWN)		InputHandler.setKey(InputHandler.BUTTON_DOWN, true);
 		if(k == KeyboardVars.KEY_Z)			InputHandler.setKey(InputHandler.BUTTON_Z, true);
+		if(k == KeyboardVars.KEY_Q)			InputHandler.setKey(InputHandler.BUTTON_Q, true);
 		return true;
 	}
 	
@@ -20,7 +21,8 @@ public class InputProcessor extends InputAdapter{
 		if(k == KeyboardVars.KEY_LEFT)		InputHandler.setKey(InputHandler.BUTTON_LEFT, false);
 		if(k == KeyboardVars.KEY_RIGHT)		InputHandler.setKey(InputHandler.BUTTON_RIGHT, false);
 		if(k == KeyboardVars.KEY_DOWN)		InputHandler.setKey(InputHandler.BUTTON_DOWN, false);
-		if(k == KeyboardVars.KEY_Z)		InputHandler.setKey(InputHandler.BUTTON_Z, false);
+		if(k == KeyboardVars.KEY_Z)			InputHandler.setKey(InputHandler.BUTTON_Z, false);
+		if(k == KeyboardVars.KEY_Q)			InputHandler.setKey(InputHandler.BUTTON_Q, false);
 		return true;
 	}
 	

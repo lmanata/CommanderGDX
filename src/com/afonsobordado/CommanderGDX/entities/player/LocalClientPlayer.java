@@ -63,7 +63,7 @@ public class LocalClientPlayer{
 		legsJumpTR[0] = new TextureRegion(Game.aManager.get("res/animations/test/legs/jump.png", Texture.class));
 
 		
-		synchronized(Play.getWorld()){
+		
 			BodyDef bdef  = new BodyDef();
 			FixtureDef fdef = new FixtureDef();
 			PolygonShape shape  = new PolygonShape();
@@ -72,7 +72,10 @@ public class LocalClientPlayer{
 			bdef.type = BodyType.DynamicBody;
 			bdef.linearVelocity.set(1,0);
 			
-			body = world.createBody(bdef);
+			synchronized(Play.getWorld()){
+				body = world.createBody(bdef);
+			}
+			
 			body.setBullet(true);
 			
 			shape.setAsBox((legSz.x/2) / B2DVars.PPM, ((legSz.y + torsoSz.y)/2) / B2DVars.PPM);
@@ -90,7 +93,7 @@ public class LocalClientPlayer{
 			fdef.isSensor = true;
 			body.createFixture(fdef).setUserData("footLcp");
 			body.setUserData(this);
-		}
+		
 		
 		
 		weapon = new Weapon(new Animation(weaponTR), 1f, 1f, 20f,new Vector2(18,10));
