@@ -1,6 +1,7 @@
 Weapon Sprite Doesent change
-Bullet no Timeout
-Bullets only update when other bullets are fired
-Bullets always Idle facing the same direction
+Bullet removal does not work
+All Bullets face the same direction when idle (Also general instability)
 Pistol Fires When button is Pressed not clicked
-Packet New Player sometiems does not transmit across all clients
+[Fixed?] Packet New Player sometimes does not transmit across all clients
+[Linux only?] Mouse doesent work when returning from Alt-tab
+Bullet position sometimes attaches to other players

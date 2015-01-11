@@ -56,6 +56,7 @@ public class IPmenu extends GameState{
 		    	  
 		    	PacketNewPlayer pnp = new PacketNewPlayer();
 		    	
+		    	pnp.np = null;
 		    	pnp.name = new BigInteger(130, new SecureRandom()).toString(32); // this is some random global with the players name
 		    	//TODO: ADD CLASS STUFF TO THIS PACKET
 		    	pnp.weapon = "ak47";

@@ -27,6 +27,8 @@ public class NetworkListener extends Listener{
     		String rejectReason = "";
     		PacketNewPlayer pnp = (PacketNewPlayer) object;
     		
+    		if(pnp.np != null) rejectReason = "Malformed Packet, please try again";
+    		
     		for(NetworkPlayer p: GDXServer.playerList.values()){
     			if(pnp.name.equals(p.name)){
     				rejectReason = "Name Already Exists";
@@ -61,9 +63,10 @@ public class NetworkListener extends Listener{
     		outPnp.np = newPlayer.getNetworkPlayer();
 			outPnp.name = newPlayer.name;
 			outPnp.weapon = newPlayer.weapon;
-    		GDXServer.server.sendToAllExceptTCP(connection.getID(), outPnp);
+    		GDXServer.server.sendToAllExceptTCP(newPlayer.connectionID, outPnp);
     		
     		for(LocalServerPlayer lsp: GDXServer.playerList.values()){
+    			if(lsp == newPlayer) continue;
     			outPnp.np = lsp.getNetworkPlayer();
     			outPnp.name = lsp.name;
     			outPnp.weapon = lsp.weapon;
