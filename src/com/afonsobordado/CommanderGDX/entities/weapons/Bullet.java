@@ -69,6 +69,7 @@ public class Bullet {
 		this.effects = effects;
 		this.lifespan = (long) (lifespan * 1000000000);
 		this.lifespanEnabled = (lifespan!=0);
+		this.body = null;
 		toRemove = true;
 		liveBullet = true;
 	}
@@ -85,6 +86,7 @@ public class Bullet {
 	}
 	
 	public void render(SpriteBatch sb) {
+		if(this.body == null) return; //should not happen
 		sb.begin();
 		sb.draw(animation.getFrame(),
 			   (body.getPosition().x * B2DVars.PPM) - animation.getFrame().getRegionWidth()/2,
@@ -108,6 +110,22 @@ public class Bullet {
 	public short getEffects() {return effects;}
 
 	public void setAngle(float angle) {this.angle = angle;}
+
+	public Bullet getCopy() {
+		if(body != null){
+			return new Bullet(animation.getCopy(),
+							  body.getPosition().scl(B2DVars.PPM),
+							  angle,
+							  speed,
+							  effects,
+							  lifespan);
+		}else{
+			return new Bullet(animation.getCopy(),
+							  speed,
+							  effects,
+							  lifespan);
+		}
+	}
 
 
 	

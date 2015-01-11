@@ -9,6 +9,6 @@ public abstract class WeaponList {
 		list.put(name, w);
 	}
 	public static Weapon get(String name){
-		return list.get(name);
+		return list.get(name).getCopy();
 	}
 }

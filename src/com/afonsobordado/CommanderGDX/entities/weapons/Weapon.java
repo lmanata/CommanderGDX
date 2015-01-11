@@ -84,6 +84,13 @@ public class Weapon {
 	public Vector2 getPin() {
 		return this.weaponPin;
 	}
+	
+	public Weapon getCopy(){
+		return new Weapon(animation.getCopy(),
+						  (coolDown != 0) ? (coolDown / 1000000000) : 0 ,
+						  weaponPin.cpy(),
+						  bullet.getCopy());
+	}
 
 
 }
