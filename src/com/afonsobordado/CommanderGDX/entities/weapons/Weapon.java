@@ -3,6 +3,7 @@ package com.afonsobordado.CommanderGDX.entities.weapons;
 import com.afonsobordado.CommanderGDX.Game;
 import com.afonsobordado.CommanderGDX.handlers.Animation;
 import com.afonsobordado.CommanderGDX.packets.PacketBullet;
+import com.afonsobordado.CommanderGDX.states.IPmenu;
 import com.afonsobordado.CommanderGDX.states.Play;
 import com.afonsobordado.CommanderGDX.vars.B2DVars;
 import com.badlogic.gdx.graphics.Texture;
@@ -55,6 +56,19 @@ public class Weapon {
 		nextTimeShoot=System.nanoTime()+coolDown;
 		PacketBullet pb = new PacketBullet(barrelPos.cpy(), bullet);
 		Game.client.sendUDP(pb);
+		
+		if(!IPmenu.play){ //we are offline
+			TextureRegion[] bulletTR = new TextureRegion[3];
+			for(int i=0; i < 3; i++) 
+				bulletTR[i] = new TextureRegion(Game.aManager.get("res/animations/bullet/"+i+".png", Texture.class));
+			Play.bulletList.add(new Bullet(new Animation(bulletTR),
+											pb.pos,
+											pb.angle,
+											pb.speed,
+											pb.effects,
+											pb.lifespan));
+			
+		}
 	}
 	
 	
