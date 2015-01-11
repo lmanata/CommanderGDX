@@ -72,10 +72,10 @@ public class Play extends GameState{
 			bulletTR[i] = new TextureRegion(Game.aManager.get("res/animations/bullet/"+i+".png", Texture.class));
 		TextureRegion[] weaponTR = new TextureRegion[1];
 		weaponTR[0] = new TextureRegion(Game.aManager.get("res/animations/soldier/weapons/002.png",Texture.class));
-		WeaponList.add("ak47",new Weapon(new Animation(weaponTR), 13.75f, 1, 20f,new Vector2(18,10), new Bullet(new Animation(bulletTR),200f,(short) 0, 0)));
+		WeaponList.add("ak47",new Weapon(new Animation(weaponTR), 13.75f,new Vector2(18,10), new Bullet(new Animation(bulletTR),200f,(short) 0, 1f)));
 		weaponTR[0] = new TextureRegion(Game.aManager.get("res/animations/soldier/weapons/000.png",Texture.class));
-		WeaponList.add("usp-s",new Weapon(new Animation(weaponTR), 1f, 1f, 20f,new Vector2(18,10), new Bullet(new Animation(bulletTR), 20f,(short) 0, 0)));
-		
+		WeaponList.add("usp-s",new Weapon(new Animation(weaponTR), 1f,new Vector2(18,10), new Bullet(new Animation(bulletTR), 20f,(short) 0, 1f)));
+		//TODO: Duplicate bullet speed, one on the bullet another on the weapon
 		
 		
 		world = new World(new Vector2(0, -9.81f), true);
@@ -125,7 +125,7 @@ public class Play extends GameState{
 		
 
 
-		Game.client.sendUDP(player.getNetworkPacket());
+		Game.client.sendTCP(player.getNetworkPacket());
 		
 		for(LocalClientPlayer lcp: playerList.values()){
 			lcp.update(dt);

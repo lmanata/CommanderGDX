@@ -63,11 +63,11 @@ public class Bullet {
 		}
 	}
 	
-	public Bullet(Animation anim, float speed,short effects, long lifespan){
+	public Bullet(Animation anim, float speed,short effects, float lifespan){
 		this.animation = anim;
 		this.speed = speed;
 		this.effects = effects;
-		this.lifespan = lifespan;
+		this.lifespan = (long) (lifespan * 1000000000);
 		this.lifespanEnabled = (lifespan!=0);
 		toRemove = true;
 		liveBullet = true;

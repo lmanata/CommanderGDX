@@ -18,16 +18,12 @@ public class Weapon {
 	private boolean canShoot;
 	private Vector2 barrelPos;
 	private float angle;
-	private long bulletLifespan;
-	private float bulletSpeed;
 	private Vector2 weaponPin;
 	private Bullet bullet;
 	
-	public Weapon(Animation animation, float bulletsPerSec, float bulletLifespan, float bulletSpeed, Vector2 weaponPin, Bullet b){ //all time args are given in seconds, and transleted into nanoseconds on the constructor
+	public Weapon(Animation animation, float bulletsPerSec, Vector2 weaponPin, Bullet b){ //all time args are given in seconds, and transleted into nanoseconds on the constructor
 		this.weaponPin = weaponPin;
 		this.animation = animation;
-		this.bulletLifespan = (long) (bulletLifespan * 1000000000);
-		this.bulletSpeed = bulletSpeed;
 		this.bullet = b;
 		nextTimeShoot = System.nanoTime();
 		canShoot=true;
