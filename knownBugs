@@ -1,0 +1,6 @@
+Weapon Sprite Doesent change
+Bullet no Timeout
+Bullets only update when other bullets are fired
+Bullets always Idle facing the same direction
+Pistol Fires When button is Pressed not clicked
+Packet New Player sometiems does not transmit across all clients
