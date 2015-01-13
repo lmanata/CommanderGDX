@@ -50,10 +50,10 @@ public class Weapon {
 	}
 	private void shoot(){
 		nextTimeShoot=System.nanoTime()+coolDown;
-		PacketBullet pb = new PacketBullet(barrelPos.cpy(), bullet);
+		PacketBullet pb = new PacketBullet(barrelPos.cpy(), bullet/*.getCopy()*/);
 		Game.client.sendUDP(pb);
 		
-		if(!IPmenu.play){ //we are offline
+	/*	if(!IPmenu.play){ //we are offline
 			TextureRegion[] bulletTR = new TextureRegion[3];
 			for(int i=0; i < 3; i++) 
 				bulletTR[i] = new TextureRegion(Game.aManager.get("res/animations/bullet/"+i+".png", Texture.class));
@@ -63,8 +63,7 @@ public class Weapon {
 											pb.speed,
 											pb.effects,
 											pb.lifespan));
-			
-		}
+		}*/
 	}
 	
 	

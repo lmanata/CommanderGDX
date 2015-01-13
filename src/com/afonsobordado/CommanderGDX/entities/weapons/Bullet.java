@@ -22,8 +22,6 @@ public class Bullet {
 	private boolean toRemove;
 	private float angle;
 	
-	private boolean liveBullet;
-	
 	public Bullet(Animation anim,
 				  Vector2 barrelPos,
 				  float angle,
@@ -35,9 +33,8 @@ public class Bullet {
 		this.speed = speed;
 		this.effects = effects;
 		this.lifespan = lifespan;
-		this.lifespanEnabled = (lifespan!=0);
+		this.lifespanEnabled = (this.lifespan!=0);
 		toRemove = false;
-		liveBullet = true;
 		
 		BodyDef bdef  = new BodyDef();
 		FixtureDef fdef = new FixtureDef();
@@ -68,10 +65,9 @@ public class Bullet {
 		this.speed = speed;
 		this.effects = effects;
 		this.lifespan = (long) (lifespan * 1000000000);
-		this.lifespanEnabled = (lifespan!=0);
+		this.lifespanEnabled = (this.lifespan!=0);
 		this.body = null;
 		toRemove = true;
-		liveBullet = true;
 	}
 	
 	public void update(float dt){
@@ -80,6 +76,7 @@ public class Bullet {
 		
 		animation.update(dt);
 		this.lifespan-=(dt*1000000000);
+		//System.out.println("Lifespan:" + this.lifespan + " : Current: " + System.currentTimeMillis()*1000);
 		if(lifespanEnabled) toRemove = ((this.lifespan) < 0);
 			
 		
@@ -118,12 +115,12 @@ public class Bullet {
 							  angle,
 							  speed,
 							  effects,
-							  lifespan);
+							  lifespan/1000000000);
 		}else{
 			return new Bullet(animation.getCopy(),
 							  speed,
 							  effects,
-							  lifespan);
+							  lifespan/1000000000);
 		}
 	}
 

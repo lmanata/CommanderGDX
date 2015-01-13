@@ -100,7 +100,7 @@ public class NetworkListener extends Listener{
     		//add to some sort of list
     		//verify validity of the bullet position
     		PacketBullet pb = (PacketBullet) object;
-    		GDXServer.server.sendToAllUDP(pb);
+    		GDXServer.server.sendToAllTCP(pb);
     	}
 	}
 }

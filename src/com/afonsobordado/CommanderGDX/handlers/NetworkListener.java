@@ -85,8 +85,10 @@ public class NetworkListener extends Listener{
 		} else if (object instanceof PacketBullet){
 			
 			PacketBullet pb = (PacketBullet) object;
+			
+			//This Should come from PacketBullet
 			TextureRegion[] bulletTR = new TextureRegion[3];
-			for(int i=0; i < 3; i++) 
+			for(int i=0; i < 3; i++)
 				bulletTR[i] = new TextureRegion(Game.aManager.get("res/animations/bullet/"+i+".png", Texture.class));
 			
 			Play.bulletList.add(new Bullet(new Animation(bulletTR),
