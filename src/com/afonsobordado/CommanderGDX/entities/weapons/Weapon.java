@@ -88,7 +88,7 @@ public class Weapon {
 	
 	public Weapon getCopy(){
 		return new Weapon(animation.getCopy(),
-						  (coolDown != 0) ? ((float) (1000000000 / coolDown)) : 0 ,
+						  (coolDown != 0) ? (1000000000f / coolDown) : 0 ,
 						  shootOnPress,
 						  weaponPin.cpy(),
 						  bullet.getCopy());

@@ -6,4 +6,4 @@ All Bullets face the same direction when idle (Also general instability)
 [Linux only?] Mouse doesent work when returning from Alt-tab
 [Fixed] Bullet position sometimes attaches to other players
 [Fixed] AK does not fire continuously
-When copying weapons there are floating percision errors.
+[Fixed] When copying weapons there are floating percision errors.
