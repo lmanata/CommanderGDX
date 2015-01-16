@@ -70,13 +70,14 @@ public class Play extends GameState{
 		TextureRegion[] bulletTR = new TextureRegion[3];
 		for(int i=0; i < 3; i++) 
 			bulletTR[i] = new TextureRegion(Game.aManager.get("res/animations/bullet/"+i+".png", Texture.class));
+		
 		TextureRegion[] weaponTR = new TextureRegion[1];
 		weaponTR[0] = new TextureRegion(Game.aManager.get("res/animations/soldier/weapons/002.png",Texture.class));
 		WeaponList.add("ak47",new Weapon(new Animation(weaponTR), 13.75f,new Vector2(18,10), new Bullet(new Animation(bulletTR),200f,(short) 0, 1f)));
 		
 		weaponTR = new TextureRegion[1];
 		weaponTR[0] = new TextureRegion(Game.aManager.get("res/animations/soldier/weapons/000.png",Texture.class));
-		WeaponList.add("usp-s",new Weapon(new Animation(weaponTR), 1f,new Vector2(18,10), new Bullet(new Animation(bulletTR), 20f,(short) 0, 1f)));
+		WeaponList.add("usp-s",new Weapon(new Animation(weaponTR), 0f,new Vector2(18,10), new Bullet(new Animation(bulletTR), 20f,(short) 0, 1f)));
 		//TODO: Duplicate bullet speed, one on the bullet another on the weapon
 		
 		
