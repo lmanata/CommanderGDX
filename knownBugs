@@ -1,4 +1,4 @@
-Weapon Sprite Doesent change
+[Fixed] Weapon Sprite Doesent change
 [Fixed] Bullet removal does not work
 All Bullets face the same direction when idle (Also general instability)
 Pistol Fires When button is Pressed not clicked
