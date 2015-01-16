@@ -2,9 +2,8 @@
 [Fixed] Bullet removal does not work
 All Bullets face the same direction when idle (Also general instability)
 [Fixed] Pistol Fires When button is Pressed not clicked*
-[Fixed?] Packet New Player sometimes does not transmit across all clients
+[Fixed] Packet New Player sometimes does not transmit across all clients
 [Linux only?] Mouse doesent work when returning from Alt-tab
-[Fixed?] Bullet position sometimes attaches to other players
-AK does not fire continuously
-
-*note: This requires some more changes as pistols dont have any cooldown on bullets
+[Fixed] Bullet position sometimes attaches to other players
+[Fixed] AK does not fire continuously
+When copying weapons there are floating percision errors.
