@@ -102,7 +102,7 @@ public class LocalClientPlayer{
 								 new Animation(legsRunTR),
 								 new Animation(torsoAnimTR),
 								 new Animation(armsTR),
-								 new Vector2(8,16), //torsoPin
+								 new Vector2(13,12), //torsoPin
 								 new Vector2(4,8), //armPin
 								 this.weapon,
 								 this.body);
@@ -141,14 +141,16 @@ public class LocalClientPlayer{
 		pc.setFlip(Math.abs(armDegrees) >= 90);
 		pc.setLegsDelay(Math.abs(1 / (body.getLinearVelocity().x * B2DVars.ANIMATION_MAX_SPEED)));
 		
+		
 		float armDegreesTemp = armDegrees+90; // we need to create a temp var so that the original armDegrees is sent over the network
 		armDegreesTemp  += ((armDegreesTemp <0)   ? 360: 0);
 		if(armDegreesTemp >180){
 			armDegreesTemp  -=  180; //this might seem counter-intuitive but trust me, its right
 			armDegreesTemp  = 180-armDegreesTemp ;
 		}
-
+		System.out.println("LCP: " + this + " : ADT: " + armDegreesTemp);
 		pc.setTorsoFrame((int) (7-(armDegreesTemp /22))); //TODO: needs smoothing
+		
 		if(body.getLinearVelocity().x >= -0.05 && body.getLinearVelocity().x <= 0.05  &&body.getLinearVelocity().y == 0){ // stopped boddy
 			pc.setAir(false);
 			pc.setIdle(true);
@@ -168,8 +170,6 @@ public class LocalClientPlayer{
 		
 		//(1-t)*v0 + t*v1; taken from wikipedia
 		armDegrees = (1-(1/lerpCount))*armDegrees + ((1/lerpCount)*nextPacket.armAngle);
-		
-		
 		
 		if(lerpCount-1 > 0) lerpCount--;
 		
