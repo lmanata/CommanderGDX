@@ -13,6 +13,8 @@ import com.afonsobordado.CommanderGDX.handlers.Animation;
 import com.afonsobordado.CommanderGDX.handlers.GameStateManager;
 import com.afonsobordado.CommanderGDX.handlers.InputHandler;
 import com.afonsobordado.CommanderGDX.handlers.MyContactListener;
+import com.afonsobordado.CommanderGDX.packets.PacketNewPlayer;
+import com.afonsobordado.CommanderGDX.packets.NetworkObject.NetworkPlayer;
 import com.afonsobordado.CommanderGDX.vars.B2DVars;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.FPSLogger;
@@ -96,6 +98,15 @@ public class Play extends GameState{
 		hud = new HUD(player);
 		
 
+		PacketNewPlayer pnp = new PacketNewPlayer();
+		pnp.name = "a";
+		pnp.np = new NetworkPlayer();
+		pnp.np.id=0;
+		pnp.np.armAngle = 0f;
+		pnp.np.linearVelocity = new Vector2();
+		pnp.np.pos = new Vector2();
+		pnp.weapon = "ak47";
+		playerList.put(0, new LocalClientPlayer(pnp, world));
 	    
 		if(debug){
 			b2dr = new Box2DDebugRenderer();
@@ -125,9 +136,6 @@ public class Play extends GameState{
 		}
 		
 		player.update(dt);
-		
-
-
 		Game.client.sendTCP(player.getNetworkPacket());
 		
 		for(LocalClientPlayer lcp: playerList.values()){

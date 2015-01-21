@@ -80,7 +80,14 @@ public class Animation {
 	public void setPingPong(boolean pingPong) {this.pingPong = pingPong;}
 	public boolean isFowards() {return fowards;}
 	public void setFowards(boolean fowards) {this.fowards = fowards;}
-	public Animation getCopy(){return new Animation(frames);}
+	public Animation getCopy(){
+		//frames.clone() //does not work
+		TextureRegion[] newf = new TextureRegion[frames.length];
+		for(int i=0;i<frames.length;i++){
+			newf[i] = new TextureRegion(frames[i].getTexture());
+		}
+		return new Animation(newf);
+	}
 
 	
 }
