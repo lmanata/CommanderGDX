@@ -9,6 +9,7 @@ import com.afonsobordado.CommanderGDX.entities.weapons.Weapon;
 import com.afonsobordado.CommanderGDX.entities.weapons.WeaponList;
 import com.afonsobordado.CommanderGDX.handlers.Animation;
 import com.afonsobordado.CommanderGDX.handlers.InputHandler;
+import com.afonsobordado.CommanderGDX.packets.PacketSwitchWeapon;
 import com.afonsobordado.CommanderGDX.packets.NetworkObject.NetworkPlayer;
 import com.afonsobordado.CommanderGDX.vars.B2DVars;
 import com.badlogic.gdx.graphics.Texture;
@@ -253,5 +254,10 @@ public class Player {
 	public void switchNextWeapon(){
 		currentWeapon = (short) ((currentWeapon+1) % weapons.size);
 		pc.setWeapon(weapons.get(currentWeapon));
+		PacketSwitchWeapon psw = new PacketSwitchWeapon();
+		psw.id = this.id;
+		psw.newWeapon = weapons.get(currentWeapon).getName();
+		System.out.println("NEW PACKET OUT:\nID: " + this.id + "\nNW: " + psw.newWeapon + "");
+		Game.client.sendTCP(psw);
 	}
 }

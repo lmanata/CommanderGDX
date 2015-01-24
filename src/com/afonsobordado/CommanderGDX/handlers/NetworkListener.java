@@ -9,6 +9,7 @@ import com.afonsobordado.CommanderGDX.packets.PacketConsoleMessage;
 import com.afonsobordado.CommanderGDX.packets.PacketDeclined;
 import com.afonsobordado.CommanderGDX.packets.PacketDisconnect;
 import com.afonsobordado.CommanderGDX.packets.PacketNewPlayer;
+import com.afonsobordado.CommanderGDX.packets.PacketSwitchWeapon;
 import com.afonsobordado.CommanderGDX.packets.NetworkObject.NetworkPlayer;
 import com.afonsobordado.CommanderGDX.states.IPmenu;
 import com.afonsobordado.CommanderGDX.states.Play;
@@ -97,6 +98,11 @@ public class NetworkListener extends Listener{
 											pb.speed,
 											pb.effects,
 											pb.lifespan));
+		} else if (object instanceof PacketSwitchWeapon){
+			PacketSwitchWeapon psw = (PacketSwitchWeapon) object;
+			LocalClientPlayer lcp = Play.playerList.get(psw.id);
+			System.out.println("LCP: sw weapons");
+			lcp.setWeapon(psw.newWeapon);
 		}
 		
    }

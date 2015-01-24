@@ -179,5 +179,9 @@ public class LocalClientPlayer{
 	public void destroy(){
 		body.getWorld().destroyBody(body);
 	}
+	public void setWeapon(String newWeapon){
+		this.weapon = WeaponList.get(newWeapon);
+		pc.setWeapon(this.weapon);
+	}
 	
 }

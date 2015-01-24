@@ -27,5 +27,9 @@ public class LocalServerPlayer extends NetworkPlayer{
 								 armAngle,
 								 linearVelocity);
 	}
+	
+	public void setWeapon(String newWeapon){
+		this.weapon = newWeapon;
+	}
 
 }

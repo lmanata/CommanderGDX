@@ -7,6 +7,7 @@ import com.afonsobordado.CommanderGDX.packets.PacketDeclined;
 import com.afonsobordado.CommanderGDX.packets.PacketDisconnect;
 import com.afonsobordado.CommanderGDX.packets.PacketHello;
 import com.afonsobordado.CommanderGDX.packets.PacketNewPlayer;
+import com.afonsobordado.CommanderGDX.packets.PacketSwitchWeapon;
 import com.afonsobordado.CommanderGDXServer.LocalObjects.LocalServerPlayer;
 import com.afonsobordado.CommanderGDXServer.NetworkObjects.NetworkPlayer;
 import com.badlogic.gdx.math.Vector2;
@@ -101,6 +102,10 @@ public class NetworkListener extends Listener{
     		//verify validity of the bullet position
     		PacketBullet pb = (PacketBullet) object;
     		GDXServer.server.sendToAllTCP(pb);
+    	} else if (object instanceof PacketSwitchWeapon){
+    		PacketSwitchWeapon psw = (PacketSwitchWeapon) object;
+    		GDXServer.playerList.get(psw.id).setWeapon(psw.newWeapon);
+    		GDXServer.server.sendToAllExceptTCP(connection.getID(), psw);
     	}
 	}
 }

@@ -21,10 +21,12 @@ public class Weapon {
 	private float angle;
 	private Vector2 weaponPin;
 	private Bullet bullet;
+	private String weaponName;
 	
-	public Weapon(Animation animation, float bulletsPerSec, boolean shootOnPress ,Vector2 weaponPin, Bullet b){ //all time args are given in seconds, and transleted into nanoseconds on the constructor
+	public Weapon(String weaponName,Animation animation, float bulletsPerSec, boolean shootOnPress ,Vector2 weaponPin, Bullet b){ //all time args are given in seconds, and transleted into nanoseconds on the constructor
 		this.weaponPin = weaponPin;
 		this.animation = animation;
+		this.weaponName = weaponName;
 		this.bullet = b;
 		this.shootOnPress = shootOnPress;
 		nextTimeShoot = System.nanoTime();
@@ -87,11 +89,16 @@ public class Weapon {
 	}
 	
 	public Weapon getCopy(){
-		return new Weapon(animation.getCopy(),
+		return new Weapon(weaponName,
+						  animation.getCopy(),
 						  (coolDown != 0) ? (1000000000f / coolDown) : 0 ,
 						  shootOnPress,
 						  weaponPin.cpy(),
 						  bullet.getCopy());
+	}
+
+	public String getName() {
+		return weaponName;
 	}
 
 

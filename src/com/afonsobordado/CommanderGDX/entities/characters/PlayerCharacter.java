@@ -60,7 +60,6 @@ public class PlayerCharacter {
 	
 	
 	public void update(float dt){
-		System.out.println("ANIM: " + weapon.getAnimation().getFrame());
 		if(isFlip && !legs.getFrame().isFlipX()) legs.flipAllFrames(true, false);
 		if(isFlip && !torso.getFrame().isFlipX()) torso.flipAllFrames(true, false);
 		if(isFlip && !arm.getFrame().isFlipX()) arm.flipAllFrames(true, false);
@@ -219,6 +218,8 @@ public class PlayerCharacter {
 	public void setWeapon(Weapon weapon){ 
 		this.weapon = weapon;
 		this.weaponPin = weapon.getPin();
+		this.weapon.setAngle(0f);
+		this.weapon.setBarrelPos(new Vector2());
 	}
 	
 }

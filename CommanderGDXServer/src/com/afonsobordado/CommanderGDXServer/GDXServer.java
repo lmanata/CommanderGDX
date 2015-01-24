@@ -11,6 +11,7 @@ import com.afonsobordado.CommanderGDX.packets.PacketDisconnect;
 import com.afonsobordado.CommanderGDX.packets.PacketHello;
 import com.afonsobordado.CommanderGDX.packets.PacketNewPlayer;
 import com.afonsobordado.CommanderGDX.packets.PacketPositionUpdate;
+import com.afonsobordado.CommanderGDX.packets.PacketSwitchWeapon;
 import com.afonsobordado.CommanderGDXServer.LocalObjects.LocalServerPlayer;
 import com.afonsobordado.CommanderGDXServer.NetworkObjects.NetworkPlayer;
 import com.badlogic.gdx.math.Vector2;
@@ -18,6 +19,7 @@ import com.esotericsoftware.kryonet.Server;
 
 public class GDXServer {
 	public static final float STEP = 1 / 60f;
+	private static final long SERVER_TICK = (long) ((1/66f)*1000);
 	
 	public static ConcurrentHashMap<Integer, LocalServerPlayer> playerList;
 	public static Server server;	
@@ -40,6 +42,7 @@ public class GDXServer {
 	    server.getKryo().register(PacketNewPlayer.class);
 	    server.getKryo().register(PacketDisconnect.class);
 	    server.getKryo().register(PacketBullet.class);
+	    server.getKryo().register(PacketSwitchWeapon.class);
 	    server.start();
 	    
 	    try {
@@ -56,7 +59,7 @@ public class GDXServer {
 	    server.addListener(new NetworkListener());
 		
 		for(;;){
-			if(System.currentTimeMillis() % 50 == 0){
+			if(System.currentTimeMillis() % SERVER_TICK == 0){
 				for(LocalServerPlayer lsp: GDXServer.playerList.values()){
 					//System.out.println(lsp.name + ": " + lsp.id + " : X: " + lsp.pos.x + " Y: " + lsp.pos.y + " TimeOut: " + (System.currentTimeMillis()-lsp.lastPacketTime)); 
 					
