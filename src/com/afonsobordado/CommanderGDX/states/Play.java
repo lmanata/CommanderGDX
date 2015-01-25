@@ -1,5 +1,6 @@
 package com.afonsobordado.CommanderGDX.states;
 
+import java.util.Iterator;
 import java.util.concurrent.ConcurrentHashMap;
 
 import com.afonsobordado.CommanderGDX.Game;
@@ -10,19 +11,17 @@ import com.afonsobordado.CommanderGDX.entities.player.Player;
 import com.afonsobordado.CommanderGDX.entities.weapons.Bullet;
 import com.afonsobordado.CommanderGDX.entities.weapons.Weapon;
 import com.afonsobordado.CommanderGDX.entities.weapons.WeaponList;
-import com.afonsobordado.CommanderGDX.handlers.Animation;
 import com.afonsobordado.CommanderGDX.handlers.GameStateManager;
 import com.afonsobordado.CommanderGDX.handlers.InputHandler;
 import com.afonsobordado.CommanderGDX.handlers.MyContactListener;
-import com.afonsobordado.CommanderGDX.packets.PacketNewPlayer;
-import com.afonsobordado.CommanderGDX.packets.NetworkObject.NetworkPlayer;
 import com.afonsobordado.CommanderGDX.vars.B2DVars;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.FPSLogger;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.maps.MapLayer;
+import com.badlogic.gdx.maps.MapObject;
+import com.badlogic.gdx.maps.objects.PolylineMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell;
@@ -35,6 +34,7 @@ import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.ChainShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
+import com.badlogic.gdx.physics.box2d.Shape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
 
@@ -207,10 +207,58 @@ public class Play extends GameState{
 		layer = (TiledMapTileLayer) tileMap.getLayers().get("blue");
 		createLayer(layer, B2DVars.BIT_GROUND);
 		
+		MapLayer l = tileMap.getLayers().get("Ground");
+		colisionLayer(l,B2DVars.BIT_GROUND);
 		
 		
 	}
 	
+	private void colisionLayer(MapLayer layer, short bits){
+		FixtureDef fdef = new FixtureDef();
+		fdef.filter.categoryBits = bits; 
+		fdef.filter.maskBits = B2DVars.BIT_PLAYER;
+        fdef.density = 1.0f;
+        fdef.friction = 0.8f;
+        fdef.restitution = 0.0f;
+	 	
+	    Iterator<MapObject> iterator = layer.getObjects().iterator();
+	    while (iterator.hasNext()){
+	    	BodyDef bdef  = new BodyDef();
+	    	bdef.type = BodyDef.BodyType.StaticBody;
+	    	MapObject object = iterator.next();
+	        Shape shape = null; 
+	        if (object instanceof PolylineMapObject){
+	           PolylineMapObject poly = (PolylineMapObject)object;
+	           shape = createFromPolyline(poly);
+	        }
+	        
+	        if(shape != null){
+	        	fdef.shape = shape;
+	            world.createBody(bdef).createFixture(fdef);
+	            fdef.shape = null;
+	            shape.dispose();
+	        }
+	    	
+	    }
+	}
+	
+	private Shape createFromPolyline(PolylineMapObject poly) {
+	      float[] vertices = poly.getPolyline().getTransformedVertices();
+	      Vector2[] worldVertices = new Vector2[vertices.length / 2];
+	   
+	      for (int i = 0; i < vertices.length / 2; ++i)
+	      {
+	         worldVertices[i] = new Vector2();
+	         worldVertices[i].x = vertices[i * 2] / B2DVars.PPM;
+	         worldVertices[i].y = vertices[i * 2 + 1] / B2DVars.PPM;
+	      }
+	   
+	      ChainShape chain = new ChainShape();
+	      chain.createChain(worldVertices);
+	   
+	      return chain;
+	}
+
 	private void createLayer(TiledMapTileLayer layer, short bits){
 		//go trough all cells in the layer
 		BodyDef bdef  = new BodyDef();

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="78" height="8" tilewidth="32" tileheight="32">
+<map version="1.0" orientation="orthogonal" width="78" height="8" tilewidth="32" tileheight="32">
  <tileset firstgid="1" name="blocks" tilewidth="32" tileheight="32">
   <image source="blocks.png" width="96" height="32"/>
  </tileset>
@@ -15,10 +15,10 @@
  </layer>
  <layer name="blue" width="78" height="8">
   <data encoding="base64" compression="zlib">
-   eJxjZmBgYB5gzDSEMLK7KQGU6h9qgFrhNtIAvnBjxkGjswc7QC8PqG3mSAOU+HkkhxsIUOL/oRZutHYrseYTE2741Ax0+4WWmBAAAA07Acs=
+   eJxjZmBgYB5gzDSEMLK7KQGU6h9qgFrhNtIAvnBjxkEPNYBeHlDbzJEGKPHzSA43EKDE/0Mt3GjtVmLNJybc8KkZ6PYLLTEhAAD7dAHI
   </data>
  </layer>
- <objectgroup name="crystals">
+ <objectgroup name="crystals" width="0" height="0">
   <object x="272" y="145">
    <ellipse/>
   </object>
@@ -72,6 +72,11 @@
   </object>
   <object x="2416" y="146">
    <ellipse/>
+  </object>
+ </objectgroup>
+ <objectgroup name="Ground" width="78" height="8">
+  <object x="875" y="113">
+   <polyline points="0,0 96,-5 185,1 197,26 212,27 224,24 229,20 236,15 245,15 251,15 253,23 253,31 259,37 271,35 277,29 278,22 280,14 287,14 295,20 292,36 293,42 300,44 305,42 311,30 313,21 322,18 331,25 331,40 336,50 344,42 351,24 356,17 364,-3 343,-28"/>
   </object>
  </objectgroup>
 </map>
