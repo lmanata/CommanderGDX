@@ -22,6 +22,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.objects.PolylineMapObject;
+import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell;
@@ -232,13 +233,35 @@ public class Play extends GameState{
 	           shape = createFromPolyline(poly);
 	        }
 	        
+	        if(object instanceof RectangleMapObject){
+	        		RectangleMapObject rect = (RectangleMapObject) object;
+	        		bdef.position.set((rect.getRectangle().x + (rect.getRectangle().width / 2)) / B2DVars.PPM,
+	        						  (rect.getRectangle().y + (rect.getRectangle().height / 2)) / B2DVars.PPM);
+	        		ChainShape cs = new ChainShape();
+					Vector2[] v = new Vector2[4];
+					v[0] = new Vector2(
+							-rect.getRectangle().width / 2 / B2DVars.PPM,
+							-rect.getRectangle().height / 2 / B2DVars.PPM);
+					v[1] = new Vector2(
+							-rect.getRectangle().width / 2 / B2DVars.PPM,
+							rect.getRectangle().height / 2 / B2DVars.PPM);
+					v[2] = new Vector2(
+							rect.getRectangle().width / 2 / B2DVars.PPM,
+							rect.getRectangle().height / 2 / B2DVars.PPM);
+					v[3] = new Vector2(
+							rect.getRectangle().width / 2 / B2DVars.PPM,
+							-rect.getRectangle().height / 2 / B2DVars.PPM);
+					cs.createLoop(v);
+					shape = cs;
+	        		
+	        }
+	        
 	        if(shape != null){
 	        	fdef.shape = shape;
 	            world.createBody(bdef).createFixture(fdef);
 	            fdef.shape = null;
 	            shape.dispose();
 	        }
-	    	
 	    }
 	}
 	
