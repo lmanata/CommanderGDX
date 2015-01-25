@@ -1,6 +1,7 @@
 package com.afonsobordado.CommanderGDX.entities.weapons;
 
 import com.afonsobordado.CommanderGDX.Game;
+import com.afonsobordado.CommanderGDX.entities.AnimationList;
 import com.afonsobordado.CommanderGDX.handlers.Animation;
 import com.afonsobordado.CommanderGDX.packets.PacketBullet;
 import com.afonsobordado.CommanderGDX.states.IPmenu;
@@ -57,10 +58,7 @@ public class Weapon {
 		Game.client.sendUDP(pb);
 		
 		if(!IPmenu.play){ //we are offline //TODO: this is debug only
-			TextureRegion[] bulletTR = new TextureRegion[3];
-			for(int i=0; i < 3; i++) 
-				bulletTR[i] = new TextureRegion(Game.aManager.get("res/animations/bullet/"+i+".png", Texture.class));
-			Play.bulletList.add(new Bullet(new Animation(bulletTR),
+			Play.bulletList.add(new Bullet(AnimationList.get("bullet"),
 											pb.pos,
 											pb.angle,
 											pb.speed,

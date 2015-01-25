@@ -1,6 +1,7 @@
 package com.afonsobordado.CommanderGDX.handlers;
 
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Vector2;
 
 
 //Im using this animation class because LibGDX's requires you
@@ -87,6 +88,14 @@ public class Animation {
 			newf[i] = new TextureRegion(frames[i].getTexture());
 		}
 		return new Animation(newf);
+	}
+	public Vector2 getMaxSize(){
+		Vector2 tmp = new Vector2();
+		for(TextureRegion tr: frames){
+			if(tr.getRegionHeight() > tmp.y) tmp.y = tr.getRegionHeight();
+			if(tr.getRegionWidth() > tmp.x) tmp.x = tr.getRegionWidth();
+		}
+		return tmp;
 	}
 
 	

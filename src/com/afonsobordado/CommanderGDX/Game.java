@@ -1,5 +1,7 @@
 package com.afonsobordado.CommanderGDX;
 
+import com.afonsobordado.CommanderGDX.entities.AnimationList;
+import com.afonsobordado.CommanderGDX.handlers.Animation;
 import com.afonsobordado.CommanderGDX.handlers.GameStateManager;
 import com.afonsobordado.CommanderGDX.handlers.InputHandler;
 import com.afonsobordado.CommanderGDX.handlers.InputProcessor;
@@ -12,6 +14,7 @@ import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.esotericsoftware.kryonet.Client;
 
@@ -87,6 +90,9 @@ public class Game implements ApplicationListener{
 		
 		loadAssets(); // will block the aplication until is done loading
 		
+		registerAnimations();
+		
+		
 		
 		/*Pixmap pm = new Pixmap(Gdx.files.internal("res/images/crystal.png"));
         int xHotSpot = pm.getWidth() / 2;
@@ -107,6 +113,45 @@ public class Game implements ApplicationListener{
 
 		
 	}
+	private void registerAnimations() {
+		//bullet
+		TextureRegion[] tmp = new TextureRegion[3];
+		
+		for(int i=0; i < 3; i++) 
+			tmp[i] = new TextureRegion(Game.aManager.get("res/animations/bullet/"+i+".png", Texture.class));
+		AnimationList.add("bullet", new Animation(tmp));
+		
+		tmp = new TextureRegion[1];
+		tmp[0] = new TextureRegion(Game.aManager.get("res/animations/soldier/weapons/002.png",Texture.class));
+		AnimationList.add("ak47", new Animation(tmp));
+		
+		tmp = new TextureRegion[1];
+		tmp[0] = new TextureRegion(Game.aManager.get("res/animations/soldier/weapons/000.png",Texture.class));
+		AnimationList.add("usp-s", new Animation(tmp));
+		
+		tmp = new TextureRegion[1];
+		tmp[0] = new TextureRegion(Game.aManager.get("res/animations/soldier/arms/001.png", Texture.class));
+		AnimationList.add("MainCharArms", new Animation(tmp));
+
+		tmp = new TextureRegion[1];
+		tmp[0] = new TextureRegion(Game.aManager.get("res/animations/test/legs/idle.png", Texture.class));
+		AnimationList.add("MainCharLegsIdle", new Animation(tmp));
+
+		tmp = new TextureRegion[1];
+		tmp[0] = new TextureRegion(Game.aManager.get("res/animations/test/legs/jump.png", Texture.class));
+		AnimationList.add("MainCharLegsJump", new Animation(tmp));
+
+		tmp = new TextureRegion[5];
+		for(int i = 0;i<5;i++)
+			tmp[i] = new TextureRegion(Game.aManager.get("res/animations/test/chest/00"+i+".png", Texture.class));
+		AnimationList.add("MainCharTorso", new Animation(tmp));
+
+		tmp = new TextureRegion[8];
+		for(int i=0;i<8;i++)
+			tmp[i] = new TextureRegion(Game.aManager.get("res/animations/test/legs/00"+i+".png", Texture.class));
+		AnimationList.add("MainCharLegsRun", new Animation(tmp));
+	}
+	
 	public void dispose() {}
 	
 	public void render() {

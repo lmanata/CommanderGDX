@@ -3,6 +3,7 @@ package com.afonsobordado.CommanderGDX.states;
 import java.util.concurrent.ConcurrentHashMap;
 
 import com.afonsobordado.CommanderGDX.Game;
+import com.afonsobordado.CommanderGDX.entities.AnimationList;
 import com.afonsobordado.CommanderGDX.entities.UI.HUD;
 import com.afonsobordado.CommanderGDX.entities.player.LocalClientPlayer;
 import com.afonsobordado.CommanderGDX.entities.player.Player;
@@ -68,18 +69,9 @@ public class Play extends GameState{
 	public Play(GameStateManager gsm) {
 		super(gsm);
 		
+		WeaponList.add("ak47",new Weapon("ak47",AnimationList.get("ak47"), 13.75f, false, new Vector2(18,10), new Bullet(AnimationList.get("bullet"),200f,(short) 0, 1f)));
 		
-		TextureRegion[] bulletTR = new TextureRegion[3];
-		for(int i=0; i < 3; i++) 
-			bulletTR[i] = new TextureRegion(Game.aManager.get("res/animations/bullet/"+i+".png", Texture.class));
-		
-		TextureRegion[] weaponTR = new TextureRegion[1];
-		weaponTR[0] = new TextureRegion(Game.aManager.get("res/animations/soldier/weapons/002.png",Texture.class));
-		WeaponList.add("ak47",new Weapon("ak47",new Animation(weaponTR), 13.75f, false, new Vector2(18,10), new Bullet(new Animation(bulletTR),200f,(short) 0, 1f)));
-		
-		weaponTR = new TextureRegion[1];
-		weaponTR[0] = new TextureRegion(Game.aManager.get("res/animations/soldier/weapons/000.png",Texture.class));
-		WeaponList.add("usp-s",new Weapon("usp-s",new Animation(weaponTR), 0f, true, new Vector2(18,10), new Bullet(new Animation(bulletTR), 20f,(short) 0, 1f)));
+		WeaponList.add("usp-s",new Weapon("usp-s",AnimationList.get("usp-s"), 0f, true, new Vector2(18,10), new Bullet(AnimationList.get("bullet"), 20f,(short) 0, 1f)));
 		//TODO: Duplicate bullet speed, one on the bullet another on the weapon
 		
 		

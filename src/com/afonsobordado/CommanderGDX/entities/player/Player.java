@@ -4,6 +4,7 @@ package com.afonsobordado.CommanderGDX.entities.player;
 import static com.afonsobordado.CommanderGDX.vars.B2DVars.PLAYER_MAX_VELOCITY;
 
 import com.afonsobordado.CommanderGDX.Game;
+import com.afonsobordado.CommanderGDX.entities.AnimationList;
 import com.afonsobordado.CommanderGDX.entities.characters.PlayerCharacter;
 import com.afonsobordado.CommanderGDX.entities.weapons.Weapon;
 import com.afonsobordado.CommanderGDX.entities.weapons.WeaponList;
@@ -42,36 +43,10 @@ public class Player {
 	private String name;
 	
 	public Player(World world){
-		Vector2 legSz=new Vector2(0f,0f);
-		Vector2 torsoSz = new Vector2(0f,0f);
+		Vector2 legSz = AnimationList.get("MainCharLegsRun").getMaxSize();
+		Vector2 torsoSz = AnimationList.get("MainCharTorso").getMaxSize();
 		weapons = new Array<Weapon>();
 		currentWeapon = 0;
-
-		TextureRegion[] torsoAnimTR = new TextureRegion[5];
-		TextureRegion[] legsRunTR = new TextureRegion[8];
-		TextureRegion[] armsTR = new TextureRegion[1];
-		TextureRegion[] weaponTR = new TextureRegion[1];
-		TextureRegion[] legsIdleTR = new TextureRegion[1];
-		TextureRegion[] legsJumpTR = new TextureRegion[1];
-		
-		for(int i = 0;i<5;i++){
-			torsoAnimTR[i] = new TextureRegion(Game.aManager.get("res/animations/test/chest/00"+i+".png", Texture.class));
-			if(torsoAnimTR[i].getRegionHeight() > torsoSz.y) torsoSz.y = torsoAnimTR[i].getRegionHeight();
-			if(torsoAnimTR[i].getRegionWidth() > torsoSz.x) torsoSz.x = torsoAnimTR[i].getRegionWidth();
-		}
-		for(int i=0;i<8;i++){
-			legsRunTR[i] = new TextureRegion(Game.aManager.get("res/animations/test/legs/00"+i+".png", Texture.class));
-			if(legsRunTR[i].getRegionHeight() > legSz.y) legSz.y = legsRunTR[i].getRegionHeight();
-			if(legsRunTR[i].getRegionWidth() > legSz.x) legSz.x = legsRunTR[i].getRegionWidth();
-		}
-		
-		armsTR[0] = new TextureRegion(Game.aManager.get("res/animations/soldier/arms/001.png", Texture.class));
-		
-		legsIdleTR[0] = new TextureRegion(Game.aManager.get("res/animations/test/legs/idle.png", Texture.class));
-		legsJumpTR[0] = new TextureRegion(Game.aManager.get("res/animations/test/legs/jump.png", Texture.class));
-
-
-		
 		
 		BodyDef bdef  = new BodyDef();
 		FixtureDef fdef = new FixtureDef();
@@ -105,15 +80,15 @@ public class Player {
 		weapons.add(WeaponList.get("ak47"));
 		weapons.add(WeaponList.get("usp-s"));
 		
-		pc = new PlayerCharacter(new Animation(legsIdleTR),
-				 new Animation(legsJumpTR),
-				 new Animation(legsRunTR),
-				 new Animation(torsoAnimTR),
-				 new Animation(armsTR),
-				 new Vector2(13,12), //torsoPin
-				 new Vector2(4,8), //armPin
-				 this.weapons.get(currentWeapon),
-				 this.body);
+		pc = new PlayerCharacter(AnimationList.get("MainCharLegsIdle"),
+					 			 AnimationList.get("MainCharLegsJump"),
+								 AnimationList.get("MainCharLegsRun"),
+								 AnimationList.get("MainCharTorso"),
+								 AnimationList.get("MainCharArms"),
+								 new Vector2(13,12), //torsoPin
+								 new Vector2(4,8), //armPin
+								 this.weapons.get(currentWeapon),
+								 this.body);
 		
 		
 		

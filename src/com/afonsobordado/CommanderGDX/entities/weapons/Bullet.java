@@ -77,7 +77,6 @@ public class Bullet {
 		
 		animation.update(dt);
 		this.lifespan-=(dt*1000000000);
-		//System.out.println("Lifespan:" + this.lifespan + " : Current: " + System.currentTimeMillis()*1000);
 		if(lifespanEnabled) toRemove = ((this.lifespan) < 0);
 			
 		
