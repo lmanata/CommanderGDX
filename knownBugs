@@ -1,11 +1,2 @@
-[Fixed] Weapon Sprite Doesent change
-[Fixed] Bullet removal does not work
 All Bullets face the same direction when idle (Also general instability)
-[Fixed] Pistol Fires When button is Pressed not clicked*
-[Fixed] Packet New Player sometimes does not transmit across all clients
 [Linux only?] Mouse doesent work when returning from Alt-tab
-[Fixed] Bullet position sometimes attaches to other players
-[Fixed] AK does not fire continuously
-[Fixed] When copying weapons there are floating percision errors.
-[Fixed] Weapons are placed backwards in the player but only if its connected to a server.
-[Fixed] Weapons are not changed in network players.[new packet]

@@ -237,22 +237,23 @@ public class Play extends GameState{
 							(col + 0.5f) * tileSize / B2DVars.PPM,
 							(row + 0.5f) * tileSize / B2DVars.PPM); 
 					
+					
 					ChainShape cs = new ChainShape();
 					Vector2[] v = new Vector2[4];
 					v[0] = new Vector2(
 							-tileSize / 2 / B2DVars.PPM,
 							-tileSize / 2 / B2DVars.PPM);
 					v[1] = new Vector2(
-							tileSize / 2 / B2DVars.PPM,
+							-tileSize / 2 / B2DVars.PPM,
 							tileSize / 2 / B2DVars.PPM);
 					v[2] = new Vector2(
-							-tileSize / 2 / B2DVars.PPM,
+							tileSize / 2 / B2DVars.PPM,
 							tileSize / 2 / B2DVars.PPM);
 					v[3] = new Vector2(
 							tileSize / 2 / B2DVars.PPM,
 							-tileSize / 2 / B2DVars.PPM);
 
-					cs.createChain(v);
+					cs.createLoop(v);
 					fdef.friction = 0.2f;
 					fdef.shape = cs;
 					fdef.filter.categoryBits = bits; 
