@@ -148,7 +148,6 @@ public class LocalClientPlayer{
 			armDegreesTemp  -=  180; //this might seem counter-intuitive but trust me, its right
 			armDegreesTemp  = 180-armDegreesTemp ;
 		}
-		//System.out.println("LCP: " + this + " : ADT: " + armDegreesTemp);
 		pc.setTorsoFrame((int) (7-(armDegreesTemp /22))); //TODO: needs smoothing
 		
 		if(body.getLinearVelocity().x >= -0.05 && body.getLinearVelocity().x <= 0.05  &&body.getLinearVelocity().y == 0){ // stopped boddy

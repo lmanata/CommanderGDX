@@ -34,7 +34,6 @@ public class Weapon {
 		barrelPos=new Vector2();
 		angle = 0f;
 		
-		System.out.println("bulletsps: " + bulletsPerSec + " ASSERT: " + (bulletsPerSec != 0));
 		if(bulletsPerSec != 0)
 			this.coolDown = (long) (1000000000 / bulletsPerSec);
 	}

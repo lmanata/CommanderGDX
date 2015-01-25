@@ -101,7 +101,6 @@ public class NetworkListener extends Listener{
 		} else if (object instanceof PacketSwitchWeapon){
 			PacketSwitchWeapon psw = (PacketSwitchWeapon) object;
 			LocalClientPlayer lcp = Play.playerList.get(psw.id);
-			System.out.println("LCP: sw weapons");
 			lcp.setWeapon(psw.newWeapon);
 		}
 		

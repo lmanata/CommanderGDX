@@ -193,7 +193,6 @@ public class Player {
 		}
 
 		pc.setTorsoFrame((int) (7-(armDegreesTemp /22))); //TODO: needs smoothing
-		//System.out.println((int) (7-(armDegrees/22)));
 		
 		if(body.getLinearVelocity().x >= -0.05 && body.getLinearVelocity().x <= 0.05  &&body.getLinearVelocity().y == 0){ // stopped boddy
 			pc.setAir(false);
@@ -257,7 +256,6 @@ public class Player {
 		PacketSwitchWeapon psw = new PacketSwitchWeapon();
 		psw.id = this.id;
 		psw.newWeapon = weapons.get(currentWeapon).getName();
-		System.out.println("NEW PACKET OUT:\nID: " + this.id + "\nNW: " + psw.newWeapon + "");
 		Game.client.sendTCP(psw);
 	}
 }
