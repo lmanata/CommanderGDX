@@ -21,6 +21,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.MapObject;
+import com.badlogic.gdx.maps.objects.PolygonMapObject;
 import com.badlogic.gdx.maps.objects.PolylineMapObject;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
@@ -230,7 +231,18 @@ public class Play extends GameState{
 	        Shape shape = null; 
 	        if (object instanceof PolylineMapObject){
 	           PolylineMapObject poly = (PolylineMapObject)object;
-	           shape = createFromPolyline(poly);
+	 	      float[] vertices = poly.getPolyline().getTransformedVertices();
+		      Vector2[] worldVertices = new Vector2[vertices.length / 2];
+		   
+		      for (int i = 0; i < vertices.length / 2; ++i){
+		         worldVertices[i] = new Vector2();
+		         worldVertices[i].x = vertices[i * 2] / B2DVars.PPM;
+		         worldVertices[i].y = vertices[i * 2 + 1] / B2DVars.PPM;
+		      }
+		   
+		      ChainShape chain = new ChainShape();
+		      chain.createChain(worldVertices);
+		      shape = chain;
 	        }
 	        
 	        if(object instanceof RectangleMapObject){
@@ -256,6 +268,22 @@ public class Play extends GameState{
 	        		
 	        }
 	        
+	        if(object instanceof PolygonMapObject){
+				PolygonMapObject poly = (PolygonMapObject) object;
+				float[] vertices = poly.getPolygon().getTransformedVertices();
+				Vector2[] worldVertices = new Vector2[vertices.length / 2];
+					   
+				for (int i = 0; i < vertices.length / 2; ++i){
+					worldVertices[i] = new Vector2();
+					worldVertices[i].x = vertices[i * 2] / B2DVars.PPM;
+					worldVertices[i].y = vertices[i * 2 + 1] / B2DVars.PPM;
+				}
+   
+				ChainShape chain = new ChainShape();
+				chain.createLoop(worldVertices);
+				shape = chain;
+	        }
+	        
 	        if(shape != null){
 	        	fdef.shape = shape;
 	            world.createBody(bdef).createFixture(fdef);
@@ -264,24 +292,6 @@ public class Play extends GameState{
 	        }
 	    }
 	}
-	
-	private Shape createFromPolyline(PolylineMapObject poly) {
-	      float[] vertices = poly.getPolyline().getTransformedVertices();
-	      Vector2[] worldVertices = new Vector2[vertices.length / 2];
-	   
-	      for (int i = 0; i < vertices.length / 2; ++i)
-	      {
-	         worldVertices[i] = new Vector2();
-	         worldVertices[i].x = vertices[i * 2] / B2DVars.PPM;
-	         worldVertices[i].y = vertices[i * 2 + 1] / B2DVars.PPM;
-	      }
-	   
-	      ChainShape chain = new ChainShape();
-	      chain.createChain(worldVertices);
-	   
-	      return chain;
-	}
-
 	private void createLayer(TiledMapTileLayer layer, short bits){
 		//go trough all cells in the layer
 		BodyDef bdef  = new BodyDef();
