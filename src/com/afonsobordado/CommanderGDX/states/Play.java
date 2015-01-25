@@ -21,6 +21,8 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.MapObject;
+import com.badlogic.gdx.maps.objects.CircleMapObject;
+import com.badlogic.gdx.maps.objects.EllipseMapObject;
 import com.badlogic.gdx.maps.objects.PolygonMapObject;
 import com.badlogic.gdx.maps.objects.PolylineMapObject;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
@@ -35,6 +37,7 @@ import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.ChainShape;
+import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.Shape;
 import com.badlogic.gdx.physics.box2d.World;
@@ -282,6 +285,20 @@ public class Play extends GameState{
 				ChainShape chain = new ChainShape();
 				chain.createLoop(worldVertices);
 				shape = chain;
+	        }
+	        
+	        if(object instanceof EllipseMapObject){
+	        	EllipseMapObject emo = (EllipseMapObject) object;
+	        	if(emo.getEllipse().height == emo.getEllipse().width){
+	        		System.out.println("got Circled");
+		        	CircleShape cs = new CircleShape();
+		        	cs.setRadius(emo.getEllipse().height / 2 / B2DVars.PPM);
+		        	cs.setPosition(new Vector2(emo.getEllipse().x / B2DVars.PPM,
+		        						       emo.getEllipse().y / B2DVars.PPM));
+		        	shape = cs;
+	        	}
+	        	
+	        	
 	        }
 	        
 	        if(shape != null){
