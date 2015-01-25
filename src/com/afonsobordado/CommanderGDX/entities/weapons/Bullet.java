@@ -71,8 +71,9 @@ public class Bullet {
 	}
 	
 	public void update(float dt){
-		
-		angle = (float) Math.toDegrees(Math.atan2(body.getLinearVelocity().y, body.getLinearVelocity().x));
+		if(Math.abs(body.getLinearVelocity().y) > 0.02f ||
+		   Math.abs(body.getLinearVelocity().x) > 0.02f )
+			angle = (float) Math.toDegrees(Math.atan2(body.getLinearVelocity().y, body.getLinearVelocity().x));
 		
 		animation.update(dt);
 		this.lifespan-=(dt*1000000000);
