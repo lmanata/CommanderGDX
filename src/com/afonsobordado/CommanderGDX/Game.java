@@ -1,12 +1,31 @@
 package com.afonsobordado.CommanderGDX;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+
 import com.afonsobordado.CommanderGDX.entities.AnimationList;
+import com.afonsobordado.CommanderGDX.entities.weapons.Bullet;
+import com.afonsobordado.CommanderGDX.entities.weapons.BulletList;
+import com.afonsobordado.CommanderGDX.entities.weapons.Weapon;
+import com.afonsobordado.CommanderGDX.entities.weapons.WeaponList;
+import com.afonsobordado.CommanderGDX.files.BulletFile;
+import com.afonsobordado.CommanderGDX.files.WeaponFile;
 import com.afonsobordado.CommanderGDX.handlers.Animation;
 import com.afonsobordado.CommanderGDX.handlers.GameStateManager;
 import com.afonsobordado.CommanderGDX.handlers.InputHandler;
 import com.afonsobordado.CommanderGDX.handlers.InputProcessor;
 import com.afonsobordado.CommanderGDX.handlers.NetworkListener;
-import com.afonsobordado.CommanderGDX.packets.*;
+import com.afonsobordado.CommanderGDX.packets.PacketAccepted;
+import com.afonsobordado.CommanderGDX.packets.PacketBullet;
+import com.afonsobordado.CommanderGDX.packets.PacketConsoleMessage;
+import com.afonsobordado.CommanderGDX.packets.PacketDeclined;
+import com.afonsobordado.CommanderGDX.packets.PacketDisconnect;
+import com.afonsobordado.CommanderGDX.packets.PacketHello;
+import com.afonsobordado.CommanderGDX.packets.PacketNewPlayer;
+import com.afonsobordado.CommanderGDX.packets.PacketPositionUpdate;
+import com.afonsobordado.CommanderGDX.packets.PacketSwitchWeapon;
 import com.afonsobordado.CommanderGDX.packets.NetworkObject.NetworkPlayer;
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
@@ -16,6 +35,8 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
+import com.esotericsoftware.kryo.io.Input;
+import com.esotericsoftware.kryo.io.Output;
 import com.esotericsoftware.kryonet.Client;
 
 public class Game implements ApplicationListener{
@@ -63,6 +84,10 @@ public class Game implements ApplicationListener{
 	    client.getKryo().register(PacketDisconnect.class);
 	    client.getKryo().register(PacketBullet.class);
 	    client.getKryo().register(PacketSwitchWeapon.class);
+	    
+	    //register these last to not interfere with the network
+		client.getKryo().register(WeaponFile.class);
+		client.getKryo().register(BulletFile.class);
 		new Thread(client).start();
 		client.addListener(networkListener = new NetworkListener());
 		
@@ -91,6 +116,38 @@ public class Game implements ApplicationListener{
 		loadAssets(); // will block the aplication until is done loading
 		
 		registerAnimations();
+		registerBullets();
+		registerWeapons();
+		
+		
+
+		
+		/*Output output = null;
+		//Input input = null;
+		try {
+			BulletFile bf = new BulletFile("7.62x39mm", "bullet", 200f,(short) 0, 1f);
+			output = new Output(new FileOutputStream("./res/bullets/"+bf.getName()+".bullet"));
+			//input  = new Input(new FileInputStream("./res/weaponfile.file"));
+			Game.client.getKryo().writeObject(output, bf);
+			output.flush();
+			//WeaponFile wfff = Game.client.getKryo().readObject(input, WeaponFile.class);
+			//System.out.println(wfff.getName());
+			
+			
+		}catch (FileNotFoundException ex) {
+            ex.printStackTrace();
+        } finally {
+        	output.flush();
+        	output.close();
+        	//input.close();
+        }*/
+	
+
+
+		
+		
+		
+		
 		
 		
 		
@@ -113,6 +170,67 @@ public class Game implements ApplicationListener{
 
 		
 	}
+	private void registerBullets() {
+		/*BulletList.add("7.62x39mm", new Bullet(AnimationList.get("bullet"),200f,(short) 0, 1f));
+		BulletList.add("9x19mm", new Bullet(AnimationList.get("bullet"), 20f,(short) 0, 1f));*/
+		File folder = new File("./res/bullets");
+		File[] listOfFiles = folder.listFiles();
+		for(File f : listOfFiles){
+			if(f.isFile()){
+				Input input = null;
+				BulletFile bf = null;
+				try {
+					input  = new Input(new FileInputStream(f.getPath()));
+					bf = Game.client.getKryo().readObject(input, BulletFile.class);
+				}catch (FileNotFoundException ex) {
+		            ex.printStackTrace();
+		        } finally {
+		        	input.close();
+		        }
+				
+				if(bf != null){
+					BulletList.add(bf.getName(),
+								   new Bullet(AnimationList.get(bf.getAnimation()),
+										      bf.getSpeed(),
+										      bf.getEffects(),
+										      bf.getLifespan())
+								  );
+					
+				}
+			}
+		}
+	}
+	private void registerWeapons() {
+		File folder = new File("./res/weapons");
+		File[] listOfFiles = folder.listFiles();
+		for(File f : listOfFiles){
+			if(f.isFile()){
+				Input input = null;
+				WeaponFile wf = null;
+				try {
+					input  = new Input(new FileInputStream(f.getPath()));
+					wf = Game.client.getKryo().readObject(input, WeaponFile.class);
+				}catch (FileNotFoundException ex) {
+		            ex.printStackTrace();
+		        } finally {
+		        	input.close();
+		        }
+				
+				if(wf != null){
+					WeaponList.add(wf.getName(),
+								  new Weapon(	wf.getName(),
+										  		AnimationList.get(wf.getAnimation()),
+										  		wf.getBulletsPerSec(),
+										  		wf.isShootOnPress(),
+										  		wf.getWeaponPin(),
+										  		BulletList.get(wf.getBullet())
+										  		)
+								 );
+				}
+			}
+		}
+	}
+	
 	private void registerAnimations() {
 		//bullet
 		TextureRegion[] tmp = new TextureRegion[3];

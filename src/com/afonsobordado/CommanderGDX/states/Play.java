@@ -1,5 +1,9 @@
 package com.afonsobordado.CommanderGDX.states;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.Iterator;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -12,6 +16,7 @@ import com.afonsobordado.CommanderGDX.entities.weapons.Bullet;
 import com.afonsobordado.CommanderGDX.entities.weapons.BulletList;
 import com.afonsobordado.CommanderGDX.entities.weapons.Weapon;
 import com.afonsobordado.CommanderGDX.entities.weapons.WeaponList;
+import com.afonsobordado.CommanderGDX.files.WeaponFile;
 import com.afonsobordado.CommanderGDX.handlers.GameStateManager;
 import com.afonsobordado.CommanderGDX.handlers.InputHandler;
 import com.afonsobordado.CommanderGDX.handlers.MyContactListener;
@@ -42,6 +47,8 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.Shape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
+import com.esotericsoftware.kryo.io.Input;
+import com.esotericsoftware.kryo.io.Output;
 
 
 public class Play extends GameState{
@@ -74,16 +81,6 @@ public class Play extends GameState{
 	
 	public Play(GameStateManager gsm) {
 		super(gsm);
-		
-		
-		BulletList.add("7.62x39mm", new Bullet(AnimationList.get("bullet"),200f,(short) 0, 1f));
-		BulletList.add("9x19mm", new Bullet(AnimationList.get("bullet"), 20f,(short) 0, 1f));
-		
-		WeaponList.add("ak47",new Weapon("ak47",AnimationList.get("ak47"), 13.75f, false, new Vector2(18,10), BulletList.get("7.62x39mm")));
-		WeaponList.add("usp-s",new Weapon("usp-s",AnimationList.get("usp-s"), 0f, true, new Vector2(18,10), BulletList.get("9mm")));
-		
-		
-
 		
 		world = new World(new Vector2(0, -9.81f), true);
 		world.setContactListener(cl = new MyContactListener());
