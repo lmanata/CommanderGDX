@@ -9,6 +9,7 @@ import com.afonsobordado.CommanderGDX.entities.UI.HUD;
 import com.afonsobordado.CommanderGDX.entities.player.LocalClientPlayer;
 import com.afonsobordado.CommanderGDX.entities.player.Player;
 import com.afonsobordado.CommanderGDX.entities.weapons.Bullet;
+import com.afonsobordado.CommanderGDX.entities.weapons.BulletList;
 import com.afonsobordado.CommanderGDX.entities.weapons.Weapon;
 import com.afonsobordado.CommanderGDX.entities.weapons.WeaponList;
 import com.afonsobordado.CommanderGDX.handlers.GameStateManager;
@@ -21,7 +22,6 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.MapObject;
-import com.badlogic.gdx.maps.objects.CircleMapObject;
 import com.badlogic.gdx.maps.objects.EllipseMapObject;
 import com.badlogic.gdx.maps.objects.PolygonMapObject;
 import com.badlogic.gdx.maps.objects.PolylineMapObject;
@@ -42,6 +42,7 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.Shape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
+
 
 public class Play extends GameState{
 
@@ -74,11 +75,15 @@ public class Play extends GameState{
 	public Play(GameStateManager gsm) {
 		super(gsm);
 		
-		WeaponList.add("ak47",new Weapon("ak47",AnimationList.get("ak47"), 13.75f, false, new Vector2(18,10), new Bullet(AnimationList.get("bullet"),200f,(short) 0, 1f)));
 		
-		WeaponList.add("usp-s",new Weapon("usp-s",AnimationList.get("usp-s"), 0f, true, new Vector2(18,10), new Bullet(AnimationList.get("bullet"), 20f,(short) 0, 1f)));
-		//TODO: Duplicate bullet speed, one on the bullet another on the weapon
+		BulletList.add("7.62x39mm", new Bullet(AnimationList.get("bullet"),200f,(short) 0, 1f));
+		BulletList.add("9x19mm", new Bullet(AnimationList.get("bullet"), 20f,(short) 0, 1f));
 		
+		WeaponList.add("ak47",new Weapon("ak47",AnimationList.get("ak47"), 13.75f, false, new Vector2(18,10), BulletList.get("7.62x39mm")));
+		WeaponList.add("usp-s",new Weapon("usp-s",AnimationList.get("usp-s"), 0f, true, new Vector2(18,10), BulletList.get("9mm")));
+		
+		
+
 		
 		world = new World(new Vector2(0, -9.81f), true);
 		world.setContactListener(cl = new MyContactListener());
@@ -213,7 +218,8 @@ public class Play extends GameState{
 		createLayer(layer, B2DVars.BIT_GROUND);
 		
 		MapLayer l = tileMap.getLayers().get("Ground");
-		colisionLayer(l,B2DVars.BIT_GROUND);
+		if(l != null)
+			colisionLayer(l,B2DVars.BIT_GROUND);
 		
 		
 	}
