@@ -35,6 +35,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
+import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
 import com.esotericsoftware.kryonet.Client;
@@ -65,6 +66,7 @@ public class Game implements ApplicationListener{
 	
 	public static AssetManager aManager;
 	public static Client client;
+	public static Kryo fileSerializer;
 	public static NetworkListener networkListener;
 	
 
@@ -84,12 +86,14 @@ public class Game implements ApplicationListener{
 	    client.getKryo().register(PacketDisconnect.class);
 	    client.getKryo().register(PacketBullet.class);
 	    client.getKryo().register(PacketSwitchWeapon.class);
-	    
-	    //register these last to not interfere with the network
-		client.getKryo().register(WeaponFile.class);
-		client.getKryo().register(BulletFile.class);
+
 		new Thread(client).start();
 		client.addListener(networkListener = new NetworkListener());
+		
+	    fileSerializer = new Kryo();
+	    fileSerializer.register(Vector2.class);
+		fileSerializer.register(WeaponFile.class);
+		fileSerializer.register(BulletFile.class);
 		
 		
 		Gdx.input.setInputProcessor(new InputProcessor());
@@ -119,20 +123,36 @@ public class Game implements ApplicationListener{
 		registerBullets();
 		registerWeapons();
 		
-		
+		/*Input input;
+		try {
+			input = new Input(new FileInputStream("./xx.xx"));
+			WeaponFile wf = fileSerializer.readObject(input, WeaponFile.class);
+			
+			System.out.println("Name: " + wf.getName() +
+							   "\nAnimation: " + wf.getAnimation() +
+							   "\nbulletsPerSec: "+ wf.getBulletsPerSec()+
+							   "\nshootOnPress:"+wf.isShootOnPress()+
+							   "\nweaponPin: "+wf.getWeaponPin()+
+							   "\nbullet: " + wf.getBullet());
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}*/
+
 
 		
 		/*Output output = null;
 		//Input input = null;
 		try {
-			BulletFile bf = new BulletFile("7.62x39mm", "bullet", 200f,(short) 0, 1f);
-			output = new Output(new FileOutputStream("./res/bullets/"+bf.getName()+".bullet"));
+			WeaponFile wf = new WeaponFile("usp-s","usp-s",0f,true,new Vector2(18,10),"9x19mm");
+			//String name, String animation, float bulletsPerSec, boolean shootOnPress, Vector2 weaponPin, String bullet
+			//BulletFile bf = new BulletFile("7.62x39mm", "bullet", 200f,(short) 0, 1f);
+			output = new Output(new FileOutputStream("./res/weapons/"+wf.getName()+".weapon"));
 			//input  = new Input(new FileInputStream("./res/weaponfile.file"));
-			Game.client.getKryo().writeObject(output, bf);
+			fileSerializer.writeObject(output, wf);
 			output.flush();
 			//WeaponFile wfff = Game.client.getKryo().readObject(input, WeaponFile.class);
 			//System.out.println(wfff.getName());
-			
+			System.out.println("WROTE");
 			
 		}catch (FileNotFoundException ex) {
             ex.printStackTrace();
@@ -140,8 +160,8 @@ public class Game implements ApplicationListener{
         	output.flush();
         	output.close();
         	//input.close();
-        }*/
-	
+        }
+	*/
 
 
 		
@@ -171,8 +191,6 @@ public class Game implements ApplicationListener{
 		
 	}
 	private void registerBullets() {
-		/*BulletList.add("7.62x39mm", new Bullet(AnimationList.get("bullet"),200f,(short) 0, 1f));
-		BulletList.add("9x19mm", new Bullet(AnimationList.get("bullet"), 20f,(short) 0, 1f));*/
 		File folder = new File("./res/bullets");
 		File[] listOfFiles = folder.listFiles();
 		for(File f : listOfFiles){
@@ -181,7 +199,7 @@ public class Game implements ApplicationListener{
 				BulletFile bf = null;
 				try {
 					input  = new Input(new FileInputStream(f.getPath()));
-					bf = Game.client.getKryo().readObject(input, BulletFile.class);
+					bf = Game.fileSerializer.readObject(input, BulletFile.class);
 				}catch (FileNotFoundException ex) {
 		            ex.printStackTrace();
 		        } finally {
@@ -209,7 +227,7 @@ public class Game implements ApplicationListener{
 				WeaponFile wf = null;
 				try {
 					input  = new Input(new FileInputStream(f.getPath()));
-					wf = Game.client.getKryo().readObject(input, WeaponFile.class);
+					wf = Game.fileSerializer.readObject(input, WeaponFile.class);
 				}catch (FileNotFoundException ex) {
 		            ex.printStackTrace();
 		        } finally {
