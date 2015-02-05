@@ -3,6 +3,7 @@ package com.afonsobordado.CommanderGDXServer;
 import java.io.IOException;
 import java.util.concurrent.ConcurrentHashMap;
 
+import com.afonsobordado.CommanderGDX.handlers.TiledMapImporter;
 import com.afonsobordado.CommanderGDX.packets.PacketAccepted;
 import com.afonsobordado.CommanderGDX.packets.PacketBullet;
 import com.afonsobordado.CommanderGDX.packets.PacketConsoleMessage;
@@ -14,7 +15,9 @@ import com.afonsobordado.CommanderGDX.packets.PacketPositionUpdate;
 import com.afonsobordado.CommanderGDX.packets.PacketSwitchWeapon;
 import com.afonsobordado.CommanderGDXServer.LocalObjects.LocalServerPlayer;
 import com.afonsobordado.CommanderGDXServer.NetworkObjects.NetworkPlayer;
+import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.World;
 import com.esotericsoftware.kryonet.Server;
 
 public class GDXServer {
@@ -28,7 +31,10 @@ public class GDXServer {
 	public static String currentMap = "level2";
 	
 	public static void main(String[] args){
-		//World world = new World(new Vector2(0, -9.81f), true); 
+		/*World world = new World(new Vector2(0, -9.81f), true);
+		synchronized(world){
+			TiledMapImporter.create(new TmxMapLoader().load("res/maps/" + currentMap + ".tmx"),world);
+		}*/
 		
 		playerList = new ConcurrentHashMap<Integer, LocalServerPlayer>(16, 0.9f, 2);// 2 concurrent threads is a worst case scenario
 	    server = new Server();
