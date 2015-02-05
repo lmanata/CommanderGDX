@@ -8,15 +8,12 @@ import com.afonsobordado.CommanderGDX.entities.Lists.AnimationList;
 import com.afonsobordado.CommanderGDX.entities.Lists.WeaponList;
 import com.afonsobordado.CommanderGDX.entities.characters.PlayerCharacter;
 import com.afonsobordado.CommanderGDX.entities.weapons.Weapon;
-import com.afonsobordado.CommanderGDX.handlers.Animation;
+import com.afonsobordado.CommanderGDX.files.PlayerCharacterFile;
 import com.afonsobordado.CommanderGDX.handlers.InputHandler;
 import com.afonsobordado.CommanderGDX.packets.PacketSwitchWeapon;
 import com.afonsobordado.CommanderGDX.packets.NetworkObject.NetworkPlayer;
 import com.afonsobordado.CommanderGDX.vars.B2DVars;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.math.Vector;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
@@ -42,7 +39,7 @@ public class Player {
 	private float armDegrees;
 	private String name;
 	
-	public Player(World world){
+	public Player(World world, PlayerCharacterFile pcf){
 		Vector2 legSz = AnimationList.get("MainCharLegsRun").getMaxSize();
 		Vector2 torsoSz = AnimationList.get("MainCharTorso").getMaxSize();
 		weapons = new Array<Weapon>();
@@ -80,7 +77,9 @@ public class Player {
 		weapons.add(WeaponList.get("ak47"));
 		weapons.add(WeaponList.get("usp-s"));
 		
-		pc = new PlayerCharacter(AnimationList.get("MainCharLegsIdle"),
+		
+		pc = new PlayerCharacter(pcf, this.weapons.get(currentWeapon), body);
+		/*pc = new PlayerCharacter(AnimationList.get("MainCharLegsIdle"),
 					 			 AnimationList.get("MainCharLegsJump"),
 								 AnimationList.get("MainCharLegsRun"),
 								 AnimationList.get("MainCharTorso"),
@@ -88,7 +87,7 @@ public class Player {
 								 new Vector2(13,12), //torsoPin
 								 new Vector2(4,8), //armPin
 								 this.weapons.get(currentWeapon),
-								 this.body);
+								 this.body);*/
 		
 		
 		

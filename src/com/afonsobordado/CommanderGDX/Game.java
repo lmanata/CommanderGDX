@@ -11,6 +11,7 @@ import com.afonsobordado.CommanderGDX.entities.Lists.WeaponList;
 import com.afonsobordado.CommanderGDX.entities.weapons.Bullet;
 import com.afonsobordado.CommanderGDX.entities.weapons.Weapon;
 import com.afonsobordado.CommanderGDX.files.BulletFile;
+import com.afonsobordado.CommanderGDX.files.PlayerCharacterFile;
 import com.afonsobordado.CommanderGDX.files.WeaponFile;
 import com.afonsobordado.CommanderGDX.handlers.Animation;
 import com.afonsobordado.CommanderGDX.handlers.GameStateManager;
@@ -94,6 +95,7 @@ public class Game implements ApplicationListener{
 	    fileSerializer.register(Vector2.class);
 		fileSerializer.register(WeaponFile.class);
 		fileSerializer.register(BulletFile.class);
+		fileSerializer.register(PlayerCharacterFile.class);
 		
 		
 		Gdx.input.setInputProcessor(new InputProcessor());
@@ -141,17 +143,18 @@ public class Game implements ApplicationListener{
 
 		
 		/*Output output = null;
-		//Input input = null;
 		try {
-			WeaponFile wf = new WeaponFile("usp-s","usp-s",0f,true,new Vector2(18,10),"9x19mm");
-			//String name, String animation, float bulletsPerSec, boolean shootOnPress, Vector2 weaponPin, String bullet
-			//BulletFile bf = new BulletFile("7.62x39mm", "bullet", 200f,(short) 0, 1f);
-			output = new Output(new FileOutputStream("./res/weapons/"+wf.getName()+".weapon"));
-			//input  = new Input(new FileInputStream("./res/weaponfile.file"));
-			fileSerializer.writeObject(output, wf);
+			PlayerCharacterFile pcf = new PlayerCharacterFile("MainChar",
+															  "MainCharLegsIdle",
+															  "MainCharLegsJump",
+															  "MainCharLegsRun",
+															  "MainCharTorso",
+															  "MainCharArm",
+															  new Vector2(13,12), //torsoPin
+															  new Vector2(4,8));
+			output = new Output(new FileOutputStream("./res/playerCharacter/"+pcf.getName()+".pcf"));
+			fileSerializer.writeObject(output, pcf);
 			output.flush();
-			//WeaponFile wfff = Game.client.getKryo().readObject(input, WeaponFile.class);
-			//System.out.println(wfff.getName());
 			System.out.println("WROTE");
 			
 		}catch (FileNotFoundException ex) {
@@ -159,9 +162,8 @@ public class Game implements ApplicationListener{
         } finally {
         	output.flush();
         	output.close();
-        	//input.close();
-        }
-	*/
+        }*/
+	
 
 
 		

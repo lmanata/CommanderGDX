@@ -1,7 +1,5 @@
 package com.afonsobordado.CommanderGDX.files;
 
-import com.badlogic.gdx.math.Vector2;
-
 public class BulletFile {
 	
 	private String name;

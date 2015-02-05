@@ -10,11 +10,14 @@ import javax.swing.JFrame;
 import javax.swing.JList;
 import javax.swing.ListSelectionModel;
 
+import com.afonsobordado.CommanderGDX.files.PlayerCharacterFile;
 import com.afonsobordado.CommanderGDX.files.BulletFile;
 import com.afonsobordado.CommanderGDX.files.WeaponFile;
 import com.badlogic.gdx.math.Vector2;
 import com.esotericsoftware.kryo.Kryo;
+
 import javax.swing.JButton;
+
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
@@ -49,6 +52,7 @@ public class Main {
 		kryo.register(Vector2.class);
 		kryo.register(WeaponFile.class);
 		kryo.register(BulletFile.class);
+		kryo.register(PlayerCharacterFile.class);
 		
 		initialize();
 	}
@@ -87,9 +91,10 @@ public class Main {
 	
 	void resetList(){
 		classSelectMenu = true;
-		String[] sa = new String[2];
+		String[] sa = new String[3];
 		sa[0] = "WeaponClass";
 		sa[1] = "BulletClass";
+		sa[2] = "PlayerCharacterClass";
 		list.setListData(sa);
 	}
 	
@@ -103,6 +108,9 @@ public class Main {
 					break;
 				case 1:
 					dir = "../res/bullets";
+					break;
+				case 2:
+					dir = "../res/playerCharacter";
 					break;
 				default:
 					break;
@@ -131,6 +139,9 @@ public class Main {
 			}else if(fileName.endsWith(".bullet")){
 				BulletMenu bm = new BulletMenu(fileName);
 				bm.setVisible(true);
+			}else if(fileName.endsWith(".pcf")){
+				PlayerCharacterMenu pcm = new PlayerCharacterMenu(fileName);
+				pcm.setVisible(true);
 			}else{
 				System.err.println("Unrecognized Option!");
 				System.exit(1);

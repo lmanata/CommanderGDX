@@ -192,7 +192,7 @@ public class BulletMenu extends JFrame {
 		
 	}
 
-		void resetFields(){
+	void resetFields(){
 		Input input = null;
 		try{
 			input = new Input(new FileInputStream(file));

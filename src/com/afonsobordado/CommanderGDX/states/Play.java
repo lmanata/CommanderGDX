@@ -1,5 +1,8 @@
 package com.afonsobordado.CommanderGDX.states;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.util.Iterator;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -8,6 +11,8 @@ import com.afonsobordado.CommanderGDX.entities.UI.HUD;
 import com.afonsobordado.CommanderGDX.entities.player.LocalClientPlayer;
 import com.afonsobordado.CommanderGDX.entities.player.Player;
 import com.afonsobordado.CommanderGDX.entities.weapons.Bullet;
+import com.afonsobordado.CommanderGDX.files.PlayerCharacterFile;
+import com.afonsobordado.CommanderGDX.files.WeaponFile;
 import com.afonsobordado.CommanderGDX.handlers.GameStateManager;
 import com.afonsobordado.CommanderGDX.handlers.InputHandler;
 import com.afonsobordado.CommanderGDX.handlers.MyContactListener;
@@ -39,6 +44,7 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.Shape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
+import com.esotericsoftware.kryo.io.Input;
 
 
 
@@ -65,6 +71,7 @@ public class Play extends GameState{
 	
 	private HUD hud;
 	public static String mapName = "level3";
+	public static String playerClass = "MainChar.pcf";
 	
 	//animations
 
@@ -74,7 +81,17 @@ public class Play extends GameState{
 		
 		world = new World(new Vector2(0, -9.81f), true);
 		world.setContactListener(cl = new MyContactListener());
-		player = new Player(world);
+		
+		/*temporary ---------------------------------------------------*/
+		PlayerCharacterFile pcf = null;
+		try {
+			pcf = Game.fileSerializer.readObject(new Input(new FileInputStream(new File("./res/playerCharacter/"+playerClass).getPath())), PlayerCharacterFile.class);
+			System.out.println(pcf.getArmPin().toString());
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+		/*temporary ---------------------------------------------------*/
+		player = new Player(world,pcf);
 		
 		synchronized(Game.networkListener){
 			Game.networkListener.notifyAll(); // a glorious warrior has born

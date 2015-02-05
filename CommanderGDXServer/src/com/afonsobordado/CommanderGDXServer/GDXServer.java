@@ -3,7 +3,6 @@ package com.afonsobordado.CommanderGDXServer;
 import java.io.IOException;
 import java.util.concurrent.ConcurrentHashMap;
 
-import com.afonsobordado.CommanderGDX.handlers.TiledMapImporter;
 import com.afonsobordado.CommanderGDX.packets.PacketAccepted;
 import com.afonsobordado.CommanderGDX.packets.PacketBullet;
 import com.afonsobordado.CommanderGDX.packets.PacketConsoleMessage;
@@ -15,9 +14,7 @@ import com.afonsobordado.CommanderGDX.packets.PacketPositionUpdate;
 import com.afonsobordado.CommanderGDX.packets.PacketSwitchWeapon;
 import com.afonsobordado.CommanderGDXServer.LocalObjects.LocalServerPlayer;
 import com.afonsobordado.CommanderGDXServer.NetworkObjects.NetworkPlayer;
-import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.World;
 import com.esotericsoftware.kryonet.Server;
 
 public class GDXServer {

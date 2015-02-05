@@ -1,6 +1,8 @@
 package com.afonsobordado.CommanderGDX.entities.characters;
 
+import com.afonsobordado.CommanderGDX.entities.Lists.AnimationList;
 import com.afonsobordado.CommanderGDX.entities.weapons.Weapon;
+import com.afonsobordado.CommanderGDX.files.PlayerCharacterFile;
 import com.afonsobordado.CommanderGDX.handlers.Animation;
 import com.afonsobordado.CommanderGDX.vars.B2DVars;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -8,7 +10,6 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
-import com.badlogic.gdx.physics.box2d.Shape;
 
 public class PlayerCharacter {
 	private Animation legsIdle;
@@ -18,18 +19,16 @@ public class PlayerCharacter {
 	private Animation arm;
 	private Vector2 torsoPin;
 	private Vector2 armPin;
-	private Vector2 weaponPin; 
+	private Weapon weapon;
+	private Vector2 weaponPin;
 	private float armRotation;
 
 	
 	
 	private boolean isFlip;
 	private boolean isAir;
-
 	private boolean isIdle;
 	
-	
-	private Weapon weapon;
 	private Body body;
 	
 	
@@ -59,6 +58,22 @@ public class PlayerCharacter {
 	}
 	
 	
+	public PlayerCharacter(PlayerCharacterFile pcf, Weapon weapon, Body body) {
+		this.legs = AnimationList.get(pcf.getLegs());
+		this.torso = AnimationList.get(pcf.getTorso());
+		this.arm = AnimationList.get(pcf.getArm());
+		this.legsIdle = AnimationList.get(pcf.getLegsIdle());
+		this.legsJump = AnimationList.get(pcf.getLegsJump());
+		this.torsoPin = pcf.getTorsoPin();
+		this.armPin = pcf.getArmPin();
+		this.body = body;
+		this.weapon = weapon;
+		this.weaponPin = weapon.getPin();
+		arm.setFrame(8);
+		isFlip = false;
+	}
+
+
 	public void update(float dt){
 		if(isFlip && !legs.getFrame().isFlipX()) legs.flipAllFrames(true, false);
 		if(isFlip && !torso.getFrame().isFlipX()) torso.flipAllFrames(true, false);
