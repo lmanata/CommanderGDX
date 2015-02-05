@@ -5,7 +5,7 @@ import java.math.BigInteger;
 import java.security.SecureRandom;
 
 import com.afonsobordado.CommanderGDX.Game;
-import com.afonsobordado.CommanderGDX.entities.weapons.WeaponList;
+import com.afonsobordado.CommanderGDX.entities.Lists.WeaponList;
 import com.afonsobordado.CommanderGDX.handlers.GameStateManager;
 import com.afonsobordado.CommanderGDX.packets.PacketHello;
 import com.afonsobordado.CommanderGDX.packets.PacketNewPlayer;

@@ -5,11 +5,11 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 
-import com.afonsobordado.CommanderGDX.entities.AnimationList;
+import com.afonsobordado.CommanderGDX.entities.Lists.AnimationList;
+import com.afonsobordado.CommanderGDX.entities.Lists.BulletList;
+import com.afonsobordado.CommanderGDX.entities.Lists.WeaponList;
 import com.afonsobordado.CommanderGDX.entities.weapons.Bullet;
-import com.afonsobordado.CommanderGDX.entities.weapons.BulletList;
 import com.afonsobordado.CommanderGDX.entities.weapons.Weapon;
-import com.afonsobordado.CommanderGDX.entities.weapons.WeaponList;
 import com.afonsobordado.CommanderGDX.files.BulletFile;
 import com.afonsobordado.CommanderGDX.files.WeaponFile;
 import com.afonsobordado.CommanderGDX.handlers.Animation;
@@ -251,8 +251,9 @@ public class Game implements ApplicationListener{
 	
 	private void registerAnimations() {
 		//bullet
-		TextureRegion[] tmp = new TextureRegion[3];
+		TextureRegion[] tmp; 
 		
+		tmp = new TextureRegion[3];
 		for(int i=0; i < 3; i++) 
 			tmp[i] = new TextureRegion(Game.aManager.get("res/animations/bullet/"+i+".png", Texture.class));
 		AnimationList.add("bullet", new Animation(tmp));

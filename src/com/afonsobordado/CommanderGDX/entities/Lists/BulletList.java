@@ -1,6 +1,8 @@
-package com.afonsobordado.CommanderGDX.entities.weapons;
+package com.afonsobordado.CommanderGDX.entities.Lists;
 
 import java.util.HashMap;
+
+import com.afonsobordado.CommanderGDX.entities.weapons.Bullet;
 
 public abstract class BulletList {
 	public static HashMap<String,Bullet> list = new HashMap<String,Bullet>();

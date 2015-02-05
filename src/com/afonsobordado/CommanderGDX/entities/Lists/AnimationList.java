@@ -1,4 +1,4 @@
-package com.afonsobordado.CommanderGDX.entities;
+package com.afonsobordado.CommanderGDX.entities.Lists;
 
 import java.util.HashMap;
 

@@ -1,7 +1,7 @@
 package com.afonsobordado.CommanderGDX.handlers;
 
 import com.afonsobordado.CommanderGDX.Game;
-import com.afonsobordado.CommanderGDX.entities.AnimationList;
+import com.afonsobordado.CommanderGDX.entities.Lists.AnimationList;
 import com.afonsobordado.CommanderGDX.entities.player.LocalClientPlayer;
 import com.afonsobordado.CommanderGDX.entities.weapons.Bullet;
 import com.afonsobordado.CommanderGDX.packets.PacketAccepted;

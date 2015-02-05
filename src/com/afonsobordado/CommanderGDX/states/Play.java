@@ -8,14 +8,14 @@ import java.util.Iterator;
 import java.util.concurrent.ConcurrentHashMap;
 
 import com.afonsobordado.CommanderGDX.Game;
-import com.afonsobordado.CommanderGDX.entities.AnimationList;
+import com.afonsobordado.CommanderGDX.entities.Lists.AnimationList;
+import com.afonsobordado.CommanderGDX.entities.Lists.BulletList;
+import com.afonsobordado.CommanderGDX.entities.Lists.WeaponList;
 import com.afonsobordado.CommanderGDX.entities.UI.HUD;
 import com.afonsobordado.CommanderGDX.entities.player.LocalClientPlayer;
 import com.afonsobordado.CommanderGDX.entities.player.Player;
 import com.afonsobordado.CommanderGDX.entities.weapons.Bullet;
-import com.afonsobordado.CommanderGDX.entities.weapons.BulletList;
 import com.afonsobordado.CommanderGDX.entities.weapons.Weapon;
-import com.afonsobordado.CommanderGDX.entities.weapons.WeaponList;
 import com.afonsobordado.CommanderGDX.files.WeaponFile;
 import com.afonsobordado.CommanderGDX.handlers.GameStateManager;
 import com.afonsobordado.CommanderGDX.handlers.InputHandler;
@@ -206,17 +206,20 @@ public class Play extends GameState{
 		tileMap = new TmxMapLoader().load("res/maps/" + mapName + ".tmx");
 		tmr = new OrthogonalTiledMapRenderer(tileMap);
 		tileSize = (int) tileMap.getProperties().get("tilewidth");
-		TiledMapTileLayer layer;
-		layer = (TiledMapTileLayer) tileMap.getLayers().get("red");
-		createLayer(layer, B2DVars.BIT_GROUND);
-		layer = (TiledMapTileLayer) tileMap.getLayers().get("green");
-		createLayer(layer, B2DVars.BIT_GROUND);
-		layer = (TiledMapTileLayer) tileMap.getLayers().get("blue");
-		createLayer(layer, B2DVars.BIT_GROUND);
-		
-		MapLayer l = tileMap.getLayers().get("Ground");
-		if(l != null)
-			colisionLayer(l,B2DVars.BIT_GROUND);
+		for(int i =0; i < tileMap.getLayers().getCount(); i++){
+			MapLayer l = tileMap.getLayers().get(i);
+			if(l.getProperties().get("object") == null){
+				TiledMapTileLayer layer = (TiledMapTileLayer) l;
+				if(tileMap.getLayers().get(i).getProperties().containsKey("ground")){
+					createLayer(layer, B2DVars.BIT_GROUND);
+				}else{
+					createLayer(layer, (short) 0);
+				}
+				
+			}
+
+		}
+
 		
 		
 	}

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="69" height="8" tilewidth="32" tileheight="32" nextobjectid="18">
+ <tileset firstgid="1" name="Nuclear" tilewidth="32" tileheight="32">
+  <image source="../images/ip/ts.png" width="96" height="96"/>
+ </tileset>
+ <layer name="ground" width="69" height="8">
+  <properties>
+   <property name="ground" value="0"/>
+  </properties>
+  <data encoding="base64" compression="zlib">
+   eJxjYBgFo2AU0AMwAjETHsxMJT2jYOgB1mFqF7mAlYH+YTIYwoVQficFk1OeUGo+tQEAOEsAkw==
+  </data>
+ </layer>
+ <layer name="visual" width="69" height="8">
+  <data encoding="base64" compression="zlib">
+   eJxjYCAfcNBZ3ygYOoAFiNnxYDYq6RkFo2A4g9EydhSMZAAAjSEAlw==
+  </data>
+ </layer>
+</map>
