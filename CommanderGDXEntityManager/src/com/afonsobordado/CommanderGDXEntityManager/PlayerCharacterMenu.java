@@ -23,6 +23,7 @@ import javax.swing.JButton;
 import com.afonsobordado.CommanderGDX.files.BulletFile;
 import com.afonsobordado.CommanderGDX.files.PlayerCharacterFile;
 import com.badlogic.gdx.math.Vector2;
+import com.esotericsoftware.kryo.KryoException;
 import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
 
@@ -293,6 +294,8 @@ public class PlayerCharacterMenu extends JFrame {
 			textField_9.setText(Float.toString(pcf.getArmPin().y));
 		}catch (FileNotFoundException ex) {
 			ex.printStackTrace();
+		}catch (KryoException ke) {
+			System.err.println("Found old version, starting new!");
 		}finally{
 			input.close();
 		}

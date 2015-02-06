@@ -22,6 +22,7 @@ import javax.swing.JButton;
 import com.afonsobordado.CommanderGDX.files.BulletFile;
 import com.afonsobordado.CommanderGDX.files.WeaponFile;
 import com.badlogic.gdx.math.Vector2;
+import com.esotericsoftware.kryo.KryoException;
 import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
 
@@ -40,6 +41,7 @@ public class BulletMenu extends JFrame {
 	private JTextField textField_3;
 	private JTextField textField_4;
 	private String file;
+	private JTextField textField_5;
 
 	/**
 	 * Create the frame.
@@ -47,15 +49,15 @@ public class BulletMenu extends JFrame {
 	public BulletMenu(String file) {
 		this.file = file;
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		setBounds(100, 100, 283, 191);
+		setBounds(100, 100, 283, 228);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		GridBagLayout gbl_contentPane = new GridBagLayout();
 		gbl_contentPane.columnWidths = new int[]{0, 102, 0, 0};
-		gbl_contentPane.rowHeights = new int[]{0, 0, 0, 0, 0, 0, 0};
+		gbl_contentPane.rowHeights = new int[]{0, 0, 0, 0, 0, 0, 0, 0};
 		gbl_contentPane.columnWeights = new double[]{0.0, 1.0, 0.0, Double.MIN_VALUE};
-		gbl_contentPane.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
+		gbl_contentPane.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
 		contentPane.setLayout(gbl_contentPane);
 		
 		JLabel lblNewLabel = new JLabel("Name:");
@@ -70,7 +72,7 @@ public class BulletMenu extends JFrame {
 		GridBagConstraints gbc_textField = new GridBagConstraints();
 		gbc_textField.gridwidth = 2;
 		gbc_textField.fill = GridBagConstraints.HORIZONTAL;
-		gbc_textField.insets = new Insets(0, 0, 5, 5);
+		gbc_textField.insets = new Insets(0, 0, 5, 0);
 		gbc_textField.gridx = 1;
 		gbc_textField.gridy = 0;
 
@@ -87,7 +89,7 @@ public class BulletMenu extends JFrame {
 		GridBagConstraints gbc_textField_1 = new GridBagConstraints();
 		gbc_textField_1.gridwidth = 2;
 		gbc_textField_1.fill = GridBagConstraints.HORIZONTAL;
-		gbc_textField_1.insets = new Insets(0, 0, 5, 5);
+		gbc_textField_1.insets = new Insets(0, 0, 5, 0);
 		gbc_textField_1.gridx = 1;
 		gbc_textField_1.gridy = 1;
 
@@ -104,7 +106,7 @@ public class BulletMenu extends JFrame {
 		GridBagConstraints gbc_textField_2 = new GridBagConstraints();
 		gbc_textField_2.gridwidth = 2;
 		gbc_textField_2.fill = GridBagConstraints.HORIZONTAL;
-		gbc_textField_2.insets = new Insets(0, 0, 5, 5);
+		gbc_textField_2.insets = new Insets(0, 0, 5, 0);
 		gbc_textField_2.gridx = 1;
 		gbc_textField_2.gridy = 2;
 
@@ -121,7 +123,7 @@ public class BulletMenu extends JFrame {
 		GridBagConstraints gbc_textField_3 = new GridBagConstraints();
 		gbc_textField_3.gridwidth = 2;
 		gbc_textField_3.fill = GridBagConstraints.HORIZONTAL;
-		gbc_textField_3.insets = new Insets(0, 0, 5, 5);
+		gbc_textField_3.insets = new Insets(0, 0, 5, 0);
 		gbc_textField_3.gridx = 1;
 		gbc_textField_3.gridy = 3;
 
@@ -137,20 +139,40 @@ public class BulletMenu extends JFrame {
 		GridBagConstraints gbc_textField_4 = new GridBagConstraints();
 		gbc_textField_4.fill = GridBagConstraints.HORIZONTAL;
 		gbc_textField_4.gridwidth = 2;
-		gbc_textField_4.insets = new Insets(0, 0, 5, 5);
+		gbc_textField_4.insets = new Insets(0, 0, 5, 0);
 		gbc_textField_4.gridx = 1;
 		gbc_textField_4.gridy = 4;
 
+		
 		JButton btnNewButton_1 = new JButton("Save");
 		btnNewButton_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				save();
 			}
 		});
+		
+		JLabel lblBodyscale = new JLabel("BodyScale:");
+		GridBagConstraints gbc_lblBodyscale = new GridBagConstraints();
+		gbc_lblBodyscale.anchor = GridBagConstraints.EAST;
+		gbc_lblBodyscale.insets = new Insets(0, 0, 5, 5);
+		gbc_lblBodyscale.gridx = 0;
+		gbc_lblBodyscale.gridy = 5;
+		
+		
+		textField_5 = new JTextField();
+		GridBagConstraints gbc_textField_5 = new GridBagConstraints();
+		gbc_textField_5.gridwidth = 2;
+		gbc_textField_5.insets = new Insets(0, 0, 5, 5);
+		gbc_textField_5.fill = GridBagConstraints.HORIZONTAL;
+		gbc_textField_5.gridx = 1;
+		gbc_textField_5.gridy = 5;
+
 		GridBagConstraints gbc_btnNewButton_1 = new GridBagConstraints();
 		gbc_btnNewButton_1.insets = new Insets(0, 0, 0, 5);
 		gbc_btnNewButton_1.gridx = 1;
-		gbc_btnNewButton_1.gridy = 5;
+		gbc_btnNewButton_1.gridy = 6;
+		
+		contentPane.add(btnNewButton_1, gbc_btnNewButton_1);
 		
 		
 		JButton btnNewButton = new JButton("Reset");
@@ -162,8 +184,12 @@ public class BulletMenu extends JFrame {
 		GridBagConstraints gbc_btnNewButton = new GridBagConstraints();
 		gbc_btnNewButton.fill = GridBagConstraints.HORIZONTAL;
 		gbc_btnNewButton.gridx = 2;
-		gbc_btnNewButton.gridy = 5;
+		gbc_btnNewButton.gridy = 6;
+		contentPane.add(btnNewButton, gbc_btnNewButton);
 
+		
+		
+		
 		resetFields();
 		
 		contentPane.add(lblNewLabel, gbc_lblNewLabel);
@@ -186,9 +212,11 @@ public class BulletMenu extends JFrame {
 		contentPane.add(textField_4, gbc_textField_4);//lifespan
 		textField_4.setColumns(10);
 		
-		contentPane.add(btnNewButton_1, gbc_btnNewButton_1);
-		contentPane.add(btnNewButton, gbc_btnNewButton);
+		contentPane.add(lblBodyscale, gbc_lblBodyscale);
+		contentPane.add(textField_5, gbc_textField_5); // body scale
+		textField_5.setColumns(10);
 		
+
 		
 	}
 
@@ -202,8 +230,11 @@ public class BulletMenu extends JFrame {
 			textField_2.setText(Float.toString(bf.getSpeed()));
 			textField_3.setText(Short.toString(bf.getEffects()));
 			textField_4.setText(Float.toString(bf.getLifespan()));
+			textField_5.setText(Float.toString(bf.getBodyScale()));
 		}catch (FileNotFoundException ex) {
 			ex.printStackTrace();
+		}catch (KryoException ke) {
+			System.err.println("Found old version, starting new!");
 		}finally{
 			input.close();
 		}
@@ -218,7 +249,8 @@ public class BulletMenu extends JFrame {
 										   textField_1.getText(),
 										   Float.parseFloat(textField_2.getText()),
 										   Short.parseShort(textField_3.getText()),
-										   Float.parseFloat(textField_4.getText())
+										   Float.parseFloat(textField_4.getText()),
+										   Float.parseFloat(textField_5.getText())
 										   );
 			
 			Main.kryo.writeObject(output, bf);

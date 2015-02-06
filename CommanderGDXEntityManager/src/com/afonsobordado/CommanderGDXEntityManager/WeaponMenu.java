@@ -11,15 +11,23 @@ import javax.swing.border.EmptyBorder;
 
 import com.afonsobordado.CommanderGDX.files.WeaponFile;
 import com.badlogic.gdx.math.Vector2;
+import com.esotericsoftware.kryo.KryoException;
 import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
+
 import java.awt.GridBagLayout;
+
 import javax.swing.JTextField;
+
 import java.awt.GridBagConstraints;
+
 import javax.swing.JLabel;
+
 import java.awt.Insets;
+
 import javax.swing.JCheckBox;
 import javax.swing.JButton;
+
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
@@ -231,6 +239,8 @@ public class WeaponMenu extends JFrame {
 					   "\nbullet: " + wf.getBullet());
 		}catch (FileNotFoundException ex) {
 			ex.printStackTrace();
+		}catch (KryoException ke) {
+			System.err.println("Found old version, starting new!");
 		}finally{
 			input.close();
 		}

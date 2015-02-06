@@ -40,11 +40,12 @@ public class Bullet {
 		toRemove = false;
 		
 		
-		/*//---------------------test
-		BodyEditorLoader loader = new BodyEditorLoader(Gdx.files.internal("tools/test/ss"));
+		//---------------------test
+		BodyEditorLoader loader = new BodyEditorLoader(Gdx.files.internal("tools/test/hue.json"));
 		Vector2 origin;
 		BodyDef bd = new BodyDef();
 		bd.type = BodyType.DynamicBody;
+		bd.position.set(barrelPos.x / B2DVars.PPM,barrelPos.y / B2DVars.PPM);
 		bd.linearVelocity.set((float) (speed * Math.cos(Math.toRadians(angle))),
 				(float) (speed * Math.sin(Math.toRadians(angle))));
 		bd.angle = (float) Math.toRadians(angle);
@@ -59,15 +60,15 @@ public class Bullet {
 	    synchronized(Play.getWorld()){
 	    	body = Play.getWorld().createBody(bd);
 	    	body.setBullet(true);
-	    	loader.attachFixture(body, "Name", fd, 1);
-	    	origin = loader.getOrigin("Name", 1 /  1);
+	    	loader.attachFixture(body, "FB", fd, 0.25f);
+	    	origin = loader.getOrigin("FB", 1 /  0.25f);
 			body.setGravityScale(0.25f);
 			body.setUserData(this);
-	    }*/
+	    }
 		//---------------------test
 		
 		
-		BodyDef bdef  = new BodyDef();
+		/*BodyDef bdef  = new BodyDef();
 		FixtureDef fdef = new FixtureDef();
 		PolygonShape shape  = new PolygonShape();
 		
@@ -89,7 +90,7 @@ public class Bullet {
 			body.createFixture(fdef).setUserData("bullet");
 			body.setGravityScale(0.25f);
 			body.setUserData(this);
-		}
+		}*/
 	}
 	
 	public Bullet(Animation anim, float speed,short effects, float lifespan){
