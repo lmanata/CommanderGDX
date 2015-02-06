@@ -1,6 +1,6 @@
 package com.afonsobordado.CommanderGDXServer.LocalObjects;
 
-import com.afonsobordado.CommanderGDXServer.NetworkObjects.NetworkPlayer;
+import com.afonsobordado.CommanderGDX.packets.NetworkObject.NetworkPlayer;
 import com.badlogic.gdx.math.Vector2;
 
 public class LocalServerPlayer extends NetworkPlayer{
