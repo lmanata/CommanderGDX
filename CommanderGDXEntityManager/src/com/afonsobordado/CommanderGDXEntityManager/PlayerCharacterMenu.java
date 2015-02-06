@@ -30,7 +30,7 @@ import com.esotericsoftware.kryo.io.Output;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
-public class PlayerCharacterMenu extends JFrame {
+public class PlayerCharacterMenu extends FDefExtender {
 
 	private String file;
 	private JPanel contentPane;

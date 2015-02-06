@@ -6,6 +6,8 @@ import java.io.FileNotFoundException;
 import java.util.Iterator;
 import java.util.concurrent.ConcurrentHashMap;
 
+import net.bigfootsoftware.bobtrucking.BodyEditorLoader;
+
 import com.afonsobordado.CommanderGDX.Game;
 import com.afonsobordado.CommanderGDX.entities.UI.HUD;
 import com.afonsobordado.CommanderGDX.entities.player.LocalClientPlayer;
@@ -57,6 +59,7 @@ public class Play extends GameState{
 	private OrthographicCamera b2dCam;
 	
 	private static World world;
+	private static BodyEditorLoader loader;
 	
 	private MyContactListener cl;
 	
@@ -72,6 +75,7 @@ public class Play extends GameState{
 	private HUD hud;
 	public static String mapName = "level3";
 	public static String playerClass = "MainChar.pcf";
+	public static String bodyFile = "res/bodies/bodyList.json";
 	
 	//animations
 
@@ -81,6 +85,7 @@ public class Play extends GameState{
 		
 		world = new World(new Vector2(0, -9.81f), true);
 		world.setContactListener(cl = new MyContactListener());
+		loader = new BodyEditorLoader(Gdx.files.internal(bodyFile));
 		
 		/*temporary ---------------------------------------------------*/
 		PlayerCharacterFile pcf = null;
@@ -214,6 +219,10 @@ public class Play extends GameState{
 	
 	public static World getWorld(){
 		return world;
+	}
+	
+	public static BodyEditorLoader getLoader(){
+		return loader;
 	}
 	
 	

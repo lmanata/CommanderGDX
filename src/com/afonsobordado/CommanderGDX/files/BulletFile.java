@@ -9,16 +9,19 @@ public class BulletFile {
 	private float lifespan;
 	
 	private float bodyScale;
+	private FixtureDefFile fdf;
 	
+
 	public BulletFile(){}
 	
-	public BulletFile(String name, String animation, float speed, short effects, float lifespan, float bodyScale){
+	public BulletFile(String name, String animation, float speed, short effects, float lifespan, float bodyScale, FixtureDefFile fdf){
 		this.name = name;
 		this.animation = animation;
 		this.speed = speed;
 		this.effects = effects;
 		this.lifespan = lifespan;
 		this.bodyScale = bodyScale;
+		this.fdf = fdf;
 	}
 
 	public String getName() {
@@ -43,6 +46,9 @@ public class BulletFile {
 
 	public float getBodyScale(){
 		return bodyScale;
+	}
+	public FixtureDefFile getFdf() {
+		return fdf;
 	}
 	
 }

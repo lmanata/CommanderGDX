@@ -11,6 +11,7 @@ import com.afonsobordado.CommanderGDX.entities.Lists.WeaponList;
 import com.afonsobordado.CommanderGDX.entities.weapons.Bullet;
 import com.afonsobordado.CommanderGDX.entities.weapons.Weapon;
 import com.afonsobordado.CommanderGDX.files.BulletFile;
+import com.afonsobordado.CommanderGDX.files.FixtureDefFile;
 import com.afonsobordado.CommanderGDX.files.PlayerCharacterFile;
 import com.afonsobordado.CommanderGDX.files.WeaponFile;
 import com.afonsobordado.CommanderGDX.handlers.Animation;
@@ -96,6 +97,8 @@ public class Game implements ApplicationListener{
 		fileSerializer.register(WeaponFile.class);
 		fileSerializer.register(BulletFile.class);
 		fileSerializer.register(PlayerCharacterFile.class);
+		fileSerializer.register(FixtureDefFile.class);
+
 		
 		
 		Gdx.input.setInputProcessor(new InputProcessor());

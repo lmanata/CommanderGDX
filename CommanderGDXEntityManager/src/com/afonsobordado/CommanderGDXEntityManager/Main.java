@@ -5,11 +5,13 @@ import java.awt.EventQueue;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
+import java.lang.reflect.Field;
 
 import javax.swing.JFrame;
 import javax.swing.JList;
 import javax.swing.ListSelectionModel;
 
+import com.afonsobordado.CommanderGDX.files.FixtureDefFile;
 import com.afonsobordado.CommanderGDX.files.PlayerCharacterFile;
 import com.afonsobordado.CommanderGDX.files.BulletFile;
 import com.afonsobordado.CommanderGDX.files.WeaponFile;
@@ -53,6 +55,7 @@ public class Main {
 		kryo.register(WeaponFile.class);
 		kryo.register(BulletFile.class);
 		kryo.register(PlayerCharacterFile.class);
+		kryo.register(FixtureDefFile.class);
 		
 		initialize();
 	}

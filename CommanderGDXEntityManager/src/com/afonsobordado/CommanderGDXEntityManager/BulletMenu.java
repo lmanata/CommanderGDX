@@ -3,6 +3,8 @@ package com.afonsobordado.CommanderGDXEntityManager;
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
 
+import javafx.scene.Parent;
+
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
@@ -20,6 +22,7 @@ import java.awt.Insets;
 import javax.swing.JButton;
 
 import com.afonsobordado.CommanderGDX.files.BulletFile;
+import com.afonsobordado.CommanderGDX.files.FixtureDefFile;
 import com.afonsobordado.CommanderGDX.files.WeaponFile;
 import com.badlogic.gdx.math.Vector2;
 import com.esotericsoftware.kryo.KryoException;
@@ -32,7 +35,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 
-public class BulletMenu extends JFrame {
+public class BulletMenu extends FDefExtender {
 
 	private JPanel contentPane;
 	private JTextField textField;
@@ -42,6 +45,7 @@ public class BulletMenu extends JFrame {
 	private JTextField textField_4;
 	private String file;
 	private JTextField textField_5;
+	private BulletFile bf;
 
 	/**
 	 * Create the frame.
@@ -49,15 +53,15 @@ public class BulletMenu extends JFrame {
 	public BulletMenu(String file) {
 		this.file = file;
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		setBounds(100, 100, 283, 228);
+		setBounds(100, 100, 283, 274);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		GridBagLayout gbl_contentPane = new GridBagLayout();
 		gbl_contentPane.columnWidths = new int[]{0, 102, 0, 0};
-		gbl_contentPane.rowHeights = new int[]{0, 0, 0, 0, 0, 0, 0, 0};
+		gbl_contentPane.rowHeights = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0};
 		gbl_contentPane.columnWeights = new double[]{0.0, 1.0, 0.0, Double.MIN_VALUE};
-		gbl_contentPane.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
+		gbl_contentPane.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
 		contentPane.setLayout(gbl_contentPane);
 		
 		JLabel lblNewLabel = new JLabel("Name:");
@@ -162,15 +166,36 @@ public class BulletMenu extends JFrame {
 		textField_5 = new JTextField();
 		GridBagConstraints gbc_textField_5 = new GridBagConstraints();
 		gbc_textField_5.gridwidth = 2;
-		gbc_textField_5.insets = new Insets(0, 0, 5, 5);
+		gbc_textField_5.insets = new Insets(0, 0, 5, 0);
 		gbc_textField_5.fill = GridBagConstraints.HORIZONTAL;
 		gbc_textField_5.gridx = 1;
 		gbc_textField_5.gridy = 5;
+		
+		JLabel lblFdf = new JLabel("FixtureDef:");
+		GridBagConstraints gbc_lblFdf = new GridBagConstraints();
+		gbc_lblFdf.anchor = GridBagConstraints.EAST;
+		gbc_lblFdf.insets = new Insets(0, 0, 5, 5);
+		gbc_lblFdf.gridx = 0;
+		gbc_lblFdf.gridy = 6;
+		contentPane.add(lblFdf, gbc_lblFdf);
+		
+		JButton btnNewButton_2 = new JButton("Edit");
+		btnNewButton_2.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				openMenu();
+			}
+		});
+		GridBagConstraints gbc_btnNewButton_2 = new GridBagConstraints();
+		gbc_btnNewButton_2.gridwidth = 2;
+		gbc_btnNewButton_2.insets = new Insets(0, 0, 5, 5);
+		gbc_btnNewButton_2.gridx = 1;
+		gbc_btnNewButton_2.gridy = 6;
+		contentPane.add(btnNewButton_2, gbc_btnNewButton_2);
 
 		GridBagConstraints gbc_btnNewButton_1 = new GridBagConstraints();
 		gbc_btnNewButton_1.insets = new Insets(0, 0, 0, 5);
 		gbc_btnNewButton_1.gridx = 1;
-		gbc_btnNewButton_1.gridy = 6;
+		gbc_btnNewButton_1.gridy = 7;
 		
 		contentPane.add(btnNewButton_1, gbc_btnNewButton_1);
 		
@@ -184,7 +209,7 @@ public class BulletMenu extends JFrame {
 		GridBagConstraints gbc_btnNewButton = new GridBagConstraints();
 		gbc_btnNewButton.fill = GridBagConstraints.HORIZONTAL;
 		gbc_btnNewButton.gridx = 2;
-		gbc_btnNewButton.gridy = 6;
+		gbc_btnNewButton.gridy = 7;
 		contentPane.add(btnNewButton, gbc_btnNewButton);
 
 		
@@ -224,7 +249,8 @@ public class BulletMenu extends JFrame {
 		Input input = null;
 		try{
 			input = new Input(new FileInputStream(file));
-			BulletFile bf = Main.kryo.readObject(input, BulletFile.class);
+			bf = Main.kryo.readObject(input, BulletFile.class);
+			this.setFdf(bf.getFdf());
 			textField.setText(bf.getName());
 			textField_1.setText(bf.getAnimation());
 			textField_2.setText(Float.toString(bf.getSpeed()));
@@ -243,15 +269,19 @@ public class BulletMenu extends JFrame {
 	void save(){
 		
 		Output output = null;
+		if(this.getFdf() == null){
+			System.err.println("No FixtureDef!\nNOT SAVED!");
+			return;
+		}
 		try{
 			output = new Output(new FileOutputStream(file));
-			BulletFile bf = new BulletFile(textField.getText(),
-										   textField_1.getText(),
-										   Float.parseFloat(textField_2.getText()),
-										   Short.parseShort(textField_3.getText()),
-										   Float.parseFloat(textField_4.getText()),
-										   Float.parseFloat(textField_5.getText())
-										   );
+			bf = new BulletFile(textField.getText(),
+							   textField_1.getText(),
+							   Float.parseFloat(textField_2.getText()),
+							   Short.parseShort(textField_3.getText()),
+							   Float.parseFloat(textField_4.getText()),
+							   Float.parseFloat(textField_5.getText()),
+							   this.getFdf());
 			
 			Main.kryo.writeObject(output, bf);
 			output.flush();
@@ -261,6 +291,11 @@ public class BulletMenu extends JFrame {
 			output.flush();
 			output.close();
 		}
+	}
+	
+	void openMenu(){
+		FixtureDefMenu fdm = new FixtureDefMenu(this);
+		fdm.setVisible(true);
 	}
 	
 	

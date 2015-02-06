@@ -31,7 +31,7 @@ import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
-public class WeaponMenu extends JFrame {
+public class WeaponMenu extends FDefExtender{
 
 	private JPanel contentPane;
 	private JTextField textField;

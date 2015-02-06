@@ -41,13 +41,13 @@ public class Bullet {
 		
 		
 		//---------------------test
-		BodyEditorLoader loader = new BodyEditorLoader(Gdx.files.internal("tools/test/hue.json"));
+		BodyEditorLoader loader = Play.getLoader();
 		Vector2 origin;
 		BodyDef bd = new BodyDef();
 		bd.type = BodyType.DynamicBody;
 		bd.position.set(barrelPos.x / B2DVars.PPM,barrelPos.y / B2DVars.PPM);
 		bd.linearVelocity.set((float) (speed * Math.cos(Math.toRadians(angle))),
-				(float) (speed * Math.sin(Math.toRadians(angle))));
+							  (float) (speed * Math.sin(Math.toRadians(angle))));
 		bd.angle = (float) Math.toRadians(angle);
 		
 		FixtureDef fd = new FixtureDef();
