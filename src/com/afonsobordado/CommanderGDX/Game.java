@@ -213,10 +213,13 @@ public class Game implements ApplicationListener{
 				
 				if(bf != null){
 					BulletList.add(bf.getName(),
-								   new Bullet(AnimationList.get(bf.getAnimation()),
+								   new Bullet(bf.getName(),
+										   	  AnimationList.get(bf.getAnimation()),
 										      bf.getSpeed(),
 										      bf.getEffects(),
-										      bf.getLifespan())
+										      bf.getLifespan(),
+										      bf.getFdf(),
+										      bf.getBodyScale())
 								  );
 					
 				}

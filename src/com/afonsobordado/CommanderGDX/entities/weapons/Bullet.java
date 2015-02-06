@@ -2,6 +2,8 @@ package com.afonsobordado.CommanderGDX.entities.weapons;
 
 import net.bigfootsoftware.bobtrucking.BodyEditorLoader;
 
+import com.afonsobordado.CommanderGDX.entities.Lists.BulletList;
+import com.afonsobordado.CommanderGDX.files.FixtureDefFile;
 import com.afonsobordado.CommanderGDX.handlers.Animation;
 import com.afonsobordado.CommanderGDX.states.Play;
 import com.afonsobordado.CommanderGDX.vars.B2DVars;
@@ -21,26 +23,30 @@ public class Bullet {
 	private short effects;
 	private long lifespan;
 
+	
 	private boolean lifespanEnabled;
 	private boolean toRemove;
 	private float angle;
 	
-	public Bullet(Animation anim,
+	private String name;
+	private FixtureDefFile fdf;
+	private float bodyScale;
+	
+	public Bullet(String name,
 				  Vector2 barrelPos,
-				  float angle,
-				  float speed,
-				  short effects,
-				  long lifespan){
+				  float angle){
+		Bullet tmpB = BulletList.get(name);
+		this.fdf = tmpB.fdf;
+		this.name = name;
 		this.angle=angle;
-		this.animation = anim;
-		this.speed = speed;
-		this.effects = effects;
-		this.lifespan = lifespan;
+		this.animation = tmpB.animation;
+		this.speed = tmpB.speed;
+		this.effects = tmpB.effects;
+		this.lifespan = tmpB.lifespan;
+		this.bodyScale = tmpB.bodyScale;
 		this.lifespanEnabled = (this.lifespan!=0);
 		toRemove = false;
 		
-		
-		//---------------------test
 		BodyEditorLoader loader = Play.getLoader();
 		Vector2 origin;
 		BodyDef bd = new BodyDef();
@@ -51,49 +57,24 @@ public class Bullet {
 		bd.angle = (float) Math.toRadians(angle);
 		
 		FixtureDef fd = new FixtureDef();
-	    fd.density = 1;
-	    fd.friction = 0.5f;
-	    fd.restitution = 0.3f;
-		fd.filter.categoryBits = B2DVars.BIT_PLAYER;
-		fd.filter.maskBits = B2DVars.BIT_GROUND | B2DVars.BIT_PLAYER;
+	    fd.density = fdf.getDensity();
+	    fd.friction = fdf.getFriction();
+	    fd.restitution = fdf.getRestitution();
+		fd.filter.categoryBits = fdf.getCb();
+		fd.filter.maskBits = fdf.getMb();
 	    
 	    synchronized(Play.getWorld()){
 	    	body = Play.getWorld().createBody(bd);
 	    	body.setBullet(true);
-	    	loader.attachFixture(body, "FB", fd, 0.25f);
-	    	origin = loader.getOrigin("FB", 1 /  0.25f);
+	    	loader.attachFixture(body, name, fd, bodyScale);
+	    	origin = loader.getOrigin(name, bodyScale);
 			body.setGravityScale(0.25f);
 			body.setUserData(this);
 	    }
-		//---------------------test
-		
-		
-		/*BodyDef bdef  = new BodyDef();
-		FixtureDef fdef = new FixtureDef();
-		PolygonShape shape  = new PolygonShape();
-		
-		bdef.position.set(barrelPos.x / B2DVars.PPM,barrelPos.y / B2DVars.PPM);
-		bdef.type = BodyType.DynamicBody;
-		bdef.linearVelocity.set((float) (speed * Math.cos(Math.toRadians(angle))),
-								(float) (speed * Math.sin(Math.toRadians(angle))));
-		bdef.angle = (float) Math.toRadians(angle);
-		
-		shape.setAsBox((float) ((anim.getFrame().getRegionHeight()/2) / B2DVars.PPM), (float) ((anim.getFrame().getRegionHeight()/2) / B2DVars.PPM));
-		fdef.shape = shape;
-		fdef.density = 1;
-		fdef.filter.categoryBits = B2DVars.BIT_PLAYER;
-		fdef.filter.maskBits = B2DVars.BIT_GROUND | B2DVars.BIT_PLAYER;
-		
-		synchronized(Play.getWorld()){
-			body = Play.getWorld().createBody(bdef);
-			body.setBullet(true);
-			body.createFixture(fdef).setUserData("bullet");
-			body.setGravityScale(0.25f);
-			body.setUserData(this);
-		}*/
 	}
 	
-	public Bullet(Animation anim, float speed,short effects, float lifespan){
+	public Bullet(String name, Animation anim, float speed,short effects, float lifespan, FixtureDefFile fixtureDefFile,float bodyScale){
+		this.name = name;
 		this.animation = anim;
 		this.speed = speed;
 		this.effects = effects;
@@ -101,6 +82,8 @@ public class Bullet {
 		this.lifespanEnabled = (this.lifespan!=0);
 		this.body = null;
 		toRemove = true;
+		this.fdf = fixtureDefFile;
+		this.bodyScale = bodyScale;
 	}
 	
 	public void update(float dt){
@@ -144,18 +127,21 @@ public class Bullet {
 
 	public Bullet getCopy() {
 		if(body != null){
-			return new Bullet(animation.getCopy(),
-							  body.getPosition().scl(B2DVars.PPM),
-							  angle,
-							  speed,
-							  effects,
-							  lifespan/1000000000);
+			System.err.println("COPY OF A LIVE BULLET!");
+			return null;
 		}else{
-			return new Bullet(animation.getCopy(),
+			return new Bullet(name,
+							  animation.getCopy(),
 							  speed,
 							  effects,
-							  lifespan/1000000000);
+							  lifespan/1000000000,
+							  fdf,
+							  bodyScale);
 		}
+	}
+
+	public String getName() {
+		return name;
 	}
 
 

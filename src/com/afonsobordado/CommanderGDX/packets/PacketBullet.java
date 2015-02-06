@@ -7,14 +7,10 @@ public class PacketBullet {
 	public PacketBullet(){}
 	public PacketBullet(Vector2 pos, Bullet b){
 		this.pos = pos;
+		this.name = b.getName();
 		angle = b.getAngle();
-		speed = b.getSpeed();
-		effects = b.getEffects();
-		lifespan = b.getLifespan();
 	}
-	  public Vector2 pos;
-	  public float angle;
-	  public float speed;
-	  public short effects;
-	  public long lifespan;
+	public String name;
+	public Vector2 pos;
+	public float angle;
 }

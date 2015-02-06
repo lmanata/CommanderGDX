@@ -53,16 +53,13 @@ public class Weapon {
 	}
 	private void shoot(){
 		nextTimeShoot=System.nanoTime()+coolDown;
-		PacketBullet pb = new PacketBullet(barrelPos.cpy(), bullet/*.getCopy()*/);
+		PacketBullet pb = new PacketBullet(barrelPos.cpy(), bullet);
 		Game.client.sendUDP(pb);
 		
 		if(!IPmenu.play){ //we are offline //TODO: this is debug only
-			Play.bulletList.add(new Bullet(AnimationList.get("bullet"),
+			Play.bulletList.add(new Bullet(	pb.name,
 											pb.pos,
-											pb.angle,
-											pb.speed,
-											pb.effects,
-											pb.lifespan));
+											pb.angle));
 		}
 	}
 	
