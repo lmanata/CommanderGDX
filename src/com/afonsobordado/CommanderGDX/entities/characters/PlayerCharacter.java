@@ -4,7 +4,9 @@ import com.afonsobordado.CommanderGDX.entities.Lists.AnimationList;
 import com.afonsobordado.CommanderGDX.entities.weapons.Weapon;
 import com.afonsobordado.CommanderGDX.files.PlayerCharacterFile;
 import com.afonsobordado.CommanderGDX.handlers.Animation;
+import com.afonsobordado.CommanderGDX.utils.AUtils;
 import com.afonsobordado.CommanderGDX.vars.B2DVars;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
@@ -171,15 +173,27 @@ public class PlayerCharacter {
 				1,
 				armRotation);
 		
+		
+		
+		/*drawPos.x += ((isFlip) ? (weapon.getFrame().getRegionWidth() - weaponPin.x + armPin.x): 0);
+		drawPos.y += weapon.getFrame().getRegionHeight() + weaponPin.y;*/
+		//if(isFlip) 
+
+
+
+
+		
 		if(isFlip){
-			//TODO: fix an weapon barrel offset error, most likely this is due to the barrel of the weapon not being the center of the image
-			drawPos.x -= weapon.getFrame().getRegionWidth() * Math.cos(Math.toRadians(armRotation));
-			drawPos.y -= weapon.getFrame().getRegionWidth() * Math.sin(Math.toRadians(armRotation));
+			drawPos.x += (weaponPin.x - armPin.x);
+			drawPos.x -= (weapon.getFrame().getRegionWidth() * Math.cos(Math.toRadians(armRotation)) + (weaponPin.y/2 * Math.sin(Math.toRadians(armRotation))) );
+			drawPos.y -= (weapon.getFrame().getRegionWidth() * Math.sin(Math.toRadians(armRotation)) - (weaponPin.y/2 * Math.cos(Math.toRadians(armRotation))) );
 		}else{
-			drawPos.x += weapon.getFrame().getRegionWidth() * Math.cos(Math.toRadians(armRotation));
-			drawPos.y += weapon.getFrame().getRegionWidth() * Math.sin(Math.toRadians(armRotation));
+			drawPos.x += (weapon.getFrame().getRegionWidth() * Math.cos(Math.toRadians(armRotation)) - (weaponPin.y/2 * Math.sin(Math.toRadians(armRotation))));
+			drawPos.y += (weapon.getFrame().getRegionWidth() * Math.sin(Math.toRadians(armRotation)) + (weaponPin.y/2 * Math.cos(Math.toRadians(armRotation))));
 		}
-		//drawPos.y += weapon.getFrame().getRegionWidth() * Math.sin(Math.toRadians(armRotation));
+		AUtils.drawPixel(sb,
+				 drawPos.x,
+				 drawPos.y);
 		weapon.setBarrelPos(drawPos);
 		
 	}
