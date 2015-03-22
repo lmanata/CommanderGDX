@@ -6,6 +6,7 @@ import com.afonsobordado.CommanderGDX.entities.Lists.BulletList;
 import com.afonsobordado.CommanderGDX.files.FixtureDefFile;
 import com.afonsobordado.CommanderGDX.handlers.Animation;
 import com.afonsobordado.CommanderGDX.states.Play;
+import com.afonsobordado.CommanderGDX.utils.AUtils;
 import com.afonsobordado.CommanderGDX.vars.B2DVars;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -101,16 +102,18 @@ public class Bullet {
 	public void render(SpriteBatch sb) {
 		if(this.body == null) return; //should not happen
 		sb.begin();
+		/*AUtils.drawPixel(sb, (body.getPosition().x * B2DVars.PPM),
+							 (body.getPosition().y * B2DVars.PPM));*/
 		sb.draw(animation.getFrame(),
-			   (body.getPosition().x * B2DVars.PPM)- (animation.getFrame().getRegionWidth()/2) - (bodyOrigin.x * B2DVars.PPM),
-			   (body.getPosition().y * B2DVars.PPM) - (animation.getFrame().getRegionHeight()/2) - (bodyOrigin.y * B2DVars.PPM),
-			   bodyOrigin.x,
-			   bodyOrigin.y,
+			   (body.getPosition().x * B2DVars.PPM),
+			   (body.getPosition().y * B2DVars.PPM),
+			   0,
+			   0,
 			   animation.getFrame().getRegionWidth(),
 			   animation.getFrame().getRegionHeight(),
 			   1,
 			   1,
-			   angle);
+			   (float) (Math.toDegrees(body.getAngle())));
 		sb.end();
 	}
 	
