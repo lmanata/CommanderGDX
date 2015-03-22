@@ -69,7 +69,7 @@ public class NetworkListener extends Listener{
 			
 			LocalClientPlayer lcp = Play.playerList.get(np.id);
 			
-			if(lcp == null) return; //we dont have the object yet
+			if(lcp == null) return; //we don't have the object yet
 			
 			synchronized(Play.getWorld()){
 				lcp.updateNetworkPlayer(np);

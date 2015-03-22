@@ -26,11 +26,12 @@ public class Bullet {
 	
 	private boolean lifespanEnabled;
 	private boolean toRemove;
-	private float angle;
+	private float angle; //angle of the animation
 	
 	private String name;
 	private FixtureDefFile fdf;
 	private float bodyScale;
+	private Vector2 bodyOrigin;
 	
 	public Bullet(String name,
 				  Vector2 barrelPos,
@@ -48,7 +49,6 @@ public class Bullet {
 		toRemove = false;
 		
 		BodyEditorLoader loader = Play.getLoader();
-		Vector2 origin;
 		BodyDef bd = new BodyDef();
 		bd.type = BodyType.DynamicBody;
 		bd.position.set(barrelPos.x / B2DVars.PPM,barrelPos.y / B2DVars.PPM);
@@ -67,7 +67,7 @@ public class Bullet {
 	    	body = Play.getWorld().createBody(bd);
 	    	body.setBullet(true);
 	    	loader.attachFixture(body, name, fd, bodyScale);
-	    	origin = loader.getOrigin(name, bodyScale);
+	    	bodyOrigin = loader.getOrigin(name, bodyScale).cpy();
 			body.setGravityScale(0.25f);
 			body.setUserData(this);
 	    }
@@ -87,15 +87,14 @@ public class Bullet {
 	}
 	
 	public void update(float dt){
-		/*if(Math.abs(body.getLinearVelocity().y) > 0.02f ||
+		if(Math.abs(body.getLinearVelocity().y) > 0.02f ||
 		   Math.abs(body.getLinearVelocity().x) > 0.02f )
-			angle = (float) Math.toDegrees(Math.atan2(body.getLinearVelocity().y, body.getLinearVelocity().x));*/
-		angle = (float) Math.toDegrees(body.getAngle());
+			angle = (float) Math.toDegrees(Math.atan2(body.getLinearVelocity().y, body.getLinearVelocity().x));
 		
 		animation.update(dt);
 		this.lifespan-=(dt*1000000000);
 		if(lifespanEnabled) toRemove = ((this.lifespan) < 0);
-			
+		toRemove = false;
 		
 	}
 	
@@ -103,10 +102,10 @@ public class Bullet {
 		if(this.body == null) return; //should not happen
 		sb.begin();
 		sb.draw(animation.getFrame(),
-			   (body.getPosition().x * B2DVars.PPM) - animation.getFrame().getRegionWidth()/2,
-			   (body.getPosition().y * B2DVars.PPM) - animation.getFrame().getRegionHeight()/2,
-			   animation.getFrame().getRegionWidth()/2,
-			   animation.getFrame().getRegionHeight()/2,
+			   (body.getPosition().x * B2DVars.PPM)- (animation.getFrame().getRegionWidth()/2) - (bodyOrigin.x * B2DVars.PPM),
+			   (body.getPosition().y * B2DVars.PPM) - (animation.getFrame().getRegionHeight()/2) - (bodyOrigin.y * B2DVars.PPM),
+			   bodyOrigin.x,
+			   bodyOrigin.y,
 			   animation.getFrame().getRegionWidth(),
 			   animation.getFrame().getRegionHeight(),
 			   1,

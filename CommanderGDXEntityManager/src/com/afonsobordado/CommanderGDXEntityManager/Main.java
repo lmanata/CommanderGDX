@@ -25,7 +25,7 @@ import java.awt.event.ActionEvent;
 
 
 public class Main {
-	private boolean classSelectMenu = true;
+	private boolean classSelectMenu = false;
 	private JFrame frame;
 	private JList list;
 	public static Kryo kryo;
@@ -93,6 +93,9 @@ public class Main {
 	}
 	
 	void resetList(){
+		if(classSelectMenu == true)
+			System.exit(0);
+		
 		classSelectMenu = true;
 		String[] sa = new String[3];
 		sa[0] = "WeaponClass";

@@ -10,8 +10,8 @@ public class B2DVars {
 	public static final short BIT_GROUND = 4;
 	
 	//physics vars
-	public static final float PLAYER_MAX_VELOCITY = 4f;
-	public static final float JUMP_FORCE = 200f;
+	public static final float PLAYER_MAX_VELOCITY = 3f;
+	public static final float JUMP_FORCE = 300f;
 
 	public static final float PLAYER_WALK_FORCE = 0.2f;
 
