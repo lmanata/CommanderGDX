@@ -1,8 +1,6 @@
 package com.afonsobordado.CommanderGDX.entities.weapons;
 
 import com.afonsobordado.CommanderGDX.Game;
-import com.afonsobordado.CommanderGDX.entities.Lists.AnimationList;
-import com.afonsobordado.CommanderGDX.files.WeaponFile;
 import com.afonsobordado.CommanderGDX.handlers.Animation;
 import com.afonsobordado.CommanderGDX.packets.PacketBullet;
 import com.afonsobordado.CommanderGDX.states.IPmenu;

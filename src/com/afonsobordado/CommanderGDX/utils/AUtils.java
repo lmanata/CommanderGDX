@@ -7,12 +7,18 @@ import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Vector2;
 
 public class AUtils {
 	static Pixmap p;
 	static Random r = new Random();
 
+	public static void drawPixel(SpriteBatch sb, Vector2 v){
+		drawPixel(sb, v.x, v.y);
+	}
+	
 	public static void drawPixel(SpriteBatch sb, Color a, float posX, float posY){
+		p = new Pixmap(1,1,Format.RGB888);
 		p.setColor(a.cpy());
 		p.fillRectangle(0, 0, 1, 1);
 		Texture pText = new Texture(p, Format.RGB888, false);

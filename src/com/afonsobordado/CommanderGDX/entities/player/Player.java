@@ -30,7 +30,6 @@ public class Player {
 	public boolean grounded;
 	private long lastGroundTime;
 	private PlayerCharacter pc;
-	private Weapon weapon;
 	public int id;
 	
 	private Array<Weapon> weapons;
@@ -79,15 +78,6 @@ public class Player {
 		
 		
 		pc = new PlayerCharacter(pcf, this.weapons.get(currentWeapon), body);
-		/*pc = new PlayerCharacter(AnimationList.get("MainCharLegsIdle"),
-					 			 AnimationList.get("MainCharLegsJump"),
-								 AnimationList.get("MainCharLegsRun"),
-								 AnimationList.get("MainCharTorso"),
-								 AnimationList.get("MainCharArms"),
-								 new Vector2(13,12), //torsoPin
-								 new Vector2(4,8), //armPin
-								 this.weapons.get(currentWeapon),
-								 this.body);*/
 		
 		
 		
@@ -151,7 +141,7 @@ public class Player {
 	
 	public void update(float dt){
 
-		Vector2 pos = new Vector2((Game.V_WIDTH*Game.SCALE)/2, (Game.V_HEIGHT*Game.SCALE)/2); 
+		Vector2 pos = new Vector2((Game.V_WIDTH*Game.SCALE)/2, (Game.V_HEIGHT*Game.SCALE)/2); //center of the screen
 		Vector2 mousePos = new Vector2(InputHandler.mouseX, (Game.V_HEIGHT*Game.SCALE) - InputHandler.mouseY);
 		armDegrees = (float) Math.toDegrees(Math.atan2((mousePos.y - pos.y), (mousePos.x - pos.x)));
 

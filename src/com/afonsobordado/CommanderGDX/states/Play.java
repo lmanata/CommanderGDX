@@ -76,6 +76,7 @@ public class Play extends GameState{
 	public static String mapName = "level3";
 	public static String playerClass = "MainChar.pcf";
 	public static String bodyFile = "res/bodies/bodyList.json";
+	private static Vector2 cameraPos = new Vector2();
 	
 	//animations
 
@@ -135,6 +136,7 @@ public class Play extends GameState{
 
 
 	public void update(float dt) {
+		cameraPos.set(cam.position.x, cam.position.y);
 		handleInput();
 		synchronized(Play.getWorld()){
 			world.step(dt, 6, 2);
@@ -181,6 +183,7 @@ public class Play extends GameState{
 						 0);
 		cam.update();
 		
+		
 		//draw tile map
 		tmr.setView(cam);
 		tmr.render();
@@ -224,6 +227,11 @@ public class Play extends GameState{
 	public static BodyEditorLoader getLoader(){
 		return loader;
 	}
+	
+	public static Vector2 getCameraPosition(){
+		return cameraPos.cpy();
+	}
+
 	
 	
 	

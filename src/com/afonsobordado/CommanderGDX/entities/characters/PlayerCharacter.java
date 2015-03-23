@@ -6,7 +6,6 @@ import com.afonsobordado.CommanderGDX.files.PlayerCharacterFile;
 import com.afonsobordado.CommanderGDX.handlers.Animation;
 import com.afonsobordado.CommanderGDX.utils.AUtils;
 import com.afonsobordado.CommanderGDX.vars.B2DVars;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
@@ -173,16 +172,6 @@ public class PlayerCharacter {
 				1,
 				armRotation);
 		
-		
-		
-		/*drawPos.x += ((isFlip) ? (weapon.getFrame().getRegionWidth() - weaponPin.x + armPin.x): 0);
-		drawPos.y += weapon.getFrame().getRegionHeight() + weaponPin.y;*/
-		//if(isFlip) 
-
-
-
-
-		
 		if(isFlip){
 			drawPos.x += (weaponPin.x - armPin.x);
 			drawPos.x -= (weapon.getFrame().getRegionWidth() * Math.cos(Math.toRadians(armRotation)) + (weaponPin.y/2 * Math.sin(Math.toRadians(armRotation))) );
@@ -191,9 +180,9 @@ public class PlayerCharacter {
 			drawPos.x += (weapon.getFrame().getRegionWidth() * Math.cos(Math.toRadians(armRotation)) - (weaponPin.y/2 * Math.sin(Math.toRadians(armRotation))));
 			drawPos.y += (weapon.getFrame().getRegionWidth() * Math.sin(Math.toRadians(armRotation)) + (weaponPin.y/2 * Math.cos(Math.toRadians(armRotation))));
 		}
-		AUtils.drawPixel(sb,
+		/*AUtils.drawPixel(sb,
 				 drawPos.x,
-				 drawPos.y);
+				 drawPos.y);*/
 		weapon.setBarrelPos(drawPos);
 		
 	}
