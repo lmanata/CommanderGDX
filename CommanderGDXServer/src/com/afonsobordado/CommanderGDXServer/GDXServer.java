@@ -22,7 +22,8 @@ public class GDXServer {
 	private static final long SERVER_TICK = (long) ((1/66f)*1000);
 	
 	public static ConcurrentHashMap<Integer, LocalServerPlayer> playerList;
-	public static Server server;	
+	public static Server server;
+	public static ServerViewerHandler svh;
 	
 	//current game vars
 	public static String currentMap = "level2";
@@ -56,11 +57,10 @@ public class GDXServer {
 			e.printStackTrace();
 		}
 	    
-
-	    
-	    
 	    server.addListener(new NetworkListener());
-		
+	    
+	    new Thread(svh = new ServerViewerHandler()).start();
+
 		for(;;){
 			if(System.currentTimeMillis() % SERVER_TICK == 0){
 				for(LocalServerPlayer lsp: GDXServer.playerList.values()){
