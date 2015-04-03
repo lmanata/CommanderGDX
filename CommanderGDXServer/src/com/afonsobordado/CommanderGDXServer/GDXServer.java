@@ -14,7 +14,6 @@ import com.afonsobordado.CommanderGDX.packets.PacketPositionUpdate;
 import com.afonsobordado.CommanderGDX.packets.PacketSwitchWeapon;
 import com.afonsobordado.CommanderGDX.packets.NetworkObject.NetworkPlayer;
 import com.afonsobordado.CommanderGDXServer.LocalObjects.LocalServerPlayer;
-import com.afonsobordado.CommanderGDXServerViewer.Viewer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
@@ -32,6 +31,7 @@ public class GDXServer {
 	
 	public static ConcurrentHashMap<Integer, LocalServerPlayer> playerList;
 	public static Server server;
+	
 	public static ServerViewerHandler svh;
 	public static boolean SVHEnable = true;
 	
@@ -48,7 +48,7 @@ public class GDXServer {
 	        bodyDef.position.set(0, 0);
 	        body = world.createBody(bodyDef);
 	        PolygonShape shape = new PolygonShape();
-	        shape.setAsBox(10f / Viewer.PPM, 10f / Viewer.PPM);
+	        shape.setAsBox(10f / ServerViewerWindow.PPM, 10f / ServerViewerWindow.PPM);
 	        FixtureDef fixtureDef = new FixtureDef();
 	        fixtureDef.shape = shape;
 	        fixtureDef.density = 1f;
@@ -83,7 +83,7 @@ public class GDXServer {
 	    server.addListener(new NetworkListener());
 	    
 	    if(SVHEnable)
-	    	new Thread(svh = new ServerViewerHandler()).start();
+	    	svh = new ServerViewerHandler();
 
 		for(;;){
 			if(System.currentTimeMillis() % SERVER_TICK == 0){
