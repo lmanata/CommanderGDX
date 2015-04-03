@@ -46,18 +46,7 @@ public class Viewer implements ApplicationListener{
 		b2dCam.setToOrtho(false, Viewer.V_WIDTH / Viewer.PPM, Viewer.V_HEIGHT / Viewer.PPM);
 		fps = new FPSLogger();
 		
-		Body body;
-        BodyDef bodyDef = new BodyDef();
-        bodyDef.type = BodyDef.BodyType.DynamicBody;
-        bodyDef.position.set(0, 0);
-        body = world.createBody(bodyDef);
-        PolygonShape shape = new PolygonShape();
-        shape.setAsBox(10f / Viewer.PPM, 10f / Viewer.PPM);
-        FixtureDef fixtureDef = new FixtureDef();
-        fixtureDef.shape = shape;
-        fixtureDef.density = 1f;
-        Fixture fixture = body.createFixture(fixtureDef);
-        shape.dispose();
+
 
 	}
 	public void dispose() {

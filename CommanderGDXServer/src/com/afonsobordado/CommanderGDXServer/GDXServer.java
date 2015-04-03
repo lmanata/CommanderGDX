@@ -14,12 +14,21 @@ import com.afonsobordado.CommanderGDX.packets.PacketPositionUpdate;
 import com.afonsobordado.CommanderGDX.packets.PacketSwitchWeapon;
 import com.afonsobordado.CommanderGDX.packets.NetworkObject.NetworkPlayer;
 import com.afonsobordado.CommanderGDXServer.LocalObjects.LocalServerPlayer;
+import com.afonsobordado.CommanderGDXServerViewer.Viewer;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.Fixture;
+import com.badlogic.gdx.physics.box2d.FixtureDef;
+import com.badlogic.gdx.physics.box2d.PolygonShape;
+import com.badlogic.gdx.physics.box2d.World;
 import com.esotericsoftware.kryonet.Server;
 
 public class GDXServer {
 	public static final float STEP = 1 / 60f;
 	private static final long SERVER_TICK = (long) ((1/66f)*1000);
+	
+	public static World world;
 	
 	public static ConcurrentHashMap<Integer, LocalServerPlayer> playerList;
 	public static Server server;
@@ -30,10 +39,22 @@ public class GDXServer {
 	public static String currentMap = "level2";
 	
 	public static void main(String[] args){
-		/*World world = new World(new Vector2(0, -9.81f), true);
+		world = new World(new Vector2(0, -9.81f), true);
 		synchronized(world){
-			TiledMapImporter.create(new TmxMapLoader().load("res/maps/" + currentMap + ".tmx"),world);
-		}*/
+			//TiledMapImporter.create(new TmxMapLoader().load("res/maps/" + currentMap + ".tmx"),world);
+			Body body;
+	        BodyDef bodyDef = new BodyDef();
+	        bodyDef.type = BodyDef.BodyType.DynamicBody;
+	        bodyDef.position.set(0, 0);
+	        body = world.createBody(bodyDef);
+	        PolygonShape shape = new PolygonShape();
+	        shape.setAsBox(10f / Viewer.PPM, 10f / Viewer.PPM);
+	        FixtureDef fixtureDef = new FixtureDef();
+	        fixtureDef.shape = shape;
+	        fixtureDef.density = 1f;
+	        Fixture fixture = body.createFixture(fixtureDef);
+	        shape.dispose();
+		}
 		
 		playerList = new ConcurrentHashMap<Integer, LocalServerPlayer>(16, 0.9f, 2);// 2 concurrent threads is a worst case scenario
 	    server = new Server();
@@ -84,5 +105,9 @@ public class GDXServer {
 		}
 		
 		
+	}
+	
+	public static World getWorld(){
+		return world;
 	}
 }
