@@ -116,7 +116,6 @@ public abstract class TiledMapImporter {
 	        if(object instanceof EllipseMapObject){
 	        	EllipseMapObject emo = (EllipseMapObject) object;
 	        	if(emo.getEllipse().height == emo.getEllipse().width){
-	        		System.out.println("got Circled");
 		        	CircleShape cs = new CircleShape();
 		        	cs.setRadius(emo.getEllipse().height / 2 / B2DVars.PPM);
 		        	cs.setPosition(new Vector2(emo.getEllipse().x / B2DVars.PPM,

@@ -19,8 +19,6 @@ import com.afonsobordado.CommanderGDXServer.LocalObjects.LocalServerPlayer;
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.headless.HeadlessApplication;
-import com.badlogic.gdx.backends.lwjgl.LwjglFiles;
-import com.badlogic.gdx.backends.lwjgl.LwjglNativesLoader;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.math.Vector2;
@@ -47,17 +45,12 @@ public class GDXServer {
 	public static String currentMap = "level2";
 	
 	public static void main(String[] args){
-		LwjglNativesLoader.load();
-		Gdx.files = new LwjglFiles();
-		
-		//headless gdx
 		world = new World(new Vector2(0, -9.81f), true);
 		
 		
-		Gdx.gl = mock(GL20.class);
+		Gdx.gl = mock(GL20.class);					//headless gdx to load the maps
 		new HeadlessApplication(new ApplicationListener(){
-			public void create() {
-			}
+			public void create() {}
 			public void dispose() {}
 			public void pause() {}
 			public void render() {}
@@ -73,7 +66,7 @@ public class GDXServer {
 			Body body;
 	        BodyDef bodyDef = new BodyDef();
 	        bodyDef.type = BodyDef.BodyType.DynamicBody;
-	        bodyDef.position.set(0, 0);
+	        bodyDef.position.set(1, 1);
 	        body = world.createBody(bodyDef);
 	        PolygonShape shape = new PolygonShape();
 	        shape.setAsBox(10f / ServerViewerWindow.PPM, 10f / ServerViewerWindow.PPM);

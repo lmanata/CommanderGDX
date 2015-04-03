@@ -25,6 +25,7 @@ public class ServerViewerHandler{
 		cfg.vSyncEnabled = false;
 		cfg.fullscreen = false;
 		cfg.resizable = false;
+		cfg.forceExit = false;
 		
 		new LwjglApplication(new ServerViewerWindow(), cfg);
 	}
