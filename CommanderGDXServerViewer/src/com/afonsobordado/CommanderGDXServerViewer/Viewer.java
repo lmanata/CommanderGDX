@@ -1,5 +1,7 @@
 package com.afonsobordado.CommanderGDXServerViewer;
 
+import java.io.IOException;
+
 import com.afonsobordado.CommanderGDXServerViewer.Packets.SViewer_PacketJoin;
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
@@ -38,6 +40,13 @@ public class Viewer implements ApplicationListener{
 
 		new Thread(client).start();
 		client.addListener(networkListener = new NetworkListener());
+		try {
+			client.connect(5000, "127.0.0.1", 44100, 44100);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		System.out.println("Connected");
 		
 		
 		world = new World(new Vector2(0, -9.81f), true);

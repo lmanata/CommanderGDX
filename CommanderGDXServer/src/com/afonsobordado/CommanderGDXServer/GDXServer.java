@@ -40,7 +40,7 @@ public class GDXServer {
 	
 	public static void main(String[] args){
 		world = new World(new Vector2(0, -9.81f), true);
-		synchronized(world){
+		synchronized(GDXServer.getWorld()){
 			//TiledMapImporter.create(new TmxMapLoader().load("res/maps/" + currentMap + ".tmx"),world);
 			Body body;
 	        BodyDef bodyDef = new BodyDef();
@@ -54,6 +54,7 @@ public class GDXServer {
 	        fixtureDef.density = 1f;
 	        Fixture fixture = body.createFixture(fixtureDef);
 	        shape.dispose();
+	        
 		}
 		
 		playerList = new ConcurrentHashMap<Integer, LocalServerPlayer>(16, 0.9f, 2);// 2 concurrent threads is a worst case scenario
