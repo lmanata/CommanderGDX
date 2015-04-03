@@ -3,6 +3,8 @@ package com.afonsobordado.CommanderGDXServer;
 import java.io.IOException;
 import java.util.concurrent.ConcurrentHashMap;
 
+import static org.mockito.Mockito.mock;
+import com.afonsobordado.CommanderGDX.handlers.TiledMapImporter;
 import com.afonsobordado.CommanderGDX.packets.PacketAccepted;
 import com.afonsobordado.CommanderGDX.packets.PacketBullet;
 import com.afonsobordado.CommanderGDX.packets.PacketConsoleMessage;
@@ -14,6 +16,13 @@ import com.afonsobordado.CommanderGDX.packets.PacketPositionUpdate;
 import com.afonsobordado.CommanderGDX.packets.PacketSwitchWeapon;
 import com.afonsobordado.CommanderGDX.packets.NetworkObject.NetworkPlayer;
 import com.afonsobordado.CommanderGDXServer.LocalObjects.LocalServerPlayer;
+import com.badlogic.gdx.ApplicationListener;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.backends.headless.HeadlessApplication;
+import com.badlogic.gdx.backends.lwjgl.LwjglFiles;
+import com.badlogic.gdx.backends.lwjgl.LwjglNativesLoader;
+import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
@@ -38,9 +47,29 @@ public class GDXServer {
 	public static String currentMap = "level2";
 	
 	public static void main(String[] args){
+		LwjglNativesLoader.load();
+		Gdx.files = new LwjglFiles();
+		
+		//headless gdx
 		world = new World(new Vector2(0, -9.81f), true);
-		synchronized(GDXServer.getWorld()){
-			//TiledMapImporter.create(new TmxMapLoader().load("res/maps/" + currentMap + ".tmx"),world);
+		
+		
+		Gdx.gl = mock(GL20.class);
+		new HeadlessApplication(new ApplicationListener(){
+			public void create() {
+			}
+			public void dispose() {}
+			public void pause() {}
+			public void render() {}
+			public void resize(int arg0, int arg1) {}
+			public void resume() {}
+		});
+		
+		synchronized(world){
+			TiledMapImporter.create(
+					new TmxMapLoader().load("../res/maps/" + currentMap + ".tmx"),
+					world);
+			
 			Body body;
 	        BodyDef bodyDef = new BodyDef();
 	        bodyDef.type = BodyDef.BodyType.DynamicBody;
