@@ -24,6 +24,7 @@ public class GDXServer {
 	public static ConcurrentHashMap<Integer, LocalServerPlayer> playerList;
 	public static Server server;
 	public static ServerViewerHandler svh;
+	public static boolean SVHEnable = true;
 	
 	//current game vars
 	public static String currentMap = "level2";
@@ -59,7 +60,8 @@ public class GDXServer {
 	    
 	    server.addListener(new NetworkListener());
 	    
-	    new Thread(svh = new ServerViewerHandler()).start();
+	    if(SVHEnable)
+	    	new Thread(svh = new ServerViewerHandler()).start();
 
 		for(;;){
 			if(System.currentTimeMillis() % SERVER_TICK == 0){
