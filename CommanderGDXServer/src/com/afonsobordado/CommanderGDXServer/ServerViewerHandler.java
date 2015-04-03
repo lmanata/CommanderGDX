@@ -1,14 +1,11 @@
 package com.afonsobordado.CommanderGDXServer;
 
-import com.afonsobordado.CommanderGDX.Game;
-import com.afonsobordado.CommanderGDX.vars.B2DVars;
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Input.Keys;
+import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
-import com.badlogic.gdx.graphics.FPSLogger;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector2;
@@ -40,7 +37,6 @@ class ServerViewerWindow implements ApplicationListener{
 	public static final int SCALE = 3;
 	public static final int PPM = 64;
 	
-	private FPSLogger fps;
 	private Box2DDebugRenderer b2dr;
 	private OrthographicCamera b2dCam;
 	
