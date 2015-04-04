@@ -50,8 +50,8 @@ public class PlayerFactory {
 		Body body;
 		System.out.println(pcf.getLegs());
 		
-		Vector2 legSz = AnimationList.get(pcf.getLegs()).getMaxSize();
-		Vector2 torsoSz = AnimationList.get(pcf.getTorso()).getMaxSize();
+		Vector2 legSz = pcf.getLegSize();
+		Vector2 torsoSz = pcf.getTorsoSize();
 		
 		System.out.println("legSZ: " + legSz.toString());
 		System.out.println("torsoSZ: "  + torsoSz.toString());
