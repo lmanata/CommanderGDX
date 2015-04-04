@@ -60,7 +60,9 @@ public class PlayerFactory {
 		bdef.type = BodyType.DynamicBody;
 		bdef.linearVelocity.set(1,0);
 		
-		body = world.createBody(bdef);
+		synchronized(world){
+			body = world.createBody(bdef);
+		}
 		body.setBullet(true);
 		
 		shape.setAsBox((legSz.x/2) / B2DVars.PPM, ((legSz.y + torsoSz.y)/2) / B2DVars.PPM);
@@ -68,8 +70,8 @@ public class PlayerFactory {
 		fdef.filter.categoryBits = B2DVars.BIT_PLAYER;
 		fdef.filter.maskBits = B2DVars.BIT_GROUND | B2DVars.BIT_PLAYER;
 		
+		body.createFixture(fdef).setUserData("fullBody");
 		
-		body.createFixture(fdef).setUserData("player");
 		
 		//create foot sensor
 		shape.setAsBox((legSz.x/2) / B2DVars.PPM-0.5f, 2 / B2DVars.PPM, new Vector2(0, (float) (-((legSz.y + torsoSz.y)/2) / B2DVars.PPM)), 0);
@@ -77,7 +79,7 @@ public class PlayerFactory {
 		fdef.filter.categoryBits = B2DVars.BIT_PLAYER;
 		fdef.filter.maskBits = B2DVars.BIT_GROUND | B2DVars.BIT_PLAYER;
 		fdef.isSensor = true;
-		body.createFixture(fdef).setUserData("footPlayer");
+		body.createFixture(fdef).setUserData("foot");
 		
 		return body;
 		

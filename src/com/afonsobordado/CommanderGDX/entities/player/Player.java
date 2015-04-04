@@ -4,11 +4,9 @@ package com.afonsobordado.CommanderGDX.entities.player;
 import static com.afonsobordado.CommanderGDX.vars.B2DVars.PLAYER_MAX_VELOCITY;
 
 import com.afonsobordado.CommanderGDX.Game;
-import com.afonsobordado.CommanderGDX.entities.Lists.AnimationList;
 import com.afonsobordado.CommanderGDX.entities.Lists.WeaponList;
 import com.afonsobordado.CommanderGDX.entities.characters.PlayerCharacter;
 import com.afonsobordado.CommanderGDX.entities.weapons.Weapon;
-import com.afonsobordado.CommanderGDX.files.PlayerCharacterFile;
 import com.afonsobordado.CommanderGDX.handlers.InputHandler;
 import com.afonsobordado.CommanderGDX.packets.PacketSwitchWeapon;
 import com.afonsobordado.CommanderGDX.packets.NetworkObject.NetworkPlayer;
@@ -17,10 +15,7 @@ import com.afonsobordado.CommanderGDX.vars.B2DVars;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
-import com.badlogic.gdx.physics.box2d.BodyDef;
-import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
-import com.badlogic.gdx.physics.box2d.FixtureDef;
-import com.badlogic.gdx.physics.box2d.PolygonShape;
+import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
 
@@ -51,6 +46,16 @@ public class Player {
 		weapons.add(WeaponList.get("usp-s"));
 		
 		body = pf.getBodyByClass(playerClass);
+		
+		
+		//PlayerFactory creates generalized bodies, we now need to identify them
+		for(Fixture f: body.getFixtureList()){ 
+			if(f.getUserData().equals("fullBody"))
+				f.setUserData("player");
+			else if(f.getUserData().equals("foot"))
+				f.setUserData("footPlayer");
+		}
+		
 		body.setUserData(this);
 		
 		pc = new PlayerCharacter(pf.getFileByClass(playerClass), this.weapons.get(currentWeapon), body);
