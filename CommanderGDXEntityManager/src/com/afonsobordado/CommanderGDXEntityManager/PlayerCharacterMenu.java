@@ -46,6 +46,15 @@ public class PlayerCharacterMenu extends FDefExtender {
 	private JTextField textField_9;
 	private JButton btnNewButton;
 	private JButton btnNewButton_1;
+	private JLabel lblArmsz;
+	private JLabel lblArmsz_1;
+	private JTextField textField_10;
+	private JTextField textField_11;
+	private JTextField textField_12;
+	private JTextField textField_13;
+	private JLabel lblHeadsz;
+	private JTextField textField_14;
+	private JTextField textField_15;
 
 	/**
 	 * Create the frame.
@@ -53,15 +62,15 @@ public class PlayerCharacterMenu extends FDefExtender {
 	public PlayerCharacterMenu(String file) {
 		this.file = file;
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		setBounds(100, 100, 450, 267);
+		setBounds(100, 100, 450, 432);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		GridBagLayout gbl_contentPane = new GridBagLayout();
 		gbl_contentPane.columnWidths = new int[]{0, 0, 0, 0};
-		gbl_contentPane.rowHeights = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+		gbl_contentPane.rowHeights = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 		gbl_contentPane.columnWeights = new double[]{0.0, 1.0, 1.0, Double.MIN_VALUE};
-		gbl_contentPane.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
+		gbl_contentPane.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
 		contentPane.setLayout(gbl_contentPane);
 		
 		JLabel lblNewLabel = new JLabel("Name:");
@@ -207,29 +216,72 @@ public class PlayerCharacterMenu extends FDefExtender {
 		gbc_textField_9.fill = GridBagConstraints.HORIZONTAL;
 		gbc_textField_9.gridx = 2;
 		gbc_textField_9.gridy = 7;
+		
+		lblArmsz = new JLabel("TorsoSz:");
+		GridBagConstraints gbc_lblArmsz = new GridBagConstraints();
+		gbc_lblArmsz.anchor = GridBagConstraints.EAST;
+		gbc_lblArmsz.insets = new Insets(0, 0, 5, 5);
+		gbc_lblArmsz.gridx = 0;
+		gbc_lblArmsz.gridy = 8;
 
 		
-		btnNewButton = new JButton("Save");
-		btnNewButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				save();
-			}
-		});
-		GridBagConstraints gbc_btnNewButton = new GridBagConstraints();
-		gbc_btnNewButton.insets = new Insets(0, 0, 0, 5);
-		gbc_btnNewButton.gridx = 1;
-		gbc_btnNewButton.gridy = 8;
+		textField_10 = new JTextField();
+		GridBagConstraints gbc_textField_10 = new GridBagConstraints();
+		gbc_textField_10.insets = new Insets(0, 0, 5, 5);
+		gbc_textField_10.fill = GridBagConstraints.HORIZONTAL;
+		gbc_textField_10.gridx = 1;
+		gbc_textField_10.gridy = 8;
 		
 		
-		btnNewButton_1 = new JButton("Reset");
-		btnNewButton_1.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				resetFields();
-			}
-		});
-		GridBagConstraints gbc_btnNewButton_1 = new GridBagConstraints();
-		gbc_btnNewButton_1.gridx = 2;
-		gbc_btnNewButton_1.gridy = 8;
+		textField_11 = new JTextField();
+		GridBagConstraints gbc_textField_11 = new GridBagConstraints();
+		gbc_textField_11.insets = new Insets(0, 0, 5, 0);
+		gbc_textField_11.fill = GridBagConstraints.HORIZONTAL;
+		gbc_textField_11.gridx = 2;
+		gbc_textField_11.gridy = 8;
+
+		
+		lblArmsz_1 = new JLabel("LegSz:");
+		GridBagConstraints gbc_lblArmsz_1 = new GridBagConstraints();
+		gbc_lblArmsz_1.anchor = GridBagConstraints.EAST;
+		gbc_lblArmsz_1.insets = new Insets(0, 0, 5, 5);
+		gbc_lblArmsz_1.gridx = 0;
+		gbc_lblArmsz_1.gridy = 9;
+
+		textField_12 = new JTextField();
+		GridBagConstraints gbc_textField_12 = new GridBagConstraints();
+		gbc_textField_12.insets = new Insets(0, 0, 5, 5);
+		gbc_textField_12.fill = GridBagConstraints.HORIZONTAL;
+		gbc_textField_12.gridx = 1;
+		gbc_textField_12.gridy = 9;
+
+		textField_13 = new JTextField();
+		GridBagConstraints gbc_textField_13 = new GridBagConstraints();
+		gbc_textField_13.insets = new Insets(0, 0, 5, 0);
+		gbc_textField_13.fill = GridBagConstraints.HORIZONTAL;
+		gbc_textField_13.gridx = 2;
+		gbc_textField_13.gridy = 9;
+		
+		lblHeadsz = new JLabel("HeadSz:");
+		GridBagConstraints gbc_lblHeadsz = new GridBagConstraints();
+		gbc_lblHeadsz.anchor = GridBagConstraints.EAST;
+		gbc_lblHeadsz.insets = new Insets(0, 0, 5, 5);
+		gbc_lblHeadsz.gridx = 0;
+		gbc_lblHeadsz.gridy = 10;
+		
+		textField_14 = new JTextField();
+		GridBagConstraints gbc_textField_14 = new GridBagConstraints();
+		gbc_textField_14.insets = new Insets(0, 0, 5, 5);
+		gbc_textField_14.fill = GridBagConstraints.HORIZONTAL;
+		gbc_textField_14.gridx = 1;
+		gbc_textField_14.gridy = 10;
+		
+		textField_15 = new JTextField();
+		GridBagConstraints gbc_textField_15 = new GridBagConstraints();
+		gbc_textField_15.insets = new Insets(0, 0, 5, 0);
+		gbc_textField_15.fill = GridBagConstraints.HORIZONTAL;
+		gbc_textField_15.gridx = 2;
+		gbc_textField_15.gridy = 10;
 		
 		resetFields();
 		
@@ -268,9 +320,51 @@ public class PlayerCharacterMenu extends FDefExtender {
 		textField_8.setColumns(10);
 		contentPane.add(textField_9, gbc_textField_9);//armpiny
 		textField_9.setColumns(10);
+
+		contentPane.add(lblArmsz, gbc_lblArmsz);
+		contentPane.add(textField_10, gbc_textField_10);
+		textField_10.setColumns(10);
+		contentPane.add(textField_11, gbc_textField_11);
+		textField_11.setColumns(10);
 		
-		contentPane.add(btnNewButton, gbc_btnNewButton);
-		contentPane.add(btnNewButton_1, gbc_btnNewButton_1);
+		contentPane.add(lblArmsz_1, gbc_lblArmsz_1);
+		contentPane.add(textField_12, gbc_textField_12);
+		textField_12.setColumns(10);
+		contentPane.add(textField_13, gbc_textField_13);
+		textField_13.setColumns(10);
+		
+		contentPane.add(lblHeadsz, gbc_lblHeadsz);
+		contentPane.add(textField_14, gbc_textField_14);
+		textField_14.setColumns(10);
+		contentPane.add(textField_15, gbc_textField_15);
+		textField_15.setColumns(10);
+		
+					
+		btnNewButton = new JButton("Save");
+		btnNewButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				save();
+			}
+		});
+						
+						GridBagConstraints gbc_btnNewButton = new GridBagConstraints();
+						gbc_btnNewButton.insets = new Insets(0, 0, 0, 5);
+						gbc_btnNewButton.gridx = 1;
+						gbc_btnNewButton.gridy = 11;
+						
+						contentPane.add(btnNewButton, gbc_btnNewButton);
+						
+						
+						btnNewButton_1 = new JButton("Reset");
+						btnNewButton_1.addActionListener(new ActionListener() {
+							public void actionPerformed(ActionEvent e) {
+								resetFields();
+							}
+						});
+						GridBagConstraints gbc_btnNewButton_1 = new GridBagConstraints();
+						gbc_btnNewButton_1.gridx = 2;
+						gbc_btnNewButton_1.gridy = 11;
+						contentPane.add(btnNewButton_1, gbc_btnNewButton_1);
 
 	}
 
@@ -292,6 +386,14 @@ public class PlayerCharacterMenu extends FDefExtender {
 			textField_7.setText(Float.toString(pcf.getTorsoPin().y));
 			textField_8.setText(Float.toString(pcf.getArmPin().x));
 			textField_9.setText(Float.toString(pcf.getArmPin().y));
+			textField_10.setText(Float.toString(pcf.getTorsoSize().x));
+			textField_11.setText(Float.toString(pcf.getTorsoSize().y));
+			textField_12.setText(Float.toString(pcf.getLegSize().x));
+			textField_13.setText(Float.toString(pcf.getLegSize().y));
+			textField_14.setText(Float.toString(pcf.getHeadSize().x));
+			textField_15.setText(Float.toString(pcf.getHeadSize().y));
+			
+			
 		}catch (FileNotFoundException ex) {
 			ex.printStackTrace();
 		}catch (KryoException ke) {
@@ -315,7 +417,13 @@ public class PlayerCharacterMenu extends FDefExtender {
 															  new Vector2(Float.parseFloat(textField_6.getText()),
 																	  	  Float.parseFloat(textField_7.getText())),
 															  new Vector2(Float.parseFloat(textField_8.getText()),
-																		  Float.parseFloat(textField_9.getText()))
+																		  Float.parseFloat(textField_9.getText())),
+															  new Vector2(Float.parseFloat(textField_12.getText()),
+																	  	  Float.parseFloat(textField_13.getText())),
+															  new Vector2(Float.parseFloat(textField_10.getText()),
+																	  	  Float.parseFloat(textField_11.getText())),
+															  new Vector2(Float.parseFloat(textField_14.getText()),
+																	  	  Float.parseFloat(textField_15.getText()))
 															  );
 			Main.kryo.writeObject(output, pcf);
 			output.flush();
