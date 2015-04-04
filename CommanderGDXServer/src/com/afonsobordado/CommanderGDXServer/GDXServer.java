@@ -99,6 +99,7 @@ public class GDXServer {
 			System.err.println("Could not bind to port!\n"
 							+  "You may have another service is using it.\n");
 			e.printStackTrace();
+			System.exit(1);
 		}
 	    
 	    server.addListener(new NetworkListener());
