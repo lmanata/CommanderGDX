@@ -6,6 +6,7 @@ import java.security.SecureRandom;
 
 import com.afonsobordado.CommanderGDX.Game;
 import com.afonsobordado.CommanderGDX.entities.Lists.WeaponList;
+import com.afonsobordado.CommanderGDX.entities.player.Player;
 import com.afonsobordado.CommanderGDX.handlers.GameStateManager;
 import com.afonsobordado.CommanderGDX.packets.PacketHello;
 import com.afonsobordado.CommanderGDX.packets.PacketNewPlayer;
@@ -58,7 +59,7 @@ public class IPmenu extends GameState{
 		    	
 		    	pnp.np = null;
 		    	pnp.name = new BigInteger(130, new SecureRandom()).toString(32); // this is some random global with the players name
-		    	//TODO: ADD CLASS STUFF TO THIS PACKET
+		    	pnp.playerClass = Player.playerClass;
 		    	pnp.weapon = "ak47";
 		    	
 				Game.client.sendTCP(pnp);

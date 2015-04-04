@@ -63,7 +63,7 @@ public class Play extends GameState{
 	public static String bodyFile = "res/bodies/bodyList.json";
 	private static Vector2 cameraPos = new Vector2();
 	
-	private PlayerFactory pf;
+	private static PlayerFactory pf;
 	//animations
 
 	
@@ -74,9 +74,8 @@ public class Play extends GameState{
 		world.setContactListener(cl = new MyContactListener());
 		loader = new BodyEditorLoader(Gdx.files.internal(bodyFile));
 		pf = new PlayerFactory(world, loader);
-		/*temporary ---------------------------------------------------*/
 
-		/*temporary ---------------------------------------------------*/
+		
 		player = new Player(world,pf);
 		
 		synchronized(Game.networkListener){
@@ -199,6 +198,9 @@ public class Play extends GameState{
 		tmr.dispose();
 	}
 	
+	public static PlayerFactory getPlayerFactory(){
+		return pf;
+	}
 	
 	public static World getWorld(){
 		return world;

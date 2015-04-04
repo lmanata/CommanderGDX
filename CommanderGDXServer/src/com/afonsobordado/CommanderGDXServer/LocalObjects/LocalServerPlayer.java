@@ -7,8 +7,16 @@ public class LocalServerPlayer extends NetworkPlayer{
 	public int connectionID;
 	public long lastPacketTime;
 	public String weapon;
+	public String playerClass;
 
-	public LocalServerPlayer(int id, String name, Vector2 pos, float armAngle,Vector2 linearVelocity, int connectionID, String weapon) {
+	public LocalServerPlayer(int id,
+							 String name,
+							 Vector2 pos,
+							 float armAngle,
+							 Vector2 linearVelocity,
+							 int connectionID,
+							 String weapon,
+							 String playerClass) {
 		this.id = id;
 		this.name = name;
 		this.pos = pos;
@@ -16,6 +24,7 @@ public class LocalServerPlayer extends NetworkPlayer{
 		this.linearVelocity = linearVelocity;
 		this.connectionID = connectionID;
 		this.weapon = weapon;
+		this.playerClass = playerClass;
 		this.lastPacketTime = System.currentTimeMillis();
 	}
 	

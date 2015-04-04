@@ -9,4 +9,5 @@ public class PacketNewPlayer {
 	public NetworkPlayer np;
 	public String name; //TODO: this is not used in the client
 	public String weapon;
+	public String playerClass;
 }

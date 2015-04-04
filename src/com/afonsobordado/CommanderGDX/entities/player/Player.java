@@ -22,7 +22,7 @@ import com.badlogic.gdx.utils.Array;
 
 
 public class Player {
-	private String playerClass = "MainChar";
+	public static String playerClass = "MainChar";
 	
 	private Body body;
 	public boolean grounded;

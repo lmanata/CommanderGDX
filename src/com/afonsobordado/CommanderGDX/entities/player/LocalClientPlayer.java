@@ -6,15 +6,12 @@ import com.afonsobordado.CommanderGDX.entities.characters.PlayerCharacter;
 import com.afonsobordado.CommanderGDX.entities.weapons.Weapon;
 import com.afonsobordado.CommanderGDX.packets.PacketNewPlayer;
 import com.afonsobordado.CommanderGDX.packets.NetworkObject.NetworkPlayer;
-import com.afonsobordado.CommanderGDX.states.Play;
+import com.afonsobordado.CommanderGDX.utils.PlayerFactory;
 import com.afonsobordado.CommanderGDX.vars.B2DVars;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
-import com.badlogic.gdx.physics.box2d.BodyDef;
-import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
-import com.badlogic.gdx.physics.box2d.FixtureDef;
-import com.badlogic.gdx.physics.box2d.PolygonShape;
+import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.World;
 
 public class LocalClientPlayer{
@@ -22,6 +19,7 @@ public class LocalClientPlayer{
 	public float armDegrees;
 	public int id;
 	public String name;
+	private String playerClass;
 	private Body body;
 	private PlayerCharacter pc;
 	private Weapon weapon;
@@ -29,45 +27,25 @@ public class LocalClientPlayer{
 	private NetworkPlayer nextPacket;
 	private int lerpCount = B2DVars.LERP_MAX_COUNT;
 	
-	public LocalClientPlayer(PacketNewPlayer pnp,World world) {
+	public LocalClientPlayer(PacketNewPlayer pnp,World world,PlayerFactory pf) {
 		this.armDegrees = pnp.np.armAngle;
 		this.id = pnp.np.id;
 		this.name = pnp.np.name;
 		this.nextPacket = pnp.np;
+		this.playerClass = pnp.playerClass;
 		this.weapon = WeaponList.get(pnp.weapon);
 		
+
+		body = pf.getBodyByClass(playerClass);
 		
-		Vector2 legSz = AnimationList.get("MainCharLegsRun").getMaxSize();
-		Vector2 torsoSz = AnimationList.get("MainCharTorso").getMaxSize();
-		
-		BodyDef bdef  = new BodyDef();
-		FixtureDef fdef = new FixtureDef();
-		PolygonShape shape  = new PolygonShape();
-		
-		bdef.position.set(100 / B2DVars.PPM,200 / B2DVars.PPM);
-		bdef.type = BodyType.DynamicBody;
-		bdef.linearVelocity.set(1,0);
-		
-		synchronized(Play.getWorld()){
-			body = world.createBody(bdef);
+		//PlayerFactory creates generalized bodies, we now need to identify them
+		for(Fixture f: body.getFixtureList()){ 
+			if(f.getUserData().equals("fullBody"))
+				f.setUserData("lcp");
+			else if(f.getUserData().equals("foot"))
+				f.setUserData("footLcp");
 		}
-		
-		body.setBullet(true);
-		
-		shape.setAsBox((legSz.x/2) / B2DVars.PPM, ((legSz.y + torsoSz.y)/2) / B2DVars.PPM);
-		fdef.shape = shape;
-		fdef.filter.categoryBits = B2DVars.BIT_PLAYER;
-		fdef.filter.maskBits = B2DVars.BIT_GROUND | B2DVars.BIT_PLAYER;
-		
-		body.createFixture(fdef).setUserData("lcp");
-		
-		//create foot sensor
-		shape.setAsBox((legSz.x/2) / B2DVars.PPM, 2 / B2DVars.PPM, new Vector2(0, (float) (-((legSz.y + torsoSz.y)/2) / B2DVars.PPM)), 0);
-		fdef.shape = shape;
-		fdef.filter.categoryBits = B2DVars.BIT_PLAYER;
-		fdef.filter.maskBits = B2DVars.BIT_GROUND | B2DVars.BIT_PLAYER;
-		fdef.isSensor = true;
-		body.createFixture(fdef).setUserData("footLcp");
+
 		body.setUserData(this);
 	
 		

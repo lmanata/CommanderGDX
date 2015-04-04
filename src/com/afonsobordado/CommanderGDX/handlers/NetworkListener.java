@@ -54,7 +54,7 @@ public class NetworkListener extends Listener{
 			if(Play.playerList == null) return; //if this happens we should ask for the packet again or else it will be ignored
 			if(pnp.np.id == Play.player.id) return; //this is the local player, there is no need to add
 			
-			LocalClientPlayer lcp = new LocalClientPlayer(pnp,Play.getWorld());
+			LocalClientPlayer lcp = new LocalClientPlayer(pnp,Play.getWorld(),Play.getPlayerFactory());
 			
 			Play.playerList.put(pnp.np.id, lcp); //using the same id as the server prevents many array traversals
 		} else if (object instanceof NetworkPlayer){
