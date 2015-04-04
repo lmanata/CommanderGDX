@@ -3,7 +3,6 @@ package com.afonsobordado.CommanderGDX.states;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.util.Iterator;
 import java.util.concurrent.ConcurrentHashMap;
 
 import net.bigfootsoftware.bobtrucking.BodyEditorLoader;
@@ -14,36 +13,22 @@ import com.afonsobordado.CommanderGDX.entities.player.LocalClientPlayer;
 import com.afonsobordado.CommanderGDX.entities.player.Player;
 import com.afonsobordado.CommanderGDX.entities.weapons.Bullet;
 import com.afonsobordado.CommanderGDX.files.PlayerCharacterFile;
-import com.afonsobordado.CommanderGDX.files.WeaponFile;
 import com.afonsobordado.CommanderGDX.handlers.GameStateManager;
 import com.afonsobordado.CommanderGDX.handlers.InputHandler;
 import com.afonsobordado.CommanderGDX.handlers.MyContactListener;
 import com.afonsobordado.CommanderGDX.handlers.TiledMapImporter;
+import com.afonsobordado.CommanderGDX.utils.PlayerFactory;
 import com.afonsobordado.CommanderGDX.vars.B2DVars;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.FPSLogger;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.maps.MapLayer;
-import com.badlogic.gdx.maps.MapObject;
-import com.badlogic.gdx.maps.objects.EllipseMapObject;
-import com.badlogic.gdx.maps.objects.PolygonMapObject;
-import com.badlogic.gdx.maps.objects.PolylineMapObject;
-import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
-import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
-import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
-import com.badlogic.gdx.physics.box2d.BodyDef;
-import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
-import com.badlogic.gdx.physics.box2d.ChainShape;
-import com.badlogic.gdx.physics.box2d.CircleShape;
-import com.badlogic.gdx.physics.box2d.FixtureDef;
-import com.badlogic.gdx.physics.box2d.Shape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
 import com.esotericsoftware.kryo.io.Input;
@@ -74,10 +59,11 @@ public class Play extends GameState{
 	
 	private HUD hud;
 	public static String mapName = "level3";
-	public static String playerClass = "MainChar.pcf";
+	public static String playerClass = "MainChar";
 	public static String bodyFile = "res/bodies/bodyList.json";
 	private static Vector2 cameraPos = new Vector2();
 	
+	private PlayerFactory pf;
 	//animations
 
 	
@@ -87,17 +73,11 @@ public class Play extends GameState{
 		world = new World(new Vector2(0, -9.81f), true);
 		world.setContactListener(cl = new MyContactListener());
 		loader = new BodyEditorLoader(Gdx.files.internal(bodyFile));
-		
+		pf = new PlayerFactory(world, loader);
 		/*temporary ---------------------------------------------------*/
-		PlayerCharacterFile pcf = null;
-		try {
-			pcf = Game.fileSerializer.readObject(new Input(new FileInputStream(new File("./res/playerCharacter/"+playerClass).getPath())), PlayerCharacterFile.class);
-			System.out.println(pcf.getArmPin().toString());
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		}
+
 		/*temporary ---------------------------------------------------*/
-		player = new Player(world,pcf);
+		player = new Player(world,pf);
 		
 		synchronized(Game.networkListener){
 			Game.networkListener.notifyAll(); // a glorious warrior has born

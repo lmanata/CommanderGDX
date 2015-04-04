@@ -12,6 +12,7 @@ import com.afonsobordado.CommanderGDX.files.PlayerCharacterFile;
 import com.afonsobordado.CommanderGDX.handlers.InputHandler;
 import com.afonsobordado.CommanderGDX.packets.PacketSwitchWeapon;
 import com.afonsobordado.CommanderGDX.packets.NetworkObject.NetworkPlayer;
+import com.afonsobordado.CommanderGDX.utils.PlayerFactory;
 import com.afonsobordado.CommanderGDX.vars.B2DVars;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
@@ -26,6 +27,8 @@ import com.badlogic.gdx.utils.Array;
 
 
 public class Player {
+	private String playerClass = "MainChar";
+	
 	private Body body;
 	public boolean grounded;
 	private long lastGroundTime;
@@ -38,46 +41,19 @@ public class Player {
 	private float armDegrees;
 	private String name;
 	
-	public Player(World world, PlayerCharacterFile pcf){
-		Vector2 legSz = AnimationList.get("MainCharLegsRun").getMaxSize();
-		Vector2 torsoSz = AnimationList.get("MainCharTorso").getMaxSize();
+	public Player(World world, PlayerFactory pf){
 		weapons = new Array<Weapon>();
 		currentWeapon = 0;
 		
-		BodyDef bdef  = new BodyDef();
-		FixtureDef fdef = new FixtureDef();
-		PolygonShape shape  = new PolygonShape();
-		
-		bdef.position.set(100 / B2DVars.PPM,200 / B2DVars.PPM);  //spawnpos
-		bdef.type = BodyType.DynamicBody;
-		bdef.linearVelocity.set(1,0);
-		
-		body = world.createBody(bdef);
-		body.setBullet(true);
-		
-		shape.setAsBox((legSz.x/2) / B2DVars.PPM, ((legSz.y + torsoSz.y)/2) / B2DVars.PPM);
-		fdef.shape = shape;
-		fdef.filter.categoryBits = B2DVars.BIT_PLAYER;
-		fdef.filter.maskBits = B2DVars.BIT_GROUND | B2DVars.BIT_PLAYER;
-		
-		
-		body.createFixture(fdef).setUserData("player");
-		
-		//create foot sensor
-		shape.setAsBox((legSz.x/2) / B2DVars.PPM-0.5f, 2 / B2DVars.PPM, new Vector2(0, (float) (-((legSz.y + torsoSz.y)/2) / B2DVars.PPM)), 0);
-		fdef.shape = shape;
-		fdef.filter.categoryBits = B2DVars.BIT_PLAYER;
-		fdef.filter.maskBits = B2DVars.BIT_GROUND | B2DVars.BIT_PLAYER;
-		fdef.isSensor = true;
-		body.createFixture(fdef).setUserData("footPlayer");
-		body.setUserData(this);
-		
+
 		//THIS IS CLASS STUff
 		weapons.add(WeaponList.get("ak47"));
 		weapons.add(WeaponList.get("usp-s"));
 		
+		body = pf.getBodyByClass(playerClass);
+		body.setUserData(this);
 		
-		pc = new PlayerCharacter(pcf, this.weapons.get(currentWeapon), body);
+		pc = new PlayerCharacter(pf.getFileByClass(playerClass), this.weapons.get(currentWeapon), body);
 		
 		
 		
