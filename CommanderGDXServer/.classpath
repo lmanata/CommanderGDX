@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8"/>
+	<classpathentry kind="src" path="/CommanderGDX"/>
+	<classpathentry kind="lib" path="C:/Users/Afonso/Documents/GitHub/CommanderGDX/libs/gdx.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Afonso/Documents/GitHub/CommanderGDX/libs/gdx-backend-headless.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Afonso/Documents/GitHub/CommanderGDX/libs/gdx-backend-lwjgl.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Afonso/Documents/GitHub/CommanderGDX/libs/gdx-backend-lwjgl-natives.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Afonso/Documents/GitHub/CommanderGDX/libs/gdx-box2d.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Afonso/Documents/GitHub/CommanderGDX/libs/gdx-box2d-natives.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Afonso/Documents/GitHub/CommanderGDX/libs/gdx-natives.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Afonso/Documents/GitHub/CommanderGDX/libs/jsonbeans-0.5.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Afonso/Documents/GitHub/CommanderGDX/libs/junit-4.6.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Afonso/Documents/GitHub/CommanderGDX/libs/kryo-2.23.1-SNAPSHOT-all-debug.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Afonso/Documents/GitHub/CommanderGDX/libs/minlog-none-1.2.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Afonso/Documents/GitHub/CommanderGDX/libs/mockito-all-2.0.0-beta.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
