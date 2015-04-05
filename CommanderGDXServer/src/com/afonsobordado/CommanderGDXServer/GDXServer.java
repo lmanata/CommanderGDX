@@ -1,9 +1,10 @@
 package com.afonsobordado.CommanderGDXServer;
 
+import static org.mockito.Mockito.mock;
+
 import java.io.IOException;
 import java.util.concurrent.ConcurrentHashMap;
 
-import static org.mockito.Mockito.mock;
 import com.afonsobordado.CommanderGDX.handlers.TiledMapImporter;
 import com.afonsobordado.CommanderGDX.packets.PacketAccepted;
 import com.afonsobordado.CommanderGDX.packets.PacketBullet;
@@ -15,6 +16,7 @@ import com.afonsobordado.CommanderGDX.packets.PacketNewPlayer;
 import com.afonsobordado.CommanderGDX.packets.PacketPositionUpdate;
 import com.afonsobordado.CommanderGDX.packets.PacketSwitchWeapon;
 import com.afonsobordado.CommanderGDX.packets.NetworkObject.NetworkPlayer;
+import com.afonsobordado.CommanderGDX.vars.B2DVars;
 import com.afonsobordado.CommanderGDXServer.LocalObjects.LocalServerPlayer;
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
@@ -30,10 +32,16 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.esotericsoftware.kryonet.Server;
 
 public class GDXServer {
-	public static final float STEP = 1 / 60f;
+	//public static final float STEP = 1 / 60f;
 	private static final long SERVER_TICK = (long) ((1/66f)*1000);
 	
+	private static Body body;
 	public static World world;
+	public final static float B2DW_TICK = 60f;
+    public final static float B2DW_FIXED_TIMESTEP = 1000000000 / B2DW_TICK;
+	public final static int B2DW_VELOCITY_ITER = 6;
+	public final static int B2DW_POSITION_ITER = 2;
+	private static float delta = 0;
 	
 	public static ConcurrentHashMap<Integer, LocalServerPlayer> playerList;
 	public static Server server;
@@ -63,19 +71,23 @@ public class GDXServer {
 					new TmxMapLoader().load("../res/maps/" + currentMap + ".tmx"),
 					world);
 			
-			Body body;
+			
 	        BodyDef bodyDef = new BodyDef();
 	        bodyDef.type = BodyDef.BodyType.DynamicBody;
-	        bodyDef.position.set(1, 1);
+	        bodyDef.position.set(1, 30);
+	        bodyDef.active = true;
+	        bodyDef.allowSleep = false;
+	        bodyDef.gravityScale = 1f;
 	        body = world.createBody(bodyDef);
 	        PolygonShape shape = new PolygonShape();
 	        shape.setAsBox(10f / ServerViewerWindow.PPM, 10f / ServerViewerWindow.PPM);
 	        FixtureDef fixtureDef = new FixtureDef();
 	        fixtureDef.shape = shape;
 	        fixtureDef.density = 1f;
+	    	fixtureDef.filter.categoryBits = B2DVars.BIT_PLAYER; 
+			fixtureDef.filter.maskBits = B2DVars.BIT_GROUND;
 	        body.createFixture(fixtureDef);
 	        shape.dispose();
-	        
 		}
 		
 		playerList = new ConcurrentHashMap<Integer, LocalServerPlayer>(16, 0.9f, 2);// 2 concurrent threads is a worst case scenario
@@ -107,10 +119,28 @@ public class GDXServer {
 	    if(SVHEnable)
 	    	svh = new ServerViewerHandler();
 
+	    long lastTime = System.nanoTime();
+
 		for(;;){
+			/*fixed time step*/
+			long now = System.nanoTime();
+			delta += (now - lastTime) / B2DW_FIXED_TIMESTEP;
+			lastTime = now;
+			if(delta >= 1){
+				synchronized(GDXServer.getWorld()){
+					world.step(delta / B2DW_TICK, B2DW_VELOCITY_ITER, B2DW_POSITION_ITER);
+				}
+				System.out.println(body.getPosition().toString());
+				delta--;
+			}
+			
+			/*fixed time step*/
+			
+			/*send updated values to clients*/
 			if(System.currentTimeMillis() % SERVER_TICK == 0){
+				
+				
 				for(LocalServerPlayer lsp: GDXServer.playerList.values()){
-					//System.out.println(lsp.name + ": " + lsp.id + " : X: " + lsp.pos.x + " Y: " + lsp.pos.y + " TimeOut: " + (System.currentTimeMillis()-lsp.lastPacketTime)); 
 					
 					if( (System.currentTimeMillis()-lsp.lastPacketTime) > GameVars.PLAYER_TIMEOUT){ //poll the timeout
 
@@ -130,7 +160,13 @@ public class GDXServer {
 		
 	}
 	
+
+	
 	public static World getWorld(){
 		return world;
+	}
+	
+	public static Body gb(){
+		return body;
 	}
 }

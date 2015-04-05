@@ -2,13 +2,15 @@ package com.afonsobordado.CommanderGDXServer.LocalObjects;
 
 import com.afonsobordado.CommanderGDX.packets.NetworkObject.NetworkPlayer;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.Body;
 
 public class LocalServerPlayer extends NetworkPlayer{
 	public int connectionID;
 	public long lastPacketTime;
 	public String weapon;
 	public String playerClass;
-
+	public Body body;
+	
 	public LocalServerPlayer(int id,
 							 String name,
 							 Vector2 pos,
