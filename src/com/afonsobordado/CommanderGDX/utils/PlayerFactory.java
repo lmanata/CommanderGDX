@@ -7,32 +7,35 @@ import java.io.FileNotFoundException;
 import net.bigfootsoftware.bobtrucking.BodyEditorLoader;
 
 import com.afonsobordado.CommanderGDX.Game;
-import com.afonsobordado.CommanderGDX.entities.Lists.AnimationList;
-import com.afonsobordado.CommanderGDX.entities.weapons.Weapon;
 import com.afonsobordado.CommanderGDX.files.PlayerCharacterFile;
+import com.afonsobordado.CommanderGDX.handlers.FileSerializer;
 import com.afonsobordado.CommanderGDX.vars.B2DVars;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
-import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
-import com.badlogic.gdx.utils.Array;
+import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.io.Input;
 
 public class PlayerFactory {
 	private World world;
 	private BodyEditorLoader loader;
-	public PlayerFactory(World world, BodyEditorLoader loader) {
+	private String resDir;
+	private Kryo fileSerializer;
+	public PlayerFactory(World world, BodyEditorLoader loader, String res) {
 		this.world = world;
 		this.loader = loader;
+		this.resDir = res;
+		this.fileSerializer = new FileSerializer().getSerializer();
 	}
 	
 	public PlayerCharacterFile getFileByClass(String playerClass){
 		PlayerCharacterFile pcf = null;
 		try {
-			pcf = Game.fileSerializer.readObject(new Input(new FileInputStream(new File("./res/playerCharacter/"+playerClass+".pcf").getPath())), PlayerCharacterFile.class);
+			pcf = fileSerializer.readObject(new Input(new FileInputStream(new File(resDir + "/playerCharacter/"+playerClass+".pcf").getPath())), PlayerCharacterFile.class);
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
@@ -42,7 +45,7 @@ public class PlayerFactory {
 	public Body getBodyByClass(String playerClass){
 		PlayerCharacterFile pcf = null;
 		try {
-			pcf = Game.fileSerializer.readObject(new Input(new FileInputStream(new File("./res/playerCharacter/"+playerClass+".pcf").getPath())), PlayerCharacterFile.class);
+			pcf = fileSerializer.readObject(new Input(new FileInputStream(new File(resDir + "/playerCharacter/"+playerClass+".pcf").getPath())), PlayerCharacterFile.class);
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}

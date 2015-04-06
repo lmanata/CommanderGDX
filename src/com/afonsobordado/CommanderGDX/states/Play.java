@@ -73,7 +73,7 @@ public class Play extends GameState{
 		world = new World(new Vector2(0, -9.81f), true);
 		world.setContactListener(cl = new MyContactListener());
 		loader = new BodyEditorLoader(Gdx.files.internal(bodyFile));
-		pf = new PlayerFactory(world, loader);
+		pf = new PlayerFactory(world, loader, "./res");
 
 		
 		player = new Player(world,pf);

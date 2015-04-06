@@ -15,6 +15,7 @@ import com.afonsobordado.CommanderGDX.files.FixtureDefFile;
 import com.afonsobordado.CommanderGDX.files.PlayerCharacterFile;
 import com.afonsobordado.CommanderGDX.files.WeaponFile;
 import com.afonsobordado.CommanderGDX.handlers.Animation;
+import com.afonsobordado.CommanderGDX.handlers.FileSerializer;
 import com.afonsobordado.CommanderGDX.handlers.GameStateManager;
 import com.afonsobordado.CommanderGDX.handlers.InputHandler;
 import com.afonsobordado.CommanderGDX.handlers.InputProcessor;
@@ -92,14 +93,7 @@ public class Game implements ApplicationListener{
 		new Thread(client).start();
 		client.addListener(networkListener = new NetworkListener());
 		
-	    fileSerializer = new Kryo();
-	    fileSerializer.register(Vector2.class);
-		fileSerializer.register(WeaponFile.class);
-		fileSerializer.register(BulletFile.class);
-		fileSerializer.register(PlayerCharacterFile.class);
-		fileSerializer.register(FixtureDefFile.class);
-
-		
+		fileSerializer = new FileSerializer().getSerializer();
 		
 		Gdx.input.setInputProcessor(new InputProcessor());
 		
@@ -306,6 +300,7 @@ public class Game implements ApplicationListener{
 		gsm.render();
 		
 		InputHandler.update();
+		
 	}
 	
 	public void pause() {}

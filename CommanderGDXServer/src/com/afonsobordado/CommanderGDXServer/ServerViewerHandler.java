@@ -179,8 +179,8 @@ class ServerViewerWindow implements ApplicationListener{
 		hudBatch.setProjectionMatrix(hudCam.combined);
 		hudBatch.begin();
 		hudBatch.draw(new Texture(hudCrosshair, Format.RGB888, false),
-					 (ServerViewerWindow.V_WIDTH * ServerViewerWindow.SCALE) / 2,
-					 (ServerViewerWindow.V_HEIGHT * ServerViewerWindow.SCALE) / 2,
+					 ((ServerViewerWindow.V_WIDTH * ServerViewerWindow.SCALE) / 2) - hudCrosshair.getWidth() / 2,
+					 ((ServerViewerWindow.V_HEIGHT * ServerViewerWindow.SCALE) / 2)  - hudCrosshair.getHeight() / 2,
 					 0, 0, 20, 20);
 		if(grab == null){
 			hudFont.draw(hudBatch, "Body: null", 55,55);

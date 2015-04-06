@@ -1,6 +1,7 @@
 package com.afonsobordado.CommanderGDXServer.LocalObjects;
 
 import com.afonsobordado.CommanderGDX.packets.NetworkObject.NetworkPlayer;
+import com.afonsobordado.CommanderGDXServer.GDXServer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 
@@ -28,6 +29,7 @@ public class LocalServerPlayer extends NetworkPlayer{
 		this.weapon = weapon;
 		this.playerClass = playerClass;
 		this.lastPacketTime = System.currentTimeMillis();
+		this.body = GDXServer.pf.getBodyByClass(playerClass);
 	}
 	
 	public NetworkPlayer getNetworkPlayer(){
