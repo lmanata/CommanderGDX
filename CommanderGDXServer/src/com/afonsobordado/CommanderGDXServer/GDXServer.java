@@ -80,7 +80,7 @@ public class GDXServer {
 	        bodyDef.gravityScale = 1f;
 	        body = world.createBody(bodyDef);
 	        PolygonShape shape = new PolygonShape();
-	        shape.setAsBox(10f / ServerViewerWindow.PPM, 10f / ServerViewerWindow.PPM);
+	        shape.setAsBox(10f / 64, 10f / 64);
 	        FixtureDef fixtureDef = new FixtureDef();
 	        fixtureDef.shape = shape;
 	        fixtureDef.density = 1f;
