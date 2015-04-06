@@ -6,7 +6,6 @@ import java.io.FileNotFoundException;
 
 import net.bigfootsoftware.bobtrucking.BodyEditorLoader;
 
-import com.afonsobordado.CommanderGDX.Game;
 import com.afonsobordado.CommanderGDX.files.PlayerCharacterFile;
 import com.afonsobordado.CommanderGDX.handlers.FileSerializer;
 import com.afonsobordado.CommanderGDX.vars.B2DVars;
@@ -62,6 +61,7 @@ public class PlayerFactory {
 		bdef.position.set(100 / B2DVars.PPM,200 / B2DVars.PPM);  //spawnpos
 		bdef.type = BodyType.DynamicBody;
 		bdef.linearVelocity.set(1,0);
+		bdef.gravityScale = 1f;
 		
 		synchronized(world){
 			body = world.createBody(bdef);

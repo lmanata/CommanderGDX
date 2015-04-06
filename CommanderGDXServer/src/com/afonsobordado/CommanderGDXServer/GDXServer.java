@@ -84,9 +84,6 @@ public class GDXServer {
 	        BodyDef bodyDef = new BodyDef();
 	        bodyDef.type = BodyDef.BodyType.DynamicBody;
 	        bodyDef.position.set(1, 30);
-	        bodyDef.active = true;
-	        bodyDef.allowSleep = false;
-	        bodyDef.gravityScale = 1f;
 	        Body body = world.createBody(bodyDef);
 	        PolygonShape shape = new PolygonShape();
 	        shape.setAsBox(10f / 64, 10f / 64);
@@ -131,6 +128,7 @@ public class GDXServer {
 	    long lastTime = System.nanoTime();
 
 		for(;;){
+			
 			/*fixed time step*/
 			long now = System.nanoTime();
 			delta += (now - lastTime) / B2DW_FIXED_TIMESTEP;
@@ -155,6 +153,7 @@ public class GDXServer {
 						pd.np = lsp.getNetworkPlayer();
 						pd.reason = "Timeout";
 						server.sendToAllTCP(pd);
+						GDXServer.playerList.get(lsp.id).removeBody();
 						GDXServer.playerList.remove(lsp.id);
 						continue;
 					}

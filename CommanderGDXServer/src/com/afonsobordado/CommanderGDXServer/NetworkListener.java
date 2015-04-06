@@ -92,11 +92,8 @@ public class NetworkListener extends Listener{
     			return;
     		}
     		if(p.connectionID != connection.getID()) return;
+    		p.networkUpdate(np);
     		
-    		p.armAngle = np.armAngle;
-    		p.linearVelocity = np.linearVelocity;
-    		p.pos = np.pos;
-    		p.lastPacketTime = System.currentTimeMillis();
     	} else if (object instanceof PacketDisconnect){
     		//untested
     		PacketDisconnect pd = (PacketDisconnect) object;

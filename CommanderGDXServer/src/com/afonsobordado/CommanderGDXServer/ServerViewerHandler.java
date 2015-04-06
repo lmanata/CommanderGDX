@@ -47,7 +47,7 @@ class ServerViewerWindow implements ApplicationListener{
 	private static final int V_WIDTH = 480;
 
 	private static final int V_HEIGHT = 270;
-	private static final int SCALE = 3;
+	private static final int SCALE = 2;
 	private static final int PPM = 64;
 	private static final int CAM_SPEED = 5;
 	private static final float ZOOM_SPEED = 0.75f;
@@ -204,6 +204,7 @@ class ServerViewerWindow implements ApplicationListener{
 		if(grab == null) return;
 		synchronized(GDXServer.getWorld()){
 			grab.setTransform(cam, 0);
+			grab.setAwake(true);
 		}
 	}
 	

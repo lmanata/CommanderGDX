@@ -183,7 +183,7 @@ public class Play extends GameState{
 		hud.render(sb);*/
 		
 		if(debug){
-			//fps.log();
+			fps.log();
 			b2dCam.position.set( player.getBody().getPosition().x,
 								 player.getBody().getPosition().y,
 								 0 );

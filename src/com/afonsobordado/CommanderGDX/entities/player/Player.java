@@ -67,6 +67,13 @@ public class Player {
 	
 	public void handleInput(){
 		
+		if(grounded){
+			lastGroundTime = System.nanoTime();
+		}else{
+			if(System.nanoTime() - lastGroundTime < 100000000) grounded = true;
+		}
+		
+		
 		if(InputHandler.isPressed(InputHandler.BUTTON_UP) && grounded)
 			body.applyForceToCenter(0, B2DVars.JUMP_FORCE, true); //jumpForce
 		
@@ -78,11 +85,7 @@ public class Player {
 		
 		
 		
-		if(grounded){
-			lastGroundTime = System.nanoTime();
-		}else{
-			if(System.nanoTime() - lastGroundTime < 100000000) grounded = true;
-		}
+
 		if(Math.abs(vel.x) > PLAYER_MAX_VELOCITY){ 
 			vel.x = Math.signum(vel.x) * PLAYER_MAX_VELOCITY;
 			body.setLinearVelocity(vel.x,vel.y);

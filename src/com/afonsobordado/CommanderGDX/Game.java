@@ -3,7 +3,6 @@ package com.afonsobordado.CommanderGDX;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 
 import com.afonsobordado.CommanderGDX.entities.Lists.AnimationList;
 import com.afonsobordado.CommanderGDX.entities.Lists.BulletList;
@@ -11,8 +10,6 @@ import com.afonsobordado.CommanderGDX.entities.Lists.WeaponList;
 import com.afonsobordado.CommanderGDX.entities.weapons.Bullet;
 import com.afonsobordado.CommanderGDX.entities.weapons.Weapon;
 import com.afonsobordado.CommanderGDX.files.BulletFile;
-import com.afonsobordado.CommanderGDX.files.FixtureDefFile;
-import com.afonsobordado.CommanderGDX.files.PlayerCharacterFile;
 import com.afonsobordado.CommanderGDX.files.WeaponFile;
 import com.afonsobordado.CommanderGDX.handlers.Animation;
 import com.afonsobordado.CommanderGDX.handlers.FileSerializer;
@@ -40,7 +37,6 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.io.Input;
-import com.esotericsoftware.kryo.io.Output;
 import com.esotericsoftware.kryonet.Client;
 
 public class Game implements ApplicationListener{
@@ -48,7 +44,7 @@ public class Game implements ApplicationListener{
 	public static final String TITLE = "CommanderGDX";
 	public static final int V_WIDTH = 480;
 	public static final int V_HEIGHT = 270;
-	public static final int SCALE = 3;
+	public static final int SCALE = 2;
 	
 	public static final float STEP = 1 / 60f;
 	

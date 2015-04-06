@@ -4,6 +4,7 @@ import com.afonsobordado.CommanderGDX.packets.NetworkObject.NetworkPlayer;
 import com.afonsobordado.CommanderGDXServer.GDXServer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.physics.box2d.Box2D;
 
 public class LocalServerPlayer extends NetworkPlayer{
 	public int connectionID;
@@ -32,6 +33,17 @@ public class LocalServerPlayer extends NetworkPlayer{
 		this.body = GDXServer.pf.getBodyByClass(playerClass);
 	}
 	
+	public void networkUpdate(NetworkPlayer np){
+		this.armAngle = np.armAngle;
+		this.linearVelocity = np.linearVelocity;
+		this.pos = np.pos;
+		this.lastPacketTime = System.currentTimeMillis();
+		synchronized(GDXServer.getWorld()){
+			
+			this.body.setTransform(pos, 0); //TODO: FIX THIS, this comes directly from player without checks
+		}
+	}
+	
 	public NetworkPlayer getNetworkPlayer(){
 		
 		return new NetworkPlayer(id,
@@ -39,6 +51,12 @@ public class LocalServerPlayer extends NetworkPlayer{
 								 pos,
 								 armAngle,
 								 linearVelocity);
+	}
+	
+	public void removeBody(){
+		synchronized(GDXServer.getWorld()){
+			GDXServer.getWorld().destroyBody(this.body);
+		}
 	}
 	
 	public void setWeapon(String newWeapon){
