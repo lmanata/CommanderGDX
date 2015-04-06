@@ -5,6 +5,8 @@ import static org.mockito.Mockito.mock;
 import java.io.IOException;
 import java.util.concurrent.ConcurrentHashMap;
 
+import net.bigfootsoftware.bobtrucking.BodyEditorLoader;
+
 import com.afonsobordado.CommanderGDX.handlers.TiledMapImporter;
 import com.afonsobordado.CommanderGDX.packets.PacketAccepted;
 import com.afonsobordado.CommanderGDX.packets.PacketBullet;
@@ -16,6 +18,7 @@ import com.afonsobordado.CommanderGDX.packets.PacketNewPlayer;
 import com.afonsobordado.CommanderGDX.packets.PacketPositionUpdate;
 import com.afonsobordado.CommanderGDX.packets.PacketSwitchWeapon;
 import com.afonsobordado.CommanderGDX.packets.NetworkObject.NetworkPlayer;
+import com.afonsobordado.CommanderGDX.utils.PlayerFactory;
 import com.afonsobordado.CommanderGDX.vars.B2DVars;
 import com.afonsobordado.CommanderGDXServer.LocalObjects.LocalServerPlayer;
 import com.badlogic.gdx.ApplicationListener;
@@ -35,13 +38,17 @@ public class GDXServer {
 	//public static final float STEP = 1 / 60f;
 	private static final long SERVER_TICK = (long) ((1/66f)*1000);
 	
-	private static Body body;
 	public static World world;
 	public final static float B2DW_TICK = 60f;
     public final static float B2DW_FIXED_TIMESTEP = 1000000000 / B2DW_TICK;
 	public final static int B2DW_VELOCITY_ITER = 6;
 	public final static int B2DW_POSITION_ITER = 2;
 	private static float delta = 0;
+	
+	public static String bodyFile = "../res/bodies/bodyList.json";
+	public static BodyEditorLoader bel;
+	public static PlayerFactory pf;
+	
 	
 	public static ConcurrentHashMap<Integer, LocalServerPlayer> playerList;
 	public static Server server;
@@ -54,8 +61,7 @@ public class GDXServer {
 	
 	public static void main(String[] args){
 		world = new World(new Vector2(0, -9.81f), true);
-		
-		
+
 		Gdx.gl = mock(GL20.class);					//headless gdx to load the maps
 		new HeadlessApplication(new ApplicationListener(){
 			public void create() {}
@@ -65,6 +71,9 @@ public class GDXServer {
 			public void resize(int arg0, int arg1) {}
 			public void resume() {}
 		});
+		
+		bel = new BodyEditorLoader(Gdx.files.internal(bodyFile));
+		pf = new PlayerFactory(world,bel, "../res");
 		
 		synchronized(world){
 			TiledMapImporter.create(
@@ -78,7 +87,7 @@ public class GDXServer {
 	        bodyDef.active = true;
 	        bodyDef.allowSleep = false;
 	        bodyDef.gravityScale = 1f;
-	        body = world.createBody(bodyDef);
+	        Body body = world.createBody(bodyDef);
 	        PolygonShape shape = new PolygonShape();
 	        shape.setAsBox(10f / 64, 10f / 64);
 	        FixtureDef fixtureDef = new FixtureDef();
@@ -130,10 +139,8 @@ public class GDXServer {
 				synchronized(GDXServer.getWorld()){
 					world.step(delta / B2DW_TICK, B2DW_VELOCITY_ITER, B2DW_POSITION_ITER);
 				}
-				System.out.println(body.getPosition().toString());
 				delta--;
 			}
-			
 			/*fixed time step*/
 			
 			/*send updated values to clients*/
@@ -164,9 +171,5 @@ public class GDXServer {
 	
 	public static World getWorld(){
 		return world;
-	}
-	
-	public static Body gb(){
-		return body;
 	}
 }

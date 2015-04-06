@@ -18,6 +18,7 @@
 		<link>
 			<name>res</name>
 			<type>2</type>
+			<location>../res</location>
 		</link>
 	</linkedResources>
 </projectDescription>
