@@ -12,6 +12,7 @@ import com.afonsobordado.CommanderGDX.packets.PacketSwitchWeapon;
 import com.afonsobordado.CommanderGDX.packets.NetworkObject.NetworkPlayer;
 import com.afonsobordado.CommanderGDX.utils.PlayerFactory;
 import com.afonsobordado.CommanderGDX.vars.B2DVars;
+import com.afonsobordado.CommanderGDX.vars.GameActions;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
@@ -74,7 +75,7 @@ public class Player {
 		}
 		
 		
-		if(InputHandler.isPressed(InputHandler.BUTTON_UP) && grounded)
+		if(InputHandler.isPressed(GameActions.GO_UP) && grounded)
 			body.applyForceToCenter(0, B2DVars.JUMP_FORCE, true); //jumpForce
 		
 		
@@ -92,25 +93,25 @@ public class Player {
 		}
 				
 		// apply left impulse, but only if max velocity is not reached yet
-		if(InputHandler.isDown(InputHandler.BUTTON_LEFT) && vel.x > -PLAYER_MAX_VELOCITY){
+		if(InputHandler.isDown(GameActions.GO_LEFT) && vel.x > -PLAYER_MAX_VELOCITY){
 			body.applyLinearImpulse(-B2DVars.PLAYER_WALK_FORCE, 0, pos.x, pos.y, true);
 
 		}
 
 		// apply right impulse, but only if max velocity is not reached yet
-		if(InputHandler.isDown(InputHandler.BUTTON_RIGHT) && vel.x < PLAYER_MAX_VELOCITY){
+		if(InputHandler.isDown(GameActions.GO_RIGHT) && vel.x < PLAYER_MAX_VELOCITY){
 			body.applyLinearImpulse(B2DVars.PLAYER_WALK_FORCE, 0, pos.x, pos.y, true);
 
 		}
 		
-		if(InputHandler.isDown(InputHandler.MOUSE_1)){
-			if(InputHandler.isPressed(InputHandler.MOUSE_1)) 
+		if(InputHandler.isDown(GameActions.SHOOT)){
+			if(InputHandler.isPressed(GameActions.SHOOT)) 
 				weapons.get(currentWeapon).shoot(true);
 			else
 				weapons.get(currentWeapon).shoot(false);
 		}
 		
-		if(InputHandler.isPressed(InputHandler.MOUSE_2)) switchNextWeapon();
+		if(InputHandler.isPressed(GameActions.SWITCH_WEAPON)) switchNextWeapon();
 
 		
 		

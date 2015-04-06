@@ -1,5 +1,6 @@
 package com.afonsobordado.CommanderGDX.handlers;
 
+import com.afonsobordado.CommanderGDX.vars.GameActions;
 import com.afonsobordado.CommanderGDX.vars.KeyboardVars;
 import com.badlogic.gdx.InputAdapter;
 
@@ -7,22 +8,22 @@ public class InputProcessor extends InputAdapter{
 	
 	public boolean keyDown(int k){
 		
-		if(k == KeyboardVars.KEY_UP)		InputHandler.setKey(InputHandler.BUTTON_UP, true);
-		if(k == KeyboardVars.KEY_LEFT)		InputHandler.setKey(InputHandler.BUTTON_LEFT, true);
-		if(k == KeyboardVars.KEY_RIGHT)		InputHandler.setKey(InputHandler.BUTTON_RIGHT, true);
-		if(k == KeyboardVars.KEY_DOWN)		InputHandler.setKey(InputHandler.BUTTON_DOWN, true);
-		if(k == KeyboardVars.KEY_Z)			InputHandler.setKey(InputHandler.BUTTON_Z, true);
-		if(k == KeyboardVars.KEY_Q)			InputHandler.setKey(InputHandler.BUTTON_Q, true);
+		if(k == KeyboardVars.KEY_UP)					InputHandler.setKey(GameActions.GO_UP, true);
+		if(k == KeyboardVars.KEY_LEFT)					InputHandler.setKey(GameActions.GO_LEFT, true);
+		if(k == KeyboardVars.KEY_RIGHT)					InputHandler.setKey(GameActions.GO_RIGHT, true);
+		if(k == KeyboardVars.KEY_DOWN)					InputHandler.setKey(GameActions.GO_DOWN, true);
+		if(k == KeyboardVars.KEY_DISABLE_B2D)			InputHandler.setKey(GameActions.DISABLE_B2D, true);
+		if(k == KeyboardVars.KEY_Q)						InputHandler.setKey(GameActions.BUTTON_Q, true);
 		return true;
 	}
 	
 	public boolean keyUp(int k){
-		if(k == KeyboardVars.KEY_UP)		InputHandler.setKey(InputHandler.BUTTON_UP, false);
-		if(k == KeyboardVars.KEY_LEFT)		InputHandler.setKey(InputHandler.BUTTON_LEFT, false);
-		if(k == KeyboardVars.KEY_RIGHT)		InputHandler.setKey(InputHandler.BUTTON_RIGHT, false);
-		if(k == KeyboardVars.KEY_DOWN)		InputHandler.setKey(InputHandler.BUTTON_DOWN, false);
-		if(k == KeyboardVars.KEY_Z)			InputHandler.setKey(InputHandler.BUTTON_Z, false);
-		if(k == KeyboardVars.KEY_Q)			InputHandler.setKey(InputHandler.BUTTON_Q, false);
+		if(k == KeyboardVars.KEY_UP)					InputHandler.setKey(GameActions.GO_UP, false);
+		if(k == KeyboardVars.KEY_LEFT)					InputHandler.setKey(GameActions.GO_LEFT, false);
+		if(k == KeyboardVars.KEY_RIGHT)					InputHandler.setKey(GameActions.GO_RIGHT, false);
+		if(k == KeyboardVars.KEY_DOWN)					InputHandler.setKey(GameActions.GO_DOWN, false);
+		if(k == KeyboardVars.KEY_DISABLE_B2D)			InputHandler.setKey(GameActions.DISABLE_B2D, false);
+		if(k == KeyboardVars.KEY_Q)						InputHandler.setKey(GameActions.BUTTON_Q, false);
 		return true;
 	}
 	
@@ -38,16 +39,16 @@ public class InputProcessor extends InputAdapter{
 
    public boolean touchDown (int x, int y, int pointer, int button) {
 	   InputHandler.moveMouse(x, y);
-	   if(button == 0) InputHandler.setKey(InputHandler.MOUSE_1, true);
-	   if(button == 1) InputHandler.setKey(InputHandler.MOUSE_2, true);
+	   if(button == 0) InputHandler.setKey(GameActions.SHOOT, true);
+	   if(button == 1) InputHandler.setKey(GameActions.SWITCH_WEAPON, true);
       return false;
    }
 
 
    public boolean touchUp (int x, int y, int pointer, int button) {
 	   InputHandler.moveMouse(x, y);
-	   if(button == 0) InputHandler.setKey(InputHandler.MOUSE_1, false);
-	   if(button == 1) InputHandler.setKey(InputHandler.MOUSE_2, false);
+	   if(button == 0) InputHandler.setKey(GameActions.SHOOT, false);
+	   if(button == 1) InputHandler.setKey(GameActions.SWITCH_WEAPON, false);
       return false;
    }
 

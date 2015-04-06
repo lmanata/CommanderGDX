@@ -11,7 +11,6 @@ public class InputHandler {
 	//TODO: we should name these by what they do not by what they are eg: BUTTON_Z = BUTTON_JUMP
 	
 
-	
 	static{
 		keys  = new boolean[NUM_KEYS];
 		pkeys = new boolean[NUM_KEYS];
@@ -39,15 +38,5 @@ public class InputHandler {
 	public static boolean isPressed(int i){ return keys[i] && !pkeys[i];}
 	
 	
-	
-	
 
-	public static final int BUTTON_UP = 0;
-	public static final int BUTTON_LEFT = 1;
-	public static final int BUTTON_DOWN = 2;
-	public static final int BUTTON_RIGHT = 3;
-	public static final int BUTTON_Z = 4;
-	public static final int MOUSE_1 = 5;
-	public static final int MOUSE_2 = 6;
-	public static final int BUTTON_Q = 7;
 }

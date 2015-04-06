@@ -40,7 +40,7 @@ public class LocalServerPlayer extends NetworkPlayer{
 		this.lastPacketTime = System.currentTimeMillis();
 		synchronized(GDXServer.getWorld()){
 			
-			this.body.setTransform(pos, 0); //TODO: FIX THIS, this comes directly from player without checks
+			this.body.setTransform(pos, 0); //TODO: FIX THIS, this comes directly from the player without checks
 		}
 	}
 	

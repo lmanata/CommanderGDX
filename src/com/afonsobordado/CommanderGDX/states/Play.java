@@ -1,8 +1,5 @@
 package com.afonsobordado.CommanderGDX.states;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.util.concurrent.ConcurrentHashMap;
 
 import net.bigfootsoftware.bobtrucking.BodyEditorLoader;
@@ -12,13 +9,13 @@ import com.afonsobordado.CommanderGDX.entities.UI.HUD;
 import com.afonsobordado.CommanderGDX.entities.player.LocalClientPlayer;
 import com.afonsobordado.CommanderGDX.entities.player.Player;
 import com.afonsobordado.CommanderGDX.entities.weapons.Bullet;
-import com.afonsobordado.CommanderGDX.files.PlayerCharacterFile;
 import com.afonsobordado.CommanderGDX.handlers.GameStateManager;
 import com.afonsobordado.CommanderGDX.handlers.InputHandler;
 import com.afonsobordado.CommanderGDX.handlers.MyContactListener;
 import com.afonsobordado.CommanderGDX.handlers.TiledMapImporter;
 import com.afonsobordado.CommanderGDX.utils.PlayerFactory;
 import com.afonsobordado.CommanderGDX.vars.B2DVars;
+import com.afonsobordado.CommanderGDX.vars.GameActions;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.FPSLogger;
 import com.badlogic.gdx.graphics.GL20;
@@ -31,7 +28,6 @@ import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
-import com.esotericsoftware.kryo.io.Input;
 
 
 
@@ -105,7 +101,7 @@ public class Play extends GameState{
 	}
 
 	public void handleInput() {
-		if(InputHandler.isPressed(InputHandler.BUTTON_Z))	debug = !debug;
+		if(InputHandler.isPressed(GameActions.DISABLE_B2D))	debug = !debug;
 		player.grounded = cl.isPlayerOnGround();
 		player.handleInput();
 		
