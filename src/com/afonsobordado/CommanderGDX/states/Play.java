@@ -10,13 +10,15 @@ import com.afonsobordado.CommanderGDX.entities.player.LocalClientPlayer;
 import com.afonsobordado.CommanderGDX.entities.player.Player;
 import com.afonsobordado.CommanderGDX.entities.weapons.Bullet;
 import com.afonsobordado.CommanderGDX.handlers.GameStateManager;
-import com.afonsobordado.CommanderGDX.handlers.InputHandler;
+import com.afonsobordado.CommanderGDX.handlers.KeyMap;
 import com.afonsobordado.CommanderGDX.handlers.MyContactListener;
 import com.afonsobordado.CommanderGDX.handlers.TiledMapImporter;
 import com.afonsobordado.CommanderGDX.utils.PlayerFactory;
+import com.afonsobordado.CommanderGDX.vars.ActionMap;
 import com.afonsobordado.CommanderGDX.vars.B2DVars;
-import com.afonsobordado.CommanderGDX.vars.GameActions;
+import com.afonsobordado.CommanderGDX.vars.ActionList.Action;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.FPSLogger;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -28,7 +30,6 @@ import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
-
 
 
 public class Play extends GameState{
@@ -66,6 +67,7 @@ public class Play extends GameState{
 	public Play(GameStateManager gsm) {
 		super(gsm);
 		
+		
 		world = new World(new Vector2(0, -9.81f), true);
 		world.setContactListener(cl = new MyContactListener());
 		loader = new BodyEditorLoader(Gdx.files.internal(bodyFile));
@@ -101,11 +103,9 @@ public class Play extends GameState{
 	}
 
 	public void handleInput() {
-		if(InputHandler.isPressed(GameActions.DISABLE_B2D))	debug = !debug;
+		if(Game.getKeyMap().isPressed(ActionMap.actionToKey(Action.DEBUG))) debug = !debug;
 		player.grounded = cl.isPlayerOnGround();
 		player.handleInput();
-		
-		
 	}
 	
 

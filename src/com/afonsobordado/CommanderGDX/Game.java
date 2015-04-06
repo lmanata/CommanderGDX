@@ -14,8 +14,8 @@ import com.afonsobordado.CommanderGDX.files.WeaponFile;
 import com.afonsobordado.CommanderGDX.handlers.Animation;
 import com.afonsobordado.CommanderGDX.handlers.FileSerializer;
 import com.afonsobordado.CommanderGDX.handlers.GameStateManager;
-import com.afonsobordado.CommanderGDX.handlers.InputHandler;
 import com.afonsobordado.CommanderGDX.handlers.InputProcessor;
+import com.afonsobordado.CommanderGDX.handlers.KeyMap;
 import com.afonsobordado.CommanderGDX.handlers.NetworkListener;
 import com.afonsobordado.CommanderGDX.packets.PacketAccepted;
 import com.afonsobordado.CommanderGDX.packets.PacketBullet;
@@ -38,6 +38,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryonet.Client;
+import com.afonsobordado.CommanderGDX.vars.ActionMap;;
 
 public class Game implements ApplicationListener{
 
@@ -67,11 +68,11 @@ public class Game implements ApplicationListener{
 	public static Client client;
 	public static Kryo fileSerializer;
 	public static NetworkListener networkListener;
-	
-
+	public static KeyMap KeyMap;	
 	
 	public void create() {
-		
+		KeyMap = new KeyMap();
+		//ActionMap.loadDefaultKeys();
 		
 		client = new Client();
 		client.getKryo().register(PacketConsoleMessage.class);
@@ -185,6 +186,8 @@ public class Game implements ApplicationListener{
 
 		
 	}
+
+	
 	private void registerBullets() {
 		File folder = new File("./res/bullets");
 		File[] listOfFiles = folder.listFiles();
@@ -295,7 +298,7 @@ public class Game implements ApplicationListener{
 		
 		gsm.render();
 		
-		InputHandler.update();
+		KeyMap.update();
 		
 	}
 	
@@ -319,7 +322,7 @@ public class Game implements ApplicationListener{
 	
 	
 	
-	
+	public static KeyMap getKeyMap(){return KeyMap;}
 	public SpriteBatch getSpriteBatch() {return sb;}
 	public OrthographicCamera getCamera() {return cam;}
 	public OrthographicCamera getHUDCamera() {return hudCam;}

@@ -7,18 +7,19 @@ import com.afonsobordado.CommanderGDX.Game;
 import com.afonsobordado.CommanderGDX.entities.Lists.WeaponList;
 import com.afonsobordado.CommanderGDX.entities.characters.PlayerCharacter;
 import com.afonsobordado.CommanderGDX.entities.weapons.Weapon;
-import com.afonsobordado.CommanderGDX.handlers.InputHandler;
 import com.afonsobordado.CommanderGDX.packets.PacketSwitchWeapon;
 import com.afonsobordado.CommanderGDX.packets.NetworkObject.NetworkPlayer;
 import com.afonsobordado.CommanderGDX.utils.PlayerFactory;
+import com.afonsobordado.CommanderGDX.vars.ActionMap;
 import com.afonsobordado.CommanderGDX.vars.B2DVars;
-import com.afonsobordado.CommanderGDX.vars.GameActions;
+import com.afonsobordado.CommanderGDX.vars.ActionList.Action;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
+import com.afonsobordado.CommanderGDX.handlers.KeyMap;
 
 
 
@@ -30,6 +31,7 @@ public class Player {
 	private long lastGroundTime;
 	private PlayerCharacter pc;
 	public int id;
+	public KeyMap KeyMap;
 	
 	private Array<Weapon> weapons;
 	private short currentWeapon;
@@ -38,6 +40,7 @@ public class Player {
 	private String name;
 	
 	public Player(World world, PlayerFactory pf){
+		KeyMap = new KeyMap();
 		weapons = new Array<Weapon>();
 		currentWeapon = 0;
 		
@@ -67,55 +70,42 @@ public class Player {
 	
 	
 	public void handleInput(){
-		
 		if(grounded){
 			lastGroundTime = System.nanoTime();
 		}else{
 			if(System.nanoTime() - lastGroundTime < 100000000) grounded = true;
 		}
 		
-		
-		if(InputHandler.isPressed(GameActions.GO_UP) && grounded)
-			body.applyForceToCenter(0, B2DVars.JUMP_FORCE, true); //jumpForce
-		
-		
+		if(Game.getKeyMap().isPressed(ActionMap.actionToKey(Action.GO_UP)) && grounded)
+			body.applyForceToCenter(0, B2DVars.JUMP_FORCE, true);
 		
 		//jumping action
 		Vector2 vel = body.getLinearVelocity();
 		Vector2 pos = body.getPosition();
 		
-		
-		
-
 		if(Math.abs(vel.x) > PLAYER_MAX_VELOCITY){ 
 			vel.x = Math.signum(vel.x) * PLAYER_MAX_VELOCITY;
 			body.setLinearVelocity(vel.x,vel.y);
 		}
 				
 		// apply left impulse, but only if max velocity is not reached yet
-		if(InputHandler.isDown(GameActions.GO_LEFT) && vel.x > -PLAYER_MAX_VELOCITY){
+		if(Game.getKeyMap().isDown(ActionMap.actionToKey(Action.GO_LEFT)) && vel.x > -PLAYER_MAX_VELOCITY){
 			body.applyLinearImpulse(-B2DVars.PLAYER_WALK_FORCE, 0, pos.x, pos.y, true);
-
 		}
 
 		// apply right impulse, but only if max velocity is not reached yet
-		if(InputHandler.isDown(GameActions.GO_RIGHT) && vel.x < PLAYER_MAX_VELOCITY){
+		if(Game.getKeyMap().isDown(ActionMap.actionToKey(Action.GO_RIGHT)) && vel.x < PLAYER_MAX_VELOCITY){
 			body.applyLinearImpulse(B2DVars.PLAYER_WALK_FORCE, 0, pos.x, pos.y, true);
-
 		}
 		
-		if(InputHandler.isDown(GameActions.SHOOT)){
-			if(InputHandler.isPressed(GameActions.SHOOT)) 
+		if(Game.getKeyMap().isDown(ActionMap.actionToKey(Action.SHOOT))){
+			if(Game.getKeyMap().isPressed(ActionMap.actionToKey(Action.SHOOT))) 
 				weapons.get(currentWeapon).shoot(true);
 			else
 				weapons.get(currentWeapon).shoot(false);
 		}
 		
-		if(InputHandler.isPressed(GameActions.SWITCH_WEAPON)) switchNextWeapon();
-
-		
-		
-		
+		if(Game.getKeyMap().isPressed(ActionMap.actionToKey(Action.SWITCH))) switchNextWeapon();
 	}
 	 
 	public void render(SpriteBatch sb) {
@@ -127,7 +117,7 @@ public class Player {
 	public void update(float dt){
 
 		Vector2 pos = new Vector2((Game.V_WIDTH*Game.SCALE)/2, (Game.V_HEIGHT*Game.SCALE)/2); //center of the screen
-		Vector2 mousePos = new Vector2(InputHandler.mouseX, (Game.V_HEIGHT*Game.SCALE) - InputHandler.mouseY);
+		Vector2 mousePos = new Vector2(Game.getKeyMap().getMouse().x, (Game.V_HEIGHT*Game.SCALE) - Game.getKeyMap().getMouse().y);
 		armDegrees = (float) Math.toDegrees(Math.atan2((mousePos.y - pos.y), (mousePos.x - pos.x)));
 
 		pc.setArmRotation(armDegrees);
@@ -197,6 +187,10 @@ public class Player {
 				 				 body.getPosition(),
 				 				 armDegrees,
 				 				 body.getLinearVelocity());
+	}
+	
+	public KeyMap getKeyMap(){
+		return KeyMap;
 	}
 	
 	public void switchNextWeapon(){
