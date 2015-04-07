@@ -1,7 +1,7 @@
 package com.afonsobordado.CommanderGDX.vars;
 
 import java.util.HashMap;
-import com.afonsobordado.CommanderGDX.vars.ActionList.Action;
+
 import com.badlogic.gdx.Input.Buttons;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.files.FileHandle;

@@ -7,19 +7,21 @@ import com.afonsobordado.CommanderGDX.Game;
 import com.afonsobordado.CommanderGDX.entities.Lists.WeaponList;
 import com.afonsobordado.CommanderGDX.entities.characters.PlayerCharacter;
 import com.afonsobordado.CommanderGDX.entities.weapons.Weapon;
+import com.afonsobordado.CommanderGDX.handlers.ActionList;
+import com.afonsobordado.CommanderGDX.handlers.KeyMap;
+import com.afonsobordado.CommanderGDX.packets.PacketAction;
 import com.afonsobordado.CommanderGDX.packets.PacketSwitchWeapon;
 import com.afonsobordado.CommanderGDX.packets.NetworkObject.NetworkPlayer;
 import com.afonsobordado.CommanderGDX.utils.PlayerFactory;
+import com.afonsobordado.CommanderGDX.vars.Action;
 import com.afonsobordado.CommanderGDX.vars.ActionMap;
 import com.afonsobordado.CommanderGDX.vars.B2DVars;
-import com.afonsobordado.CommanderGDX.vars.ActionList.Action;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
-import com.afonsobordado.CommanderGDX.handlers.KeyMap;
 
 
 
@@ -39,7 +41,10 @@ public class Player {
 	private float armDegrees;
 	private String name;
 	
+	private ActionList al;
+	
 	public Player(World world, PlayerFactory pf){
+		al = new ActionList();
 		KeyMap = new KeyMap();
 		weapons = new Array<Weapon>();
 		currentWeapon = 0;
@@ -106,6 +111,27 @@ public class Player {
 		}
 		
 		if(Game.getKeyMap().isPressed(ActionMap.actionToKey(Action.SWITCH))) switchNextWeapon();
+		
+		
+		for(Action a: Action.values()){
+			if(al.needsUpdate(a,
+							 Game.getKeyMap().isDown(ActionMap.actionToKey(a)),
+							 Game.getKeyMap().isPressed(ActionMap.actionToKey(a))
+							 )){
+				al.update(a,
+						 Game.getKeyMap().isDown(ActionMap.actionToKey(a)),
+						 Game.getKeyMap().isPressed(ActionMap.actionToKey(a)));
+				
+				PacketAction pa = new PacketAction();
+				pa.id = this.id;
+				pa.action = a;
+				pa.press = Game.getKeyMap().isPressed(ActionMap.actionToKey(a));
+				pa.down = Game.getKeyMap().isDown(ActionMap.actionToKey(a));
+				Game.client.sendUDP(pa);
+				
+			}
+		}
+		
 	}
 	 
 	public void render(SpriteBatch sb) {

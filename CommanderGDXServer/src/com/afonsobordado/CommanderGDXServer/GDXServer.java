@@ -9,6 +9,7 @@ import net.bigfootsoftware.bobtrucking.BodyEditorLoader;
 
 import com.afonsobordado.CommanderGDX.handlers.TiledMapImporter;
 import com.afonsobordado.CommanderGDX.packets.PacketAccepted;
+import com.afonsobordado.CommanderGDX.packets.PacketAction;
 import com.afonsobordado.CommanderGDX.packets.PacketBullet;
 import com.afonsobordado.CommanderGDX.packets.PacketConsoleMessage;
 import com.afonsobordado.CommanderGDX.packets.PacketDeclined;
@@ -19,6 +20,7 @@ import com.afonsobordado.CommanderGDX.packets.PacketPositionUpdate;
 import com.afonsobordado.CommanderGDX.packets.PacketSwitchWeapon;
 import com.afonsobordado.CommanderGDX.packets.NetworkObject.NetworkPlayer;
 import com.afonsobordado.CommanderGDX.utils.PlayerFactory;
+import com.afonsobordado.CommanderGDX.vars.Action;
 import com.afonsobordado.CommanderGDX.vars.B2DVars;
 import com.afonsobordado.CommanderGDXServer.LocalObjects.LocalServerPlayer;
 import com.badlogic.gdx.ApplicationListener;
@@ -54,7 +56,7 @@ public class GDXServer {
 	public static Server server;
 	
 	public static ServerViewerHandler svh;
-	public static boolean SVHEnable = true;
+	public static boolean SVHEnable = !true;
 	
 	//current game vars
 	public static String currentMap = "level2";
@@ -109,6 +111,8 @@ public class GDXServer {
 	    server.getKryo().register(PacketDisconnect.class);
 	    server.getKryo().register(PacketBullet.class);
 	    server.getKryo().register(PacketSwitchWeapon.class);
+	    server.getKryo().register(Action.class);
+	    server.getKryo().register(PacketAction.class);
 	    server.start();
 	    
 	    try {

@@ -18,6 +18,7 @@ import com.afonsobordado.CommanderGDX.handlers.InputProcessor;
 import com.afonsobordado.CommanderGDX.handlers.KeyMap;
 import com.afonsobordado.CommanderGDX.handlers.NetworkListener;
 import com.afonsobordado.CommanderGDX.packets.PacketAccepted;
+import com.afonsobordado.CommanderGDX.packets.PacketAction;
 import com.afonsobordado.CommanderGDX.packets.PacketBullet;
 import com.afonsobordado.CommanderGDX.packets.PacketConsoleMessage;
 import com.afonsobordado.CommanderGDX.packets.PacketDeclined;
@@ -27,6 +28,7 @@ import com.afonsobordado.CommanderGDX.packets.PacketNewPlayer;
 import com.afonsobordado.CommanderGDX.packets.PacketPositionUpdate;
 import com.afonsobordado.CommanderGDX.packets.PacketSwitchWeapon;
 import com.afonsobordado.CommanderGDX.packets.NetworkObject.NetworkPlayer;
+import com.afonsobordado.CommanderGDX.vars.Action;
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
@@ -38,7 +40,6 @@ import com.badlogic.gdx.math.Vector2;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryonet.Client;
-import com.afonsobordado.CommanderGDX.vars.ActionMap;;
 
 public class Game implements ApplicationListener{
 
@@ -86,6 +87,8 @@ public class Game implements ApplicationListener{
 	    client.getKryo().register(PacketDisconnect.class);
 	    client.getKryo().register(PacketBullet.class);
 	    client.getKryo().register(PacketSwitchWeapon.class);
+	    client.getKryo().register(Action.class);
+	    client.getKryo().register(PacketAction.class);
 
 		new Thread(client).start();
 		client.addListener(networkListener = new NetworkListener());

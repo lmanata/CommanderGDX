@@ -1,6 +1,8 @@
 package com.afonsobordado.CommanderGDXServer;
 
+import com.afonsobordado.CommanderGDX.handlers.ActionList;
 import com.afonsobordado.CommanderGDX.packets.PacketAccepted;
+import com.afonsobordado.CommanderGDX.packets.PacketAction;
 import com.afonsobordado.CommanderGDX.packets.PacketBullet;
 import com.afonsobordado.CommanderGDX.packets.PacketConsoleMessage;
 import com.afonsobordado.CommanderGDX.packets.PacketDeclined;
@@ -108,6 +110,10 @@ public class NetworkListener extends Listener{
     		PacketSwitchWeapon psw = (PacketSwitchWeapon) object;
     		GDXServer.playerList.get(psw.id).setWeapon(psw.newWeapon);
     		GDXServer.server.sendToAllExceptTCP(connection.getID(), psw);
+    	} else if (object instanceof PacketAction){
+    		PacketAction pa = (PacketAction) object;
+    		ActionList al = GDXServer.playerList.get(pa.id).al;
+    		al.update(pa.action, pa.down, pa.press);
     	}
 	}
 }

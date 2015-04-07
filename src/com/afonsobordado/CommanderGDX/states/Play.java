@@ -10,15 +10,13 @@ import com.afonsobordado.CommanderGDX.entities.player.LocalClientPlayer;
 import com.afonsobordado.CommanderGDX.entities.player.Player;
 import com.afonsobordado.CommanderGDX.entities.weapons.Bullet;
 import com.afonsobordado.CommanderGDX.handlers.GameStateManager;
-import com.afonsobordado.CommanderGDX.handlers.KeyMap;
 import com.afonsobordado.CommanderGDX.handlers.MyContactListener;
 import com.afonsobordado.CommanderGDX.handlers.TiledMapImporter;
 import com.afonsobordado.CommanderGDX.utils.PlayerFactory;
+import com.afonsobordado.CommanderGDX.vars.Action;
 import com.afonsobordado.CommanderGDX.vars.ActionMap;
 import com.afonsobordado.CommanderGDX.vars.B2DVars;
-import com.afonsobordado.CommanderGDX.vars.ActionList.Action;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.FPSLogger;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -95,7 +93,7 @@ public class Play extends GameState{
 			b2dr = new Box2DDebugRenderer();
 			b2dCam = new OrthographicCamera();
 			b2dCam.setToOrtho(false, Game.V_WIDTH/ B2DVars.PPM, Game.V_HEIGHT / B2DVars.PPM);
-			fps = new FPSLogger();
+			//fps = new FPSLogger();
 		}
 
 		
@@ -179,7 +177,7 @@ public class Play extends GameState{
 		hud.render(sb);*/
 		
 		if(debug){
-			fps.log();
+			//fps.log();
 			b2dCam.position.set( player.getBody().getPosition().x,
 								 player.getBody().getPosition().y,
 								 0 );
