@@ -112,8 +112,7 @@ public class NetworkListener extends Listener{
     		GDXServer.server.sendToAllExceptTCP(connection.getID(), psw);
     	} else if (object instanceof PacketAction){
     		PacketAction pa = (PacketAction) object;
-    		ActionList al = GDXServer.playerList.get(pa.id).al;
-    		al.update(pa.action, pa.down, pa.press);
+    		GDXServer.playerList.get(pa.id).al.update(pa.action, pa.down, pa.press);
     	}
 	}
 }

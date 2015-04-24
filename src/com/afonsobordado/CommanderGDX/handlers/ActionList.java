@@ -4,27 +4,6 @@ import java.util.HashMap;
 
 import com.afonsobordado.CommanderGDX.vars.Action;
 
-class ActionStatus{
-	private boolean down;
-	private boolean press;
-	
-	public ActionStatus(boolean down, boolean press){
-		this.down = down;
-		this.press = press;
-	}
-	
-	public boolean equals(Object o){
-		if(!(o instanceof ActionStatus)) return false;
-		ActionStatus as = (ActionStatus) o;
-		return (as.down == this.down &&
-			    as.press == this.press);
-	}
-	
-	public void update(ActionStatus newStatus){
-		this.down = newStatus.down;
-		this.press = newStatus.press;
-	}
-}
 
 public class ActionList {
 	private HashMap<Action,ActionStatus> ActionList;

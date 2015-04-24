@@ -41,10 +41,6 @@ public class LocalServerPlayer extends NetworkPlayer{
 		this.linearVelocity = np.linearVelocity;
 		this.pos = np.pos;
 		this.lastPacketTime = System.currentTimeMillis();
-		synchronized(GDXServer.getWorld()){
-			
-			this.body.setTransform(pos, 0); //TODO: FIX THIS, this comes directly from the player without checks
-		}
 	}
 	
 	public NetworkPlayer getNetworkPlayer(){

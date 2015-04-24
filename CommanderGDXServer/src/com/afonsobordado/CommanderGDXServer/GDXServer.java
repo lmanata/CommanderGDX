@@ -7,6 +7,9 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import net.bigfootsoftware.bobtrucking.BodyEditorLoader;
 
+
+
+import com.afonsobordado.CommanderGDX.handlers.ActionStatus;
 import com.afonsobordado.CommanderGDX.handlers.TiledMapImporter;
 import com.afonsobordado.CommanderGDX.packets.PacketAccepted;
 import com.afonsobordado.CommanderGDX.packets.PacketAction;
@@ -56,7 +59,7 @@ public class GDXServer {
 	public static Server server;
 	
 	public static ServerViewerHandler svh;
-	public static boolean SVHEnable = !true;
+	public static boolean SVHEnable = true;
 	
 	//current game vars
 	public static String currentMap = "level2";
@@ -138,6 +141,7 @@ public class GDXServer {
 			delta += (now - lastTime) / B2DW_FIXED_TIMESTEP;
 			lastTime = now;
 			if(delta >= 1){
+				handlePlayerInput();
 				synchronized(GDXServer.getWorld()){
 					world.step(delta / B2DW_TICK, B2DW_VELOCITY_ITER, B2DW_POSITION_ITER);
 				}
@@ -170,6 +174,37 @@ public class GDXServer {
 		
 	}
 	
+	public static void handlePlayerInput(){
+		for(LocalServerPlayer lsp: GDXServer.playerList.values()){
+			for(Action a: Action.values()){
+				ActionStatus as = lsp.al.get(a);
+				if(as == null) continue;
+				Vector2 pos = lsp.body.getLinearVelocity();
+				
+				synchronized(getWorld()){
+					switch(a){
+					case GO_RIGHT:
+						if(as.isDown() && pos.x < B2DVars.PLAYER_MAX_VELOCITY)
+							lsp.body.applyLinearImpulse(B2DVars.PLAYER_WALK_FORCE, 0, pos.x, pos.y, true);
+						break;
+					case GO_LEFT:
+						if(as.isDown() && pos.x > -B2DVars.PLAYER_MAX_VELOCITY)
+							lsp.body.applyLinearImpulse(-B2DVars.PLAYER_WALK_FORCE, 0, pos.x, pos.y, true);
+						break;
+					case GO_UP:
+						if(as.isPress())
+							lsp.body.applyForceToCenter(0, B2DVars.JUMP_FORCE, true);
+						break;
+					case GO_DOWN:
+						break;
+						
+					default:
+						break;
+					}
+				}
+			}
+		}
+	}
 
 	
 	public static World getWorld(){
