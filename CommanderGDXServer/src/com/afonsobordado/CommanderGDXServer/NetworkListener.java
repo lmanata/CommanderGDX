@@ -1,6 +1,5 @@
 package com.afonsobordado.CommanderGDXServer;
 
-import com.afonsobordado.CommanderGDX.handlers.ActionList;
 import com.afonsobordado.CommanderGDX.packets.PacketAccepted;
 import com.afonsobordado.CommanderGDX.packets.PacketAction;
 import com.afonsobordado.CommanderGDX.packets.PacketBullet;

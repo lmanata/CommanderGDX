@@ -158,7 +158,6 @@ public class GDXServer {
 				for(LocalServerPlayer lsp: GDXServer.playerList.values()){
 					
 					if( (System.currentTimeMillis()-lsp.lastPacketTime) > GameVars.PLAYER_TIMEOUT){ //poll the timeout
-
 						PacketDisconnect pd = new PacketDisconnect();
 						pd.np = lsp.getNetworkPlayer();
 						pd.reason = "Timeout";

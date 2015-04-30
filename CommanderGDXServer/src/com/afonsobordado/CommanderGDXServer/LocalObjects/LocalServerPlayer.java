@@ -5,7 +5,6 @@ import com.afonsobordado.CommanderGDX.packets.NetworkObject.NetworkPlayer;
 import com.afonsobordado.CommanderGDXServer.GDXServer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
-import com.badlogic.gdx.physics.box2d.Box2D;
 
 public class LocalServerPlayer extends NetworkPlayer{
 	public int connectionID;
@@ -72,7 +71,6 @@ public class LocalServerPlayer extends NetworkPlayer{
 	}
 
 	public boolean isGrounded() {
-		System.out.println("fc: " + footContacts + " : " + (footContacts>0));
 		return footContacts>0;
 	}
 

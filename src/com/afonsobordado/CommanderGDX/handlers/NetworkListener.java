@@ -1,7 +1,5 @@
 package com.afonsobordado.CommanderGDX.handlers;
 
-import com.afonsobordado.CommanderGDX.Game;
-import com.afonsobordado.CommanderGDX.entities.Lists.AnimationList;
 import com.afonsobordado.CommanderGDX.entities.player.LocalClientPlayer;
 import com.afonsobordado.CommanderGDX.entities.weapons.Bullet;
 import com.afonsobordado.CommanderGDX.packets.PacketAccepted;
@@ -14,8 +12,6 @@ import com.afonsobordado.CommanderGDX.packets.PacketSwitchWeapon;
 import com.afonsobordado.CommanderGDX.packets.NetworkObject.NetworkPlayer;
 import com.afonsobordado.CommanderGDX.states.IPmenu;
 import com.afonsobordado.CommanderGDX.states.Play;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 
@@ -63,7 +59,9 @@ public class NetworkListener extends Listener{
 			if(Play.player == null || Play.playerList == null) return;//there is a chance that we receive a NetworkPacket before we are ready
 			
 			if(np.id == Play.player.id){
-				//check for inaccuracies
+				synchronized(Play.getWorld()){
+					Play.player.networkUpdate(np);
+				}
 				return;
 			}
 			

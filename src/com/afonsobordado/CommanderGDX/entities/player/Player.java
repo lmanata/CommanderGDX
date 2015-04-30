@@ -227,4 +227,11 @@ public class Player {
 		psw.newWeapon = weapons.get(currentWeapon).getName();
 		Game.client.sendTCP(psw);
 	}
+
+
+	public void networkUpdate(NetworkPlayer np) {
+		//interpolate position
+		Vector2 newPos = body.getPosition().cpy().lerp(np.pos, 0.5f);
+		body.setTransform(newPos, body.getAngle());
+	}
 }
