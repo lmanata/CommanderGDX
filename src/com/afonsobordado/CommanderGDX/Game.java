@@ -24,6 +24,7 @@ import com.afonsobordado.CommanderGDX.packets.PacketBullet;
 import com.afonsobordado.CommanderGDX.packets.PacketConsoleMessage;
 import com.afonsobordado.CommanderGDX.packets.PacketDeclined;
 import com.afonsobordado.CommanderGDX.packets.PacketDisconnect;
+import com.afonsobordado.CommanderGDX.packets.PacketFile;
 import com.afonsobordado.CommanderGDX.packets.PacketHello;
 import com.afonsobordado.CommanderGDX.packets.PacketNewPlayer;
 import com.afonsobordado.CommanderGDX.packets.PacketPositionUpdate;
@@ -93,6 +94,7 @@ public class Game implements ApplicationListener{
 	    client.getKryo().register(PacketAction.class);
 	    client.getKryo().register(HashFileMap.class);
 	    client.getKryo().register(HashFileMap[].class);
+	    client.getKryo().register(PacketFile.class);
 
 		new Thread(client).start();
 		client.addListener(networkListener = new NetworkListener());

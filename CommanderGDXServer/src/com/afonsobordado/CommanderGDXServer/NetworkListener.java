@@ -8,12 +8,14 @@ import com.afonsobordado.CommanderGDX.packets.PacketAction;
 import com.afonsobordado.CommanderGDX.packets.PacketBullet;
 import com.afonsobordado.CommanderGDX.packets.PacketConsoleMessage;
 import com.afonsobordado.CommanderGDX.packets.PacketDeclined;
+import com.afonsobordado.CommanderGDX.packets.PacketFile;
 import com.afonsobordado.CommanderGDX.packets.PacketDisconnect;
 import com.afonsobordado.CommanderGDX.packets.PacketNewPlayer;
 import com.afonsobordado.CommanderGDX.packets.PacketSwitchWeapon;
 import com.afonsobordado.CommanderGDX.packets.NetworkObject.NetworkPlayer;
 import com.afonsobordado.CommanderGDX.utils.SUtils;
 import com.afonsobordado.CommanderGDXServer.LocalObjects.LocalServerPlayer;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
@@ -42,7 +44,13 @@ public class NetworkListener extends Listener{
     		}
     		ArrayList<HashFileMap> failList;
     		if(!((failList = SUtils.checkHash(GDXServer.HashFileMapOrig, pnp.hfc)).isEmpty())){
-				rejectReason = "Hash File Check Failed";
+				rejectReason = "Hash File Check Failed Retry";
+				for(HashFileMap hfm: failList){
+					PacketFile pf = new PacketFile();
+					pf.name = hfm.getFile().replace(GDXServer.resDir, "");
+					pf.file = Gdx.files.internal(hfm.getFile()).readBytes();
+					connection.sendTCP(pf);
+				}
 			}
     		
     		if(!rejectReason.isEmpty()){

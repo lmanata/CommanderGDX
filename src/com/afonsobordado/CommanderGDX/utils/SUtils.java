@@ -14,7 +14,6 @@ public class SUtils {
 		
 		
 		outerLoop: for(HashFileMap hfmo: orighfm){
-			System.out.println("File: " + hfmo.getFile() + " : Hash: "+ hfmo.getHash());
 			for(HashFileMap nhfm: newhfm){
 				if(hfmo.equals(nhfm)){
 					continue outerLoop;

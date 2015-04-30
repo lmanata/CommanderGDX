@@ -7,6 +7,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import net.bigfootsoftware.bobtrucking.BodyEditorLoader;
 
+import com.afonsobordado.CommanderGDX.packets.PacketFile;
 import com.afonsobordado.CommanderGDX.files.HashFileMap;
 import com.afonsobordado.CommanderGDX.handlers.ActionStatus;
 import com.afonsobordado.CommanderGDX.handlers.TiledMapImporter;
@@ -34,10 +35,6 @@ import com.badlogic.gdx.backends.headless.HeadlessApplication;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.Body;
-import com.badlogic.gdx.physics.box2d.BodyDef;
-import com.badlogic.gdx.physics.box2d.FixtureDef;
-import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Json;
 import com.esotericsoftware.kryonet.Server;
@@ -67,6 +64,7 @@ public class GDXServer {
 	
 	public static Json json = new Json();
 	public static boolean forceHashCheck;
+	public static String resDir = "../res/";
 	public static String HashFileMapLocation = "../res/hashfilemap.json";
 	public static HashFileMap[] HashFileMapOrig;
 	
@@ -88,7 +86,7 @@ public class GDXServer {
 		});
 		
 		bel = new BodyEditorLoader(Gdx.files.internal(bodyFile));
-		pf = new PlayerFactory(world,bel, "../res");
+		pf = new PlayerFactory(world,bel, resDir);
 		
 		synchronized(world){
 			TiledMapImporter.create(
@@ -98,7 +96,7 @@ public class GDXServer {
 		
 		//force hash check if the file exists, this is only a default, because it can be changed later when the settings file is read
 		forceHashCheck = Gdx.files.internal(HashFileMapLocation).exists();
-		HashFileMapOrig = SUtils.genHashFileMapList(Gdx.files.internal("../res/"));
+		HashFileMapOrig = SUtils.genHashFileMapList(Gdx.files.internal(resDir));
 		
 		playerList = new ConcurrentHashMap<Integer, LocalServerPlayer>(16, 0.9f, 2);// 2 concurrent threads is a worst case scenario
 	    server = new Server(8192,8192);
@@ -117,7 +115,7 @@ public class GDXServer {
 	    server.getKryo().register(PacketAction.class);
 	    server.getKryo().register(HashFileMap.class);
 	    server.getKryo().register(HashFileMap[].class);
-	   
+	    server.getKryo().register(PacketFile.class);
 	    server.start();
 	    
 	    try {
