@@ -1,5 +1,8 @@
 package com.afonsobordado.CommanderGDXServer;
 
+import java.util.ArrayList;
+
+import com.afonsobordado.CommanderGDX.files.HashFileMap;
 import com.afonsobordado.CommanderGDX.packets.PacketAccepted;
 import com.afonsobordado.CommanderGDX.packets.PacketAction;
 import com.afonsobordado.CommanderGDX.packets.PacketBullet;
@@ -9,6 +12,7 @@ import com.afonsobordado.CommanderGDX.packets.PacketDisconnect;
 import com.afonsobordado.CommanderGDX.packets.PacketNewPlayer;
 import com.afonsobordado.CommanderGDX.packets.PacketSwitchWeapon;
 import com.afonsobordado.CommanderGDX.packets.NetworkObject.NetworkPlayer;
+import com.afonsobordado.CommanderGDX.utils.SUtils;
 import com.afonsobordado.CommanderGDXServer.LocalObjects.LocalServerPlayer;
 import com.badlogic.gdx.math.Vector2;
 import com.esotericsoftware.kryonet.Connection;
@@ -36,6 +40,10 @@ public class NetworkListener extends Listener{
     				break;
     			}
     		}
+    		ArrayList<HashFileMap> failList;
+    		if(!((failList = SUtils.checkHash(GDXServer.HashFileMapOrig, pnp.hfc)).isEmpty())){
+				rejectReason = "Hash File Check Failed";
+			}
     		
     		if(!rejectReason.isEmpty()){
     			System.err.println(rejectReason);

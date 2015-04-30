@@ -151,7 +151,6 @@ public class Player {
 		
 		if(lastNetworkPlayer != null)
 			if(!this.body.getPosition().equals(lastNetworkPlayer.pos)){ //if this if doesn't execute we have already missed 4 packets
-				System.out.println(this.lerpCount);
 				this.lerpCount += B2DVars.LERP_FACTOR;
 				this.lerpCount %= 1;
 				this.body.setTransform(this.body.getPosition().cpy().lerp(lastNetworkPlayer.pos, this.lerpCount), this.body.getAngle());	

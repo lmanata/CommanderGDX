@@ -10,6 +10,7 @@ import com.afonsobordado.CommanderGDX.entities.Lists.WeaponList;
 import com.afonsobordado.CommanderGDX.entities.weapons.Bullet;
 import com.afonsobordado.CommanderGDX.entities.weapons.Weapon;
 import com.afonsobordado.CommanderGDX.files.BulletFile;
+import com.afonsobordado.CommanderGDX.files.HashFileMap;
 import com.afonsobordado.CommanderGDX.files.WeaponFile;
 import com.afonsobordado.CommanderGDX.handlers.Animation;
 import com.afonsobordado.CommanderGDX.handlers.FileSerializer;
@@ -76,7 +77,7 @@ public class Game implements ApplicationListener{
 		KeyMap = new KeyMap();
 		//ActionMap.loadDefaultKeys();
 		
-		client = new Client();
+		client = new Client(8192,8192);
 		client.getKryo().register(PacketConsoleMessage.class);
 		client.getKryo().register(PacketHello.class);
 	    client.getKryo().register(PacketAccepted.class);
@@ -90,6 +91,8 @@ public class Game implements ApplicationListener{
 	    client.getKryo().register(PacketSwitchWeapon.class);
 	    client.getKryo().register(Action.class);
 	    client.getKryo().register(PacketAction.class);
+	    client.getKryo().register(HashFileMap.class);
+	    client.getKryo().register(HashFileMap[].class);
 
 		new Thread(client).start();
 		client.addListener(networkListener = new NetworkListener());

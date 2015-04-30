@@ -5,11 +5,10 @@ import java.math.BigInteger;
 import java.security.SecureRandom;
 
 import com.afonsobordado.CommanderGDX.Game;
-import com.afonsobordado.CommanderGDX.entities.Lists.WeaponList;
 import com.afonsobordado.CommanderGDX.entities.player.Player;
 import com.afonsobordado.CommanderGDX.handlers.GameStateManager;
-import com.afonsobordado.CommanderGDX.packets.PacketHello;
 import com.afonsobordado.CommanderGDX.packets.PacketNewPlayer;
+import com.afonsobordado.CommanderGDX.utils.SUtils;
 import com.afonsobordado.CommanderGDX.vars.CVars;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
@@ -55,12 +54,16 @@ public class IPmenu extends GameState{
 				}
 		    	
 		    	  
+		    	
+		    	//move this code out of here
+		    	
 		    	PacketNewPlayer pnp = new PacketNewPlayer();
 		    	
 		    	pnp.np = null;
 		    	pnp.name = new BigInteger(130, new SecureRandom()).toString(32); // this is some random global with the players name
 		    	pnp.playerClass = Player.playerClass;
 		    	pnp.weapon = "ak47";
+		    	pnp.hfc = SUtils.genHashFileMapList(Gdx.files.internal("res/"));
 		    	
 				Game.client.sendTCP(pnp);
 		    	 

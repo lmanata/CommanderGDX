@@ -1,5 +1,6 @@
 package com.afonsobordado.CommanderGDX.packets;
 
+import com.afonsobordado.CommanderGDX.files.HashFileMap;
 import com.afonsobordado.CommanderGDX.packets.NetworkObject.NetworkPlayer;
 
 public class PacketNewPlayer {
@@ -10,4 +11,6 @@ public class PacketNewPlayer {
 	public String name; //TODO: this is not used in the client
 	public String weapon;
 	public String playerClass;
+	public HashFileMap[] hfc;
+	
 }

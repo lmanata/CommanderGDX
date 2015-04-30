@@ -7,6 +7,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import net.bigfootsoftware.bobtrucking.BodyEditorLoader;
 
+import com.afonsobordado.CommanderGDX.files.HashFileMap;
 import com.afonsobordado.CommanderGDX.handlers.ActionStatus;
 import com.afonsobordado.CommanderGDX.handlers.TiledMapImporter;
 import com.afonsobordado.CommanderGDX.packets.PacketAccepted;
@@ -21,6 +22,7 @@ import com.afonsobordado.CommanderGDX.packets.PacketPositionUpdate;
 import com.afonsobordado.CommanderGDX.packets.PacketSwitchWeapon;
 import com.afonsobordado.CommanderGDX.packets.NetworkObject.NetworkPlayer;
 import com.afonsobordado.CommanderGDX.utils.PlayerFactory;
+import com.afonsobordado.CommanderGDX.utils.SUtils;
 import com.afonsobordado.CommanderGDX.vars.Action;
 import com.afonsobordado.CommanderGDX.vars.B2DVars;
 import com.afonsobordado.CommanderGDXServer.Handler.ServerContactHandler;
@@ -37,6 +39,7 @@ import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.utils.Json;
 import com.esotericsoftware.kryonet.Server;
 
 public class GDXServer {
@@ -62,6 +65,11 @@ public class GDXServer {
 	public static ServerViewerHandler svh;
 	public static boolean SVHEnable = true;
 	
+	public static Json json = new Json();
+	public static boolean forceHashCheck;
+	public static String HashFileMapLocation = "../res/hashfilemap.json";
+	public static HashFileMap[] HashFileMapOrig;
+	
 	//current game vars
 	public static String currentMap = "level2";
 	
@@ -86,25 +94,14 @@ public class GDXServer {
 			TiledMapImporter.create(
 					new TmxMapLoader().load("../res/maps/" + currentMap + ".tmx"),
 					world);
-			
-			
-	        BodyDef bodyDef = new BodyDef();
-	        bodyDef.type = BodyDef.BodyType.DynamicBody;
-	        bodyDef.position.set(1, 30);
-	        Body body = world.createBody(bodyDef);
-	        PolygonShape shape = new PolygonShape();
-	        shape.setAsBox(10f / 64, 10f / 64);
-	        FixtureDef fixtureDef = new FixtureDef();
-	        fixtureDef.shape = shape;
-	        fixtureDef.density = 1f;
-	    	fixtureDef.filter.categoryBits = B2DVars.BIT_PLAYER; 
-			fixtureDef.filter.maskBits = B2DVars.BIT_GROUND;
-	        body.createFixture(fixtureDef);
-	        shape.dispose();
 		}
 		
+		//force hash check if the file exists, this is only a default, because it can be changed later when the settings file is read
+		forceHashCheck = Gdx.files.internal(HashFileMapLocation).exists();
+		HashFileMapOrig = SUtils.genHashFileMapList(Gdx.files.internal("../res/"));
+		
 		playerList = new ConcurrentHashMap<Integer, LocalServerPlayer>(16, 0.9f, 2);// 2 concurrent threads is a worst case scenario
-	    server = new Server();
+	    server = new Server(8192,8192);
 	    server.getKryo().register(PacketConsoleMessage.class);
 	    server.getKryo().register(PacketHello.class);
 	    server.getKryo().register(PacketAccepted.class);
@@ -118,6 +115,9 @@ public class GDXServer {
 	    server.getKryo().register(PacketSwitchWeapon.class);
 	    server.getKryo().register(Action.class);
 	    server.getKryo().register(PacketAction.class);
+	    server.getKryo().register(HashFileMap.class);
+	    server.getKryo().register(HashFileMap[].class);
+	   
 	    server.start();
 	    
 	    try {
