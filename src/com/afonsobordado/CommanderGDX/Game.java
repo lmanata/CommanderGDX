@@ -29,6 +29,7 @@ import com.afonsobordado.CommanderGDX.packets.PacketPositionUpdate;
 import com.afonsobordado.CommanderGDX.packets.PacketSwitchWeapon;
 import com.afonsobordado.CommanderGDX.packets.NetworkObject.NetworkPlayer;
 import com.afonsobordado.CommanderGDX.vars.Action;
+import com.afonsobordado.CommanderGDX.vars.ActionMap;
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
@@ -96,6 +97,8 @@ public class Game implements ApplicationListener{
 		fileSerializer = new FileSerializer().getSerializer();
 		
 		Gdx.input.setInputProcessor(new InputProcessor());
+		
+		ActionMap.loadKeysFromPreferences();
 		
 		aManager = new AssetManager();
 		aManager.load("res/images/hud.png", Texture.class);

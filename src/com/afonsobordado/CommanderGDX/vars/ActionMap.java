@@ -2,9 +2,11 @@ package com.afonsobordado.CommanderGDX.vars;
 
 import java.util.HashMap;
 
+import com.afonsobordado.CommanderGDX.Game;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Buttons;
 import com.badlogic.gdx.Input.Keys;
-import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.Preferences;
 
 public class ActionMap {
 
@@ -20,6 +22,9 @@ public class ActionMap {
 			add(Keys.LEFT, Action.GO_LEFT);
 			add(Keys.RIGHT, Action.GO_RIGHT);
 			add(Keys.DOWN, Action.GO_DOWN);
+		}
+		
+		public static void changeKey(Integer k, Action a){
 			
 		}
 
@@ -36,8 +41,32 @@ public class ActionMap {
 			return actionToKeyMap.get(a);
 		}
 
-		public static void loadKeysFromFile(FileHandle fh){
-			//fh = Gdx.files.internal(arg0)
+		public static void loadKeysFromPreferences(){
+			/*
+			 * OS 					Preferences storage location
+			 * 
+			 * Windows	 			%UserProfile%/.prefs/My Preferences
+			 * Linux and OS X 		~/.prefs/My Preferences
+			 * 
+			 */
+			
+			Preferences p = Gdx.app.getPreferences(Game.TITLE + "_Preferences_Keymap");
+
+			if(p.get().size() == 0){ //the preferences are empty, we should write them
+				
+				for(Action a: Action.values()){
+					p.putInteger(a.name(), actionToKeyMap.get(a));
+				}
+				p.flush(); //write to disk
+				
+			}else{ //we have preferences, lets read them
+				
+				for(Action a: Action.values()){
+					add(p.getInteger(a.name()), a);
+				}
+
+			}
+			
 		}
 
 }
