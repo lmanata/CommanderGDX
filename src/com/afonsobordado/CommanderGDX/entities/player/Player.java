@@ -148,6 +148,7 @@ public class Player {
 		
 		
 		//this brings some stability to the client position, who was jumping with the fixed interpolation method, see commit 6767ccc
+		if(!this.body.getPosition().equals(lastNetworkPlayer.pos)){ //if this if doesn't execute we have already missed 4 packets
 			System.out.println(this.lerpCount);
 			this.lerpCount += B2DVars.LERP_FACTOR;
 			this.lerpCount %= 1;
