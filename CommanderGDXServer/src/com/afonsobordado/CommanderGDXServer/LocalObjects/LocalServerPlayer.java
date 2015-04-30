@@ -14,7 +14,7 @@ public class LocalServerPlayer extends NetworkPlayer{
 	public String playerClass;
 	public Body body;
 	public ActionList al;
-	
+	private int footContacts;
 	public LocalServerPlayer(int id,
 							 String name,
 							 Vector2 pos,
@@ -34,6 +34,7 @@ public class LocalServerPlayer extends NetworkPlayer{
 		this.lastPacketTime = System.currentTimeMillis();
 		this.al = new ActionList();
 		this.body = GDXServer.pf.getBodyByClass(playerClass);
+		this.body.setUserData(this);
 	}
 	
 	public void networkUpdate(NetworkPlayer np){
@@ -47,9 +48,9 @@ public class LocalServerPlayer extends NetworkPlayer{
 		
 		return new NetworkPlayer(id,
 								 name,
-								 pos,
+								 body.getPosition(),
 								 armAngle,
-								 linearVelocity);
+								 body.getLinearVelocity());
 	}
 	
 	public void removeBody(){
@@ -61,5 +62,20 @@ public class LocalServerPlayer extends NetworkPlayer{
 	public void setWeapon(String newWeapon){
 		this.weapon = newWeapon;
 	}
+	
+	public int getFootContacts() {
+		return footContacts;
+	}
+
+	public void setFootContacts(int footContacts) {
+		this.footContacts = footContacts;
+	}
+
+	public boolean isGrounded() {
+		System.out.println("fc: " + footContacts + " : " + (footContacts>0));
+		return footContacts>0;
+	}
+
+
 
 }

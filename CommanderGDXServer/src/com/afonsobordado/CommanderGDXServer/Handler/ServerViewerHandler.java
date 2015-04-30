@@ -1,5 +1,6 @@
-package com.afonsobordado.CommanderGDXServer;
+package com.afonsobordado.CommanderGDXServer.Handler;
 
+import com.afonsobordado.CommanderGDXServer.GDXServer;
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;

@@ -1,5 +1,6 @@
-package com.afonsobordado.CommanderGDX.handlers;
+package com.afonsobordado.CommanderGDXServer.Handler;
 
+import com.afonsobordado.CommanderGDXServer.LocalObjects.LocalServerPlayer;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Contact;
 import com.badlogic.gdx.physics.box2d.ContactImpulse;
@@ -8,13 +9,12 @@ import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.Manifold;
 import com.badlogic.gdx.utils.Array;
 
-public class MyContactListener implements ContactListener{
+public class ServerContactHandler implements ContactListener{
 
-	private int numFootContacts;
 	private Array<Body> bodiesToRemove;
 	
 	
-	public MyContactListener(){
+	public ServerContactHandler(){
 		super();
 		bodiesToRemove = new Array<Body>();
 	}
@@ -25,11 +25,15 @@ public class MyContactListener implements ContactListener{
 		Fixture fb = c.getFixtureB();
 		
 		if(fa == null || fb == null) return;
-
-		if((fa.getUserData() != null && fa.getUserData().equals("footPlayer")) || //if any is the foot
-		   (fb.getUserData() != null && fb.getUserData().equals("footPlayer")) ){
-			if(fa.getUserData() != "bullet" && fb.getUserData() != "bullet")
-				numFootContacts++;
+		
+		if(fa.getUserData() != "bullet" && fb.getUserData() != "bullet"){
+			if(fa.getUserData() != null && fa.getUserData().equals("foot")){
+				LocalServerPlayer lsp = (LocalServerPlayer) fa.getBody().getUserData();
+				lsp.setFootContacts(lsp.getFootContacts()+1);
+			}else if(fb.getUserData() != null && fb.getUserData().equals("foot")){
+				LocalServerPlayer lsp = (LocalServerPlayer) fb.getBody().getUserData();
+				lsp.setFootContacts(lsp.getFootContacts()+1);
+			}
 		}
 
 		/*if(fa.getUserData() != null && fa.getUserData().equals("bullet"))
@@ -37,8 +41,6 @@ public class MyContactListener implements ContactListener{
 		
 		if(fb.getUserData() != null && fb.getUserData().equals("bullet"))
 			((Bullet) fb.getBody().getUserData()).setRemove(true);*/
-		
-					
 		
 
 		
@@ -53,10 +55,15 @@ public class MyContactListener implements ContactListener{
 		
 		if(fa == null || fb == null) return;
 		
-		if((fa.getUserData() != null && fa.getUserData().equals("footPlayer")) || //if any is the foot
-		   (fb.getUserData() != null && fb.getUserData().equals("footPlayer")) ){
-			if(fa.getUserData() != "bullet" && fb.getUserData() != "bullet")
-				numFootContacts--;
+		
+		if(fa.getUserData() != "bullet" && fb.getUserData() != "bullet"){
+			if(fa.getUserData() != null && fa.getUserData().equals("foot")){
+				LocalServerPlayer lsp = (LocalServerPlayer) fa.getBody().getUserData();
+				lsp.setFootContacts(lsp.getFootContacts()-1);
+			}else if(fb.getUserData() != null && fb.getUserData().equals("foot")){
+				LocalServerPlayer lsp = (LocalServerPlayer) fb.getBody().getUserData();
+				lsp.setFootContacts(lsp.getFootContacts()-1);
+			}
 		}
 
 	}
@@ -67,6 +74,4 @@ public class MyContactListener implements ContactListener{
 	public void preSolve(Contact c, Manifold m) {}
 	
 	public Array<Body> getBodiesToRemove(){return bodiesToRemove;}
-	public boolean isPlayerOnGround(){return numFootContacts>0;}
-
 }

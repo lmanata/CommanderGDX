@@ -7,8 +7,6 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import net.bigfootsoftware.bobtrucking.BodyEditorLoader;
 
-
-
 import com.afonsobordado.CommanderGDX.handlers.ActionStatus;
 import com.afonsobordado.CommanderGDX.handlers.TiledMapImporter;
 import com.afonsobordado.CommanderGDX.packets.PacketAccepted;
@@ -25,6 +23,8 @@ import com.afonsobordado.CommanderGDX.packets.NetworkObject.NetworkPlayer;
 import com.afonsobordado.CommanderGDX.utils.PlayerFactory;
 import com.afonsobordado.CommanderGDX.vars.Action;
 import com.afonsobordado.CommanderGDX.vars.B2DVars;
+import com.afonsobordado.CommanderGDXServer.Handler.ServerContactHandler;
+import com.afonsobordado.CommanderGDXServer.Handler.ServerViewerHandler;
 import com.afonsobordado.CommanderGDXServer.LocalObjects.LocalServerPlayer;
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
@@ -44,6 +44,7 @@ public class GDXServer {
 	private static final long SERVER_TICK = (long) ((1/66f)*1000);
 	
 	public static World world;
+	public static ServerContactHandler sch;
 	public final static float B2DW_TICK = 60f;
     public final static float B2DW_FIXED_TIMESTEP = 1000000000 / B2DW_TICK;
 	public final static int B2DW_VELOCITY_ITER = 6;
@@ -66,6 +67,7 @@ public class GDXServer {
 	
 	public static void main(String[] args){
 		world = new World(new Vector2(0, -9.81f), true);
+		world.setContactListener(sch = new ServerContactHandler());
 
 		Gdx.gl = mock(GL20.class);					//headless gdx to load the maps
 		new HeadlessApplication(new ApplicationListener(){
@@ -192,7 +194,7 @@ public class GDXServer {
 							lsp.body.applyLinearImpulse(-B2DVars.PLAYER_WALK_FORCE, 0, pos.x, pos.y, true);
 						break;
 					case GO_UP:
-						if(as.isPress())
+						if(as.isPress() && lsp.isGrounded())
 							lsp.body.applyForceToCenter(0, B2DVars.JUMP_FORCE, true);
 						break;
 					case GO_DOWN:

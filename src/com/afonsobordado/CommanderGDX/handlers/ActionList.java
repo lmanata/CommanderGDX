@@ -20,7 +20,6 @@ public class ActionList {
 			ActionList.put(a, new ActionStatus(down,press));
 			return;
 		}
-		System.out.println("UPDATE: " + a + " To: DOWN:" + down + " PRESS:" + press);
 		ActionList.get(a).update(new ActionStatus(down,press));
 	}
 
