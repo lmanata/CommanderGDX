@@ -44,7 +44,7 @@ public class Player {
 	
 	private ActionList al;
 	
-	private NetworkPlayer lastNetworkPlayer;
+	private NetworkPlayer lastNetworkPlayer = null;
 	private float lerpCount = 0f;
 	
 	public Player(World world, PlayerFactory pf){
@@ -148,12 +148,14 @@ public class Player {
 		
 		
 		//this brings some stability to the client position, who was jumping with the fixed interpolation method, see commit 6767ccc
-		if(!this.body.getPosition().equals(lastNetworkPlayer.pos)){ //if this if doesn't execute we have already missed 4 packets
-			System.out.println(this.lerpCount);
-			this.lerpCount += B2DVars.LERP_FACTOR;
-			this.lerpCount %= 1;
-			this.body.setTransform(this.body.getPosition().cpy().lerp(lastNetworkPlayer.pos, this.lerpCount), this.body.getAngle());	
-		}
+		
+		if(lastNetworkPlayer != null)
+			if(!this.body.getPosition().equals(lastNetworkPlayer.pos)){ //if this if doesn't execute we have already missed 4 packets
+				System.out.println(this.lerpCount);
+				this.lerpCount += B2DVars.LERP_FACTOR;
+				this.lerpCount %= 1;
+				this.body.setTransform(this.body.getPosition().cpy().lerp(lastNetworkPlayer.pos, this.lerpCount), this.body.getAngle());	
+			}
 
 		Vector2 pos = new Vector2((Game.V_WIDTH*Game.SCALE)/2, (Game.V_HEIGHT*Game.SCALE)/2); //center of the screen
 		Vector2 mousePos = new Vector2(Game.getKeyMap().getMouse().x, (Game.V_HEIGHT*Game.SCALE) - Game.getKeyMap().getMouse().y);
