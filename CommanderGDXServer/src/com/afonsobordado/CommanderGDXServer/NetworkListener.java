@@ -42,16 +42,19 @@ public class NetworkListener extends Listener{
     				break;
     			}
     		}
-    		ArrayList<HashFileMap> failList;
-    		if(!((failList = SUtils.checkHash(GDXServer.HashFileMapOrig, pnp.hfc)).isEmpty())){
-				rejectReason = "Hash File Check Failed Retry";
-				for(HashFileMap hfm: failList){
-					PacketFile pf = new PacketFile();
-					pf.name = hfm.getFile().replace(GDXServer.resDir, "");
-					pf.file = Gdx.files.internal(hfm.getFile()).readBytes();
-					connection.sendTCP(pf);
+    		
+    		if(GDXServer.forceHashCheck){
+	    		ArrayList<HashFileMap> failList;
+	    		if(!((failList = SUtils.checkHash(GDXServer.HashFileMapOrig, pnp.hfc)).isEmpty())){
+					rejectReason = "Hash File Check Failed Retry";
+					for(HashFileMap hfm: failList){
+						PacketFile pf = new PacketFile();
+						pf.name = hfm.getFile().replace(GDXServer.resDir, "");
+						pf.file = Gdx.files.internal(hfm.getFile()).readBytes();
+						connection.sendTCP(pf);
+					}
 				}
-			}
+    		}
     		
     		if(!rejectReason.isEmpty()){
     			System.err.println(rejectReason);

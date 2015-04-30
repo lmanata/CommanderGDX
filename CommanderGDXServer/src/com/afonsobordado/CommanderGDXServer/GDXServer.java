@@ -62,10 +62,8 @@ public class GDXServer {
 	public static ServerViewerHandler svh;
 	public static boolean SVHEnable = true;
 	
-	public static Json json = new Json();
-	public static boolean forceHashCheck;
+	public static boolean forceHashCheck = false;
 	public static String resDir = "../res/";
-	public static String HashFileMapLocation = "../res/hashfilemap.json";
 	public static HashFileMap[] HashFileMapOrig;
 	
 	//current game vars
@@ -94,8 +92,6 @@ public class GDXServer {
 					world);
 		}
 		
-		//force hash check if the file exists, this is only a default, because it can be changed later when the settings file is read
-		forceHashCheck = Gdx.files.internal(HashFileMapLocation).exists();
 		HashFileMapOrig = SUtils.genHashFileMapList(Gdx.files.internal(resDir));
 		
 		playerList = new ConcurrentHashMap<Integer, LocalServerPlayer>(16, 0.9f, 2);// 2 concurrent threads is a worst case scenario
