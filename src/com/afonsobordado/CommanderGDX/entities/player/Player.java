@@ -28,6 +28,7 @@ import com.badlogic.gdx.utils.Array;
 public class Player {
 	public static String playerClass = "MainChar";
 	
+	
 	private Body body;
 	public boolean grounded;
 	private long lastGroundTime;
@@ -42,6 +43,9 @@ public class Player {
 	private String name;
 	
 	private ActionList al;
+	
+	private NetworkPlayer lastNetworkPlayer;
+	private float lerpCount = 0f;
 	
 	public Player(World world, PlayerFactory pf){
 		al = new ActionList();
@@ -141,6 +145,15 @@ public class Player {
 	}
 	
 	public void update(float dt){
+		
+		
+		//this brings some stability to the client position, who was jumping with the fixed interpolation method, see commit 6767ccc
+		if(!this.body.getPosition().equals(lastNetworkPlayer.pos)){ //if this if doesn't execute we have already missed 10 packets
+			System.out.println(this.lerpCount);
+			this.lerpCount += B2DVars.LERP_FACTOR;
+			this.lerpCount %= 1;
+			this.body.setTransform(this.body.getPosition().cpy().lerp(lastNetworkPlayer.pos, this.lerpCount), this.body.getAngle());	
+		}
 
 		Vector2 pos = new Vector2((Game.V_WIDTH*Game.SCALE)/2, (Game.V_HEIGHT*Game.SCALE)/2); //center of the screen
 		Vector2 mousePos = new Vector2(Game.getKeyMap().getMouse().x, (Game.V_HEIGHT*Game.SCALE) - Game.getKeyMap().getMouse().y);
@@ -230,8 +243,8 @@ public class Player {
 
 
 	public void networkUpdate(NetworkPlayer np) {
-		//interpolate position
-		Vector2 newPos = body.getPosition().cpy().lerp(np.pos, 0.5f);
-		body.setTransform(newPos, body.getAngle());
+		this.lastNetworkPlayer = np;
+		this.lerpCount = 0;
+
 	}
 }
