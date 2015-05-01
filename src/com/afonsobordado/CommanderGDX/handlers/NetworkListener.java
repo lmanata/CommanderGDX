@@ -1,5 +1,6 @@
 package com.afonsobordado.CommanderGDX.handlers;
 
+import com.afonsobordado.CommanderGDX.Game;
 import com.afonsobordado.CommanderGDX.entities.player.LocalClientPlayer;
 import com.afonsobordado.CommanderGDX.entities.weapons.Bullet;
 import com.afonsobordado.CommanderGDX.packets.PacketAccepted;
@@ -7,11 +8,15 @@ import com.afonsobordado.CommanderGDX.packets.PacketBullet;
 import com.afonsobordado.CommanderGDX.packets.PacketConsoleMessage;
 import com.afonsobordado.CommanderGDX.packets.PacketDeclined;
 import com.afonsobordado.CommanderGDX.packets.PacketDisconnect;
+import com.afonsobordado.CommanderGDX.packets.PacketFile;
 import com.afonsobordado.CommanderGDX.packets.PacketNewPlayer;
 import com.afonsobordado.CommanderGDX.packets.PacketSwitchWeapon;
 import com.afonsobordado.CommanderGDX.packets.NetworkObject.NetworkPlayer;
 import com.afonsobordado.CommanderGDX.states.IPmenu;
 import com.afonsobordado.CommanderGDX.states.Play;
+import com.afonsobordado.CommanderGDX.utils.SUtils;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.files.FileHandle;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 
@@ -94,6 +99,9 @@ public class NetworkListener extends Listener{
 			PacketSwitchWeapon psw = (PacketSwitchWeapon) object;
 			LocalClientPlayer lcp = Play.playerList.get(psw.id);
 			lcp.setWeapon(psw.newWeapon);
+		} else if (object instanceof PacketFile){
+			PacketFile pf = (PacketFile) object;
+			Game.writeList.add(pf);
 		}
 		
    }

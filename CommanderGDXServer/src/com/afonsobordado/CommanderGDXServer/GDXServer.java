@@ -62,7 +62,7 @@ public class GDXServer {
 	public static ServerViewerHandler svh;
 	public static boolean SVHEnable = true;
 	
-	public static boolean forceHashCheck = false;
+	public static boolean forceHashCheck = true;
 	public static String resDir = "../res/";
 	public static HashFileMap[] HashFileMapOrig;
 	
@@ -95,7 +95,7 @@ public class GDXServer {
 		HashFileMapOrig = SUtils.genHashFileMapList(Gdx.files.internal(resDir));
 		
 		playerList = new ConcurrentHashMap<Integer, LocalServerPlayer>(16, 0.9f, 2);// 2 concurrent threads is a worst case scenario
-	    server = new Server(8192,8192);
+	    server = new Server(65536,65536);
 	    server.getKryo().register(PacketConsoleMessage.class);
 	    server.getKryo().register(PacketHello.class);
 	    server.getKryo().register(PacketAccepted.class);
@@ -112,6 +112,7 @@ public class GDXServer {
 	    server.getKryo().register(HashFileMap.class);
 	    server.getKryo().register(HashFileMap[].class);
 	    server.getKryo().register(PacketFile.class);
+	    server.getKryo().register(byte[].class);
 	    server.start();
 	    
 	    try {

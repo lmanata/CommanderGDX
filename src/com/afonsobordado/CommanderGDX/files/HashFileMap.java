@@ -29,7 +29,7 @@ public class HashFileMap {
 	public boolean equals(Object o){
 		if(o == null || !(o instanceof HashFileMap)) return false;
 		HashFileMap newf = (HashFileMap) o;
-		return (this.file.equals(newf.getFile())) && (this.hash == newf.hash);
+		return (this.hash == newf.hash);
 	}
 
 	

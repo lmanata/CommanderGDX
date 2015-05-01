@@ -51,6 +51,7 @@ public class NetworkListener extends Listener{
 						PacketFile pf = new PacketFile();
 						pf.name = hfm.getFile().replace(GDXServer.resDir, "");
 						pf.file = Gdx.files.internal(hfm.getFile()).readBytes();
+						System.out.println("Fail: pf:" + pf.name + " hfmname: " + hfm.getFile() + " hash:" + hfm.getHash());
 						connection.sendTCP(pf);
 					}
 				}
@@ -130,7 +131,9 @@ public class NetworkListener extends Listener{
     		GDXServer.server.sendToAllExceptTCP(connection.getID(), psw);
     	} else if (object instanceof PacketAction){
     		PacketAction pa = (PacketAction) object;
-    		GDXServer.playerList.get(pa.id).al.update(pa.action, pa.down, pa.press);
+    		LocalServerPlayer p  = GDXServer.playerList.get(pa.id);
+    		if(p == null){return;}
+    		p.al.update(pa.action, pa.down, pa.press);
     	}
 	}
 }

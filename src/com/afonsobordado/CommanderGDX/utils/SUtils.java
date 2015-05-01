@@ -8,7 +8,7 @@ import com.badlogic.gdx.files.FileHandle;
 public class SUtils {
 
 	public static ArrayList<HashFileMap> checkHash(HashFileMap[] orighfm, HashFileMap[] newhfm) {
-		if(newhfm == null) return null;
+		if(newhfm == null || orighfm == null) return null;
 		
 		ArrayList<HashFileMap> failList = new ArrayList<HashFileMap>();
 		
@@ -32,7 +32,7 @@ public class SUtils {
 		int hfmCounter = 0;
 		for(FileHandle fh: fhal){
 			HashFileMap ll = new HashFileMap();
-			ll.setFile(fh.name());
+			ll.setFile(fh.path());
 			ll.setHash(FNVHash(fh.readBytes()));
 			hfm[hfmCounter++] = ll;
 		}

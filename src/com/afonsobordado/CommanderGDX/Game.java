@@ -3,6 +3,7 @@ package com.afonsobordado.CommanderGDX;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
 
 import com.afonsobordado.CommanderGDX.entities.Lists.AnimationList;
 import com.afonsobordado.CommanderGDX.entities.Lists.BulletList;
@@ -30,6 +31,7 @@ import com.afonsobordado.CommanderGDX.packets.PacketNewPlayer;
 import com.afonsobordado.CommanderGDX.packets.PacketPositionUpdate;
 import com.afonsobordado.CommanderGDX.packets.PacketSwitchWeapon;
 import com.afonsobordado.CommanderGDX.packets.NetworkObject.NetworkPlayer;
+import com.afonsobordado.CommanderGDX.utils.SUtils;
 import com.afonsobordado.CommanderGDX.vars.Action;
 import com.afonsobordado.CommanderGDX.vars.ActionMap;
 import com.badlogic.gdx.ApplicationListener;
@@ -55,7 +57,7 @@ public class Game implements ApplicationListener{
 	
 	
 	
-	
+	public static final String resDir = "res/";
 	//variables about the current game. if any
 	public static String ipAddr;
 	
@@ -73,12 +75,16 @@ public class Game implements ApplicationListener{
 	public static Kryo fileSerializer;
 	public static NetworkListener networkListener;
 	public static KeyMap KeyMap;	
+	public static ArrayList<PacketFile> writeList;
+	
 	
 	public void create() {
 		KeyMap = new KeyMap();
 		//ActionMap.loadDefaultKeys();
 		
-		client = new Client(8192,8192);
+		writeList = new ArrayList<PacketFile>();
+		
+		client = new Client(65536,65536);
 		client.getKryo().register(PacketConsoleMessage.class);
 		client.getKryo().register(PacketHello.class);
 	    client.getKryo().register(PacketAccepted.class);
@@ -95,7 +101,9 @@ public class Game implements ApplicationListener{
 	    client.getKryo().register(HashFileMap.class);
 	    client.getKryo().register(HashFileMap[].class);
 	    client.getKryo().register(PacketFile.class);
+	    client.getKryo().register(byte[].class);
 
+	   
 		new Thread(client).start();
 		client.addListener(networkListener = new NetworkListener());
 		
@@ -305,6 +313,14 @@ public class Game implements ApplicationListener{
 	
 	public void render() {
 		
+		if(!writeList.isEmpty()){
+			for(PacketFile pf: writeList){
+				Gdx.files.local(Game.resDir + pf.name).writeBytes(pf.file, false);
+				System.out.println("Wrote: " + (Game.resDir + pf.name) + " newHash: " + SUtils.FNVHash(pf.file));
+			}
+			writeList.clear();
+		}
+		
 		gsm.update(Gdx.graphics.getDeltaTime());
 		
 		gsm.render();
@@ -317,10 +333,6 @@ public class Game implements ApplicationListener{
 	public void resize(int arg0, int arg1) {}
 	public void resume() {}
 
-	
-	
-	
-	
 	public void loadAssets(){ // we should have a state for this, with a nice loading bar
 		while(true){
 			if(aManager.update()){
