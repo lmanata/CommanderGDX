@@ -68,12 +68,36 @@ public class PlayerFactory {
 		}
 		body.setBullet(true);
 		
+		
+		Vector2 head = new Vector2(8 / B2DVars.PPM ,8 / B2DVars.PPM );
+		Vector2 torso  = new Vector2(12.5f / B2DVars.PPM, 11 / B2DVars.PPM);
+		Vector2 legs  = new Vector2(12.5f / B2DVars.PPM, 12.5f / B2DVars.PPM);
+		
+		fdef.filter.categoryBits = B2DVars.BIT_PLAYER;
+		fdef.filter.maskBits = B2DVars.BIT_GROUND | B2DVars.BIT_PLAYER;
+		
+		shape.setAsBox(legs.x, legs.y, new Vector2(legs.x*1.5f,legs.y), 0f);
+		fdef.shape = shape;
+		body.createFixture(fdef).setUserData("legs");
+		
+		shape.setAsBox(torso.x, torso.y, new Vector2(torso.x*1.5f,torso.y).add(0, legs.y*2), 0f);
+		fdef.shape = shape;
+		body.createFixture(fdef).setUserData("torso");
+		
+		shape.setAsBox(head.x, head.y, new Vector2(head.x*1.5f,head.y).add(0, legs.y*2).add(torso.x/2, torso.y*2), 0f);
+		fdef.shape = shape;
+		body.createFixture(fdef).setUserData("head");
+		
+		
+		
+		/*
 		shape.setAsBox((legSz.x/2) / B2DVars.PPM, ((legSz.y + torsoSz.y)/2) / B2DVars.PPM);
 		fdef.shape = shape;
 		fdef.filter.categoryBits = B2DVars.BIT_PLAYER;
 		fdef.filter.maskBits = B2DVars.BIT_GROUND | B2DVars.BIT_PLAYER;
 		
 		body.createFixture(fdef).setUserData("fullBody");
+		*/
 		
 		
 		//create foot sensor
