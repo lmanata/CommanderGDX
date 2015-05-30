@@ -42,17 +42,9 @@ public class PlayerFactory {
 	}
 	
 	public Body getBodyByClass(String playerClass){
-		PlayerCharacterFile pcf = null;
-		try {
-			pcf = fileSerializer.readObject(new Input(new FileInputStream(new File(resDir + "/playerCharacter/"+playerClass+".pcf").getPath())), PlayerCharacterFile.class);
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		}
+		PlayerCharacterFile pcf = getFileByClass(playerClass);
 		
 		Body body;
-		
-		Vector2 legSz = pcf.getLegSize();
-		Vector2 torsoSz = pcf.getTorsoSize();
 		
 		BodyDef bdef  = new BodyDef();
 		FixtureDef fdef = new FixtureDef();
@@ -69,10 +61,15 @@ public class PlayerFactory {
 		body.setBullet(true);
 		
 		
-		Vector2 head = new Vector2(15, 16).scl(1/2f).scl(1 / B2DVars.PPM);
+		/*Vector2 head = new Vector2(15, 16).scl(1/2f).scl(1 / B2DVars.PPM);
 		Vector2 torso  = new Vector2(24, 20).scl(1/2f).scl(1 / B2DVars.PPM);
-		Vector2 legs  = new Vector2(24, 29).scl(1/2f).scl(1 / B2DVars.PPM);
-		System.out.println(legs.toString());
+		Vector2 legs  = new Vector2(24, 29).scl(1/2f).scl(1 / B2DVars.PPM);*/
+		
+		Vector2 head = pcf.getHeadSize().cpy().scl(1/2f).scl(1 / B2DVars.PPM);
+		Vector2 torso = pcf.getTorsoSize().cpy().scl(1/2f).scl(1 / B2DVars.PPM);
+		Vector2 legs = pcf.getLegSize().cpy().scl(1/2f).scl(1 / B2DVars.PPM);
+		
+		//System.out.println(legs.toString());
 		//Vector2 center = torso.cpy().add(0, legs.y).add(0, head.y).scl(0.5f);
 		Vector2 center = new Vector2().add(5f / B2DVars.PPM, 0f).add(legs);
 		
