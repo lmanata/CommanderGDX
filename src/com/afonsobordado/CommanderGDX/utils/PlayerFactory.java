@@ -69,39 +69,37 @@ public class PlayerFactory {
 		body.setBullet(true);
 		
 		
-		Vector2 head = new Vector2(8 / B2DVars.PPM ,8 / B2DVars.PPM );
-		Vector2 torso  = new Vector2(12.5f / B2DVars.PPM, 11 / B2DVars.PPM);
-		Vector2 legs  = new Vector2(12.5f / B2DVars.PPM, 12.5f / B2DVars.PPM);
+		Vector2 head = new Vector2(15, 16).scl(1/2f).scl(1 / B2DVars.PPM);
+		Vector2 torso  = new Vector2(24, 20).scl(1/2f).scl(1 / B2DVars.PPM);
+		Vector2 legs  = new Vector2(24, 29).scl(1/2f).scl(1 / B2DVars.PPM);
+		System.out.println(legs.toString());
+		//Vector2 center = torso.cpy().add(0, legs.y).add(0, head.y).scl(0.5f);
+		Vector2 center = new Vector2().add(5f / B2DVars.PPM, 0f).add(legs);
 		
 		fdef.filter.categoryBits = B2DVars.BIT_PLAYER;
 		fdef.filter.maskBits = B2DVars.BIT_GROUND | B2DVars.BIT_PLAYER;
 		
-		shape.setAsBox(legs.x, legs.y, new Vector2(legs.x*1.5f,legs.y), 0f);
+		shape.setAsBox(legs.x, legs.y, center, 0f);
 		fdef.shape = shape;
 		body.createFixture(fdef).setUserData("legs");
 		
-		shape.setAsBox(torso.x, torso.y, new Vector2(torso.x*1.5f,torso.y).add(0, legs.y*2), 0f);
+		center.add(0f, legs.y + torso.y);
+		
+		shape.setAsBox(torso.x, torso.y, center, 0f);
 		fdef.shape = shape;
 		body.createFixture(fdef).setUserData("torso");
+
+		center.add(0f, torso.y + head.y);
 		
-		shape.setAsBox(head.x, head.y, new Vector2(head.x*1.5f,head.y).add(0, legs.y*2).add(torso.x/2, torso.y*2), 0f);
+		shape.setAsBox(head.x, head.y, center, 0f);
 		fdef.shape = shape;
 		body.createFixture(fdef).setUserData("head");
 		
 		
-		
-		/*
-		shape.setAsBox((legSz.x/2) / B2DVars.PPM, ((legSz.y + torsoSz.y)/2) / B2DVars.PPM);
-		fdef.shape = shape;
-		fdef.filter.categoryBits = B2DVars.BIT_PLAYER;
-		fdef.filter.maskBits = B2DVars.BIT_GROUND | B2DVars.BIT_PLAYER;
-		
-		body.createFixture(fdef).setUserData("fullBody");
-		*/
-		
-		
+		center.set(0, 0).add(legs.x * 1.5f, 0f).sub(1f / B2DVars.PPM, 0f);
 		//create foot sensor
-		shape.setAsBox((legSz.x/2) / B2DVars.PPM-0.5f, 2 / B2DVars.PPM, new Vector2(0, (float) (-((legSz.y + torsoSz.y)/2) / B2DVars.PPM)), 0);
+		shape.setAsBox(legs.x - (0.5f / B2DVars.PPM), 2f / B2DVars.PPM, center, 0f);
+
 		fdef.shape = shape;
 		fdef.filter.categoryBits = B2DVars.BIT_PLAYER;
 		fdef.filter.maskBits = B2DVars.BIT_GROUND | B2DVars.BIT_PLAYER;
