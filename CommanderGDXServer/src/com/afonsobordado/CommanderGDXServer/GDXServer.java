@@ -2,14 +2,28 @@ package com.afonsobordado.CommanderGDXServer;
 
 import static org.mockito.Mockito.mock;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.concurrent.ConcurrentHashMap;
 
 import net.bigfootsoftware.bobtrucking.BodyEditorLoader;
 
+import com.afonsobordado.CommanderGDX.Game;
 import com.afonsobordado.CommanderGDX.packets.PacketFile;
+import com.afonsobordado.CommanderGDX.entities.Lists.AnimationList;
+import com.afonsobordado.CommanderGDX.entities.Lists.BulletList;
+import com.afonsobordado.CommanderGDX.entities.Lists.WeaponList;
+import com.afonsobordado.CommanderGDX.entities.weapons.Bullet;
+import com.afonsobordado.CommanderGDX.entities.weapons.Weapon;
+import com.afonsobordado.CommanderGDX.files.BulletFile;
 import com.afonsobordado.CommanderGDX.files.HashFileMap;
+import com.afonsobordado.CommanderGDX.files.WeaponFile;
 import com.afonsobordado.CommanderGDX.handlers.ActionStatus;
+import com.afonsobordado.CommanderGDX.handlers.Animation;
+import com.afonsobordado.CommanderGDX.handlers.FileSerializer;
 import com.afonsobordado.CommanderGDX.handlers.TiledMapImporter;
 import com.afonsobordado.CommanderGDX.packets.PacketAccepted;
 import com.afonsobordado.CommanderGDX.packets.PacketAction;
@@ -37,6 +51,8 @@ import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Json;
+import com.esotericsoftware.kryo.Kryo;
+import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryonet.Server;
 
 public class GDXServer {
@@ -57,7 +73,10 @@ public class GDXServer {
 	
 	
 	public static ConcurrentHashMap<Integer, LocalServerPlayer> playerList;
+	public static ArrayList<Bullet> bulletList;
+
 	public static Server server;
+	public static Kryo fileSerializer;
 	
 	public static ServerViewerHandler svh;
 	public static boolean SVHEnable = true;
@@ -93,8 +112,12 @@ public class GDXServer {
 		}
 		
 		HashFileMapOrig = SUtils.genHashFileMapList(Gdx.files.internal(resDir));
-		
+		fileSerializer = new FileSerializer().getSerializer();
 		playerList = new ConcurrentHashMap<Integer, LocalServerPlayer>(16, 0.9f, 2);// 2 concurrent threads is a worst case scenario
+		bulletList = new ArrayList<Bullet>();// 2 concurrent threads is a worst case scenario
+
+		registerBullets();
+		
 	    server = new Server(65536,65536);
 	    server.getKryo().register(PacketConsoleMessage.class);
 	    server.getKryo().register(PacketHello.class);
@@ -202,6 +225,69 @@ public class GDXServer {
 		}
 	}
 
+	
+	private static void registerBullets() {
+		File folder = new File("../res/bullets");
+		File[] listOfFiles = folder.listFiles();
+		for(File f : listOfFiles){
+			if(f.isFile()){
+				Input input = null;
+				BulletFile bf = null;
+				try {
+					input  = new Input(new FileInputStream(f.getPath()));
+					bf = fileSerializer.readObject(input, BulletFile.class);
+				}catch (FileNotFoundException ex) {
+		            ex.printStackTrace();
+		        } finally {
+		        	input.close();
+		        }
+				
+				if(bf != null){
+
+					BulletList.add(bf.getName(),
+								   new Bullet(bf.getName(),
+										   	  new Animation(),//stub animation
+										      bf.getSpeed(),
+										      bf.getEffects(),
+										      bf.getLifespan(),
+										      bf.getFdf(),
+										      bf.getBodyScale())
+								  );
+	
+				}
+			}
+		}
+	}
+	private void registerWeapons() {
+		File folder = new File("../res/weapons");
+		File[] listOfFiles = folder.listFiles();
+		for(File f : listOfFiles){
+			if(f.isFile()){
+				Input input = null;
+				WeaponFile wf = null;
+				try {
+					input  = new Input(new FileInputStream(f.getPath()));
+					wf = fileSerializer.readObject(input, WeaponFile.class);
+				}catch (FileNotFoundException ex) {
+		            ex.printStackTrace();
+		        } finally {
+		        	input.close();
+		        }
+				
+				if(wf != null){
+					WeaponList.add(wf.getName(),
+								  new Weapon(	wf.getName(),
+										  		AnimationList.get(wf.getAnimation()),
+										  		wf.getBulletsPerSec(),
+										  		wf.isShootOnPress(),
+										  		wf.getWeaponPin(),
+										  		BulletList.get(wf.getBullet())
+										  		)
+								 );
+				}
+			}
+		}
+	}
 	
 	public static World getWorld(){
 		return world;

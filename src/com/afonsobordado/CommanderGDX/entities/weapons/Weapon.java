@@ -55,7 +55,9 @@ public class Weapon {
 		Game.client.sendUDP(pb);
 		
 		if(!IPmenu.play){ //we are offline //TODO: this is debug only
-			Play.bulletList.add(new Bullet(	pb.name,
+			Play.bulletList.add(new Bullet(	Play.getWorld(),
+											Play.getLoader(),
+										    pb.name,
 											pb.pos,
 											pb.angle));
 		}

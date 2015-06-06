@@ -83,6 +83,7 @@ public class Animation {
 	public void setFowards(boolean fowards) {this.fowards = fowards;}
 	public Animation getCopy(){
 		//frames.clone() //does not work
+		if(frames == null) return new Animation();
 		TextureRegion[] newf = new TextureRegion[frames.length];
 		for(int i=0;i<frames.length;i++){
 			newf[i] = new TextureRegion(frames[i].getTexture());

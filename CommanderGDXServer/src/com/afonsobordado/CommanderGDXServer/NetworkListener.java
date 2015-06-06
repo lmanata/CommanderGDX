@@ -2,6 +2,7 @@ package com.afonsobordado.CommanderGDXServer;
 
 import java.util.ArrayList;
 
+import com.afonsobordado.CommanderGDX.entities.weapons.Bullet;
 import com.afonsobordado.CommanderGDX.files.HashFileMap;
 import com.afonsobordado.CommanderGDX.packets.PacketAccepted;
 import com.afonsobordado.CommanderGDX.packets.PacketAction;
@@ -124,6 +125,13 @@ public class NetworkListener extends Listener{
     		//add to some sort of list
     		//verify validity of the bullet position
     		PacketBullet pb = (PacketBullet) object;
+    		synchronized(GDXServer.world){
+    			GDXServer.bulletList.add(new Bullet(GDXServer.world,
+    												GDXServer.bel,
+    												pb.name,
+    												pb.pos,
+    												pb.angle));
+    		}
     		GDXServer.server.sendToAllTCP(pb);
     	} else if (object instanceof PacketSwitchWeapon){
     		PacketSwitchWeapon psw = (PacketSwitchWeapon) object;

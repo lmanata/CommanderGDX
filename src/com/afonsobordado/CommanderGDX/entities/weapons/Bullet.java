@@ -13,6 +13,7 @@ import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
+import com.badlogic.gdx.physics.box2d.World;
 
 public class Bullet {
 	private Body body;
@@ -31,7 +32,9 @@ public class Bullet {
 	private float bodyScale;
 	private Vector2 bodyOrigin;
 	
-	public Bullet(String name,
+	public Bullet(World world,
+			      BodyEditorLoader loader,
+				  String name,
 				  Vector2 barrelPos,
 				  float angle){
 		Bullet tmpB = BulletList.get(name);
@@ -46,7 +49,6 @@ public class Bullet {
 		this.lifespanEnabled = (this.lifespan!=0);
 		toRemove = false;
 		
-		BodyEditorLoader loader = Play.getLoader();
 		BodyDef bd = new BodyDef();
 		bd.type = BodyType.DynamicBody;
 		bd.position.set(barrelPos.x / B2DVars.PPM,barrelPos.y / B2DVars.PPM);
@@ -61,8 +63,8 @@ public class Bullet {
 		fd.filter.categoryBits = fdf.getCb();
 		fd.filter.maskBits = fdf.getMb();
 	    
-	    synchronized(Play.getWorld()){
-	    	body = Play.getWorld().createBody(bd);
+	    synchronized(world){
+	    	body = world.createBody(bd);
 	    	body.setBullet(true);
 	    	loader.attachFixture(body, name, fd, bodyScale);
 	    	bodyOrigin = loader.getOrigin(name, bodyScale).cpy();
