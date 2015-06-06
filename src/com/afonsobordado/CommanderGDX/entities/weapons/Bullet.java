@@ -32,11 +32,14 @@ public class Bullet {
 	private float bodyScale;
 	private Vector2 bodyOrigin;
 	
+	private int ownerId;
+	
 	public Bullet(World world,
 			      BodyEditorLoader loader,
 				  String name,
 				  Vector2 barrelPos,
-				  float angle){
+				  float angle,
+				  int ownerId){
 		Bullet tmpB = BulletList.get(name);
 		this.fdf = tmpB.fdf;
 		this.name = name;
@@ -48,6 +51,7 @@ public class Bullet {
 		this.bodyScale = tmpB.bodyScale;
 		this.lifespanEnabled = (this.lifespan!=0);
 		toRemove = false;
+		this.ownerId = ownerId;
 		
 		BodyDef bd = new BodyDef();
 		bd.type = BodyType.DynamicBody;
@@ -121,6 +125,7 @@ public class Bullet {
 	public long getLifespan() {return lifespan;}
 	public float getAngle() {return angle;}
 	public short getEffects() {return effects;}
+	public int getOwnerId() {return ownerId;}
 
 	public void setAngle(float angle) {this.angle = angle;}
 

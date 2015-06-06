@@ -130,7 +130,8 @@ public class NetworkListener extends Listener{
     												GDXServer.bel,
     												pb.name,
     												pb.pos,
-    												pb.angle));
+    												pb.angle,
+    												pb.ownerId));
     		}
     		GDXServer.server.sendToAllTCP(pb);
     	} else if (object instanceof PacketSwitchWeapon){

@@ -96,7 +96,8 @@ public class NetworkListener extends Listener{
 											Play.getLoader(),
 										    pb.name,
 											pb.pos,
-											pb.angle));
+											pb.angle,
+											Play.player.id));
 		} else if (object instanceof PacketSwitchWeapon){
 			PacketSwitchWeapon psw = (PacketSwitchWeapon) object;
 			LocalClientPlayer lcp = Play.playerList.get(psw.id);

@@ -51,7 +51,7 @@ public class Weapon {
 	}
 	private void shoot(){
 		nextTimeShoot=System.nanoTime()+coolDown;
-		PacketBullet pb = new PacketBullet(barrelPos.cpy(), bullet);
+		PacketBullet pb = new PacketBullet(barrelPos.cpy(), bullet.getOwnerId(), bullet);
 		Game.client.sendUDP(pb);
 		
 		if(!IPmenu.play){ //we are offline //TODO: this is debug only
@@ -59,7 +59,8 @@ public class Weapon {
 											Play.getLoader(),
 										    pb.name,
 											pb.pos,
-											pb.angle));
+											pb.angle,
+											Play.player.id));
 		}
 	}
 	

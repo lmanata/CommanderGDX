@@ -11,7 +11,6 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import net.bigfootsoftware.bobtrucking.BodyEditorLoader;
 
-import com.afonsobordado.CommanderGDX.Game;
 import com.afonsobordado.CommanderGDX.packets.PacketFile;
 import com.afonsobordado.CommanderGDX.entities.Lists.AnimationList;
 import com.afonsobordado.CommanderGDX.entities.Lists.BulletList;
@@ -50,7 +49,6 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
-import com.badlogic.gdx.utils.Json;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryonet.Server;
