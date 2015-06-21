@@ -12,6 +12,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
+import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.World;
 
@@ -89,7 +90,7 @@ public class Bullet {
 		this.fdf = fixtureDefFile;
 		this.bodyScale = bodyScale;
 	}
-	
+
 	public void update(float dt){
 		if(Math.abs(body.getLinearVelocity().y) > 0.02f ||
 		   Math.abs(body.getLinearVelocity().x) > 0.02f )

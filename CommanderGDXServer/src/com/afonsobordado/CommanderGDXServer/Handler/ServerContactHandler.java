@@ -1,5 +1,6 @@
 package com.afonsobordado.CommanderGDXServer.Handler;
 
+import com.afonsobordado.CommanderGDX.entities.weapons.Bullet;
 import com.afonsobordado.CommanderGDXServer.LocalObjects.LocalServerPlayer;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Contact;
@@ -35,6 +36,22 @@ public class ServerContactHandler implements ContactListener{
 				lsp.setFootContacts(lsp.getFootContacts()+1);
 			}
 		}
+		
+		if(fa.getBody().getUserData() instanceof Bullet &&
+		   fb.getBody().getUserData() instanceof LocalServerPlayer){
+			((LocalServerPlayer) fb.getBody().getUserData()).hit((Bullet) fa.getBody().getUserData());
+			
+		}else if(fb.getBody().getUserData() instanceof Bullet &&
+			     fa.getBody().getUserData() instanceof LocalServerPlayer){
+			
+			((LocalServerPlayer) fa.getBody().getUserData()).hit((Bullet) fb.getBody().getUserData());
+		}
+		
+		
+		
+		/*if(fa.getUserData().equals("bullet") || fb.getUserData().equals("bullet")){
+			if(fa.getUserData().equals("") || fb.getUserData().equals());
+		}*/
 
 		/*if(fa.getUserData() != null && fa.getUserData().equals("bullet"))
 			((Bullet) fa.getBody().getUserData()).setRemove(true);

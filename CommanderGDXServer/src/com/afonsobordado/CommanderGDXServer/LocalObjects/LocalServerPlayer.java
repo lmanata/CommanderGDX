@@ -1,5 +1,6 @@
 package com.afonsobordado.CommanderGDXServer.LocalObjects;
 
+import com.afonsobordado.CommanderGDX.entities.weapons.Bullet;
 import com.afonsobordado.CommanderGDX.handlers.ActionList;
 import com.afonsobordado.CommanderGDX.packets.NetworkObject.NetworkPlayer;
 import com.afonsobordado.CommanderGDXServer.GDXServer;
@@ -13,6 +14,7 @@ public class LocalServerPlayer extends NetworkPlayer{
 	public String playerClass;
 	public Body body;
 	public ActionList al;
+	public int hp;
 	private int footContacts;
 	public LocalServerPlayer(int id,
 							 String name,
@@ -30,6 +32,7 @@ public class LocalServerPlayer extends NetworkPlayer{
 		this.connectionID = connectionID;
 		this.weapon = weapon;
 		this.playerClass = playerClass;
+		this.hp = 100;
 		this.lastPacketTime = System.currentTimeMillis();
 		this.al = new ActionList();
 		this.body = GDXServer.pf.getBodyByClass(playerClass);
@@ -72,6 +75,12 @@ public class LocalServerPlayer extends NetworkPlayer{
 
 	public boolean isGrounded() {
 		return footContacts>0;
+	}
+
+	public void hit(Bullet b) {
+		Vector2 vel = b.getBody().getLinearVelocity();
+		this.hp -= Math.sqrt((vel.x * vel.x) + (vel.y * vel.y)); 
+		System.out.println("LSP: PRV: " + hp + " : spped: "+Math.sqrt((vel.x * vel.x) + (vel.y * vel.y))+" : Now: "+hp);
 	}
 
 
