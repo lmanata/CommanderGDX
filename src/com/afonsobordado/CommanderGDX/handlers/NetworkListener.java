@@ -91,8 +91,6 @@ public class NetworkListener extends Listener{
 		} else if (object instanceof PacketBullet){
 			
 			PacketBullet pb = (PacketBullet) object;
-			
-			//This Should come from PacketBullet
 			Play.bulletList.add(new Bullet(	Play.getWorld(),
 											Play.getLoader(),
 										    pb.name,

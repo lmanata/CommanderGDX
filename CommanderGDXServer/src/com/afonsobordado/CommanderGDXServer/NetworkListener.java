@@ -1,6 +1,7 @@
 package com.afonsobordado.CommanderGDXServer;
 
 import java.util.ArrayList;
+
 import com.afonsobordado.CommanderGDX.entities.weapons.Bullet;
 import com.afonsobordado.CommanderGDX.files.HashFileMap;
 import com.afonsobordado.CommanderGDX.packets.PacketAccepted;
@@ -14,6 +15,7 @@ import com.afonsobordado.CommanderGDX.packets.PacketNewPlayer;
 import com.afonsobordado.CommanderGDX.packets.PacketSwitchWeapon;
 import com.afonsobordado.CommanderGDX.packets.NetworkObject.NetworkPlayer;
 import com.afonsobordado.CommanderGDX.utils.SUtils;
+import com.afonsobordado.CommanderGDX.vars.B2DVars;
 import com.afonsobordado.CommanderGDXServer.LocalObjects.LocalServerPlayer;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
@@ -100,6 +102,10 @@ public class NetworkListener extends Listener{
     			connection.sendTCP(outPnp);
     		}
     		
+    		for(Bullet b: GDXServer.bulletList){
+    			PacketBullet pb = new PacketBullet(b.getBody().getPosition().scl(B2DVars.PPM), b);
+    			connection.sendTCP(pb);
+    		}
     		
     		/*i could use the connection id as a Integer on the hashmap
     		 *but i don't know how kryonet handles id's and if for some reason it can colide with a previous value*/
