@@ -85,7 +85,7 @@ public class GDXServer {
 	
 	//current game vars
 	public static String currentMap = "level2";
-	
+	private static NetworkListener nl = new NetworkListener();
 	public static void main(String[] args){
 		world = new World(new Vector2(0, -9.81f), true);
 		world.setContactListener(sch = new ServerContactHandler());
@@ -145,7 +145,7 @@ public class GDXServer {
 			System.exit(1);
 		}
 	    
-	    server.addListener(new NetworkListener());
+	    server.addListener(nl);
 	    
 	    if(SVHEnable)
 	    	svh = new ServerViewerHandler();
@@ -178,8 +178,7 @@ public class GDXServer {
 						pd.np = lsp.getNetworkPlayer();
 						pd.reason = "Timeout";
 						server.sendToAllTCP(pd);
-						GDXServer.playerList.get(lsp.id).removeBody();
-						GDXServer.playerList.remove(lsp.id);
+						lsp.disconnect();
 						continue;
 					}
 					server.sendToAllUDP(lsp.getNetworkPlayer());

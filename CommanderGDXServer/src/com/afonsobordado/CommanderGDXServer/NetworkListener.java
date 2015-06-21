@@ -1,6 +1,7 @@
 package com.afonsobordado.CommanderGDXServer;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 import com.afonsobordado.CommanderGDX.entities.weapons.Bullet;
 import com.afonsobordado.CommanderGDX.files.HashFileMap;
@@ -117,9 +118,8 @@ public class NetworkListener extends Listener{
     		p.networkUpdate(np);
     		
     	} else if (object instanceof PacketDisconnect){
-    		//untested
     		PacketDisconnect pd = (PacketDisconnect) object;
-    		GDXServer.playerList.remove(pd.np.id);
+    		GDXServer.playerList.get(pd.np.id).disconnect();
     		GDXServer.server.sendToAllExceptTCP(connection.getID(), pd);
     	} else if (object instanceof PacketBullet){
     		//add to some sort of list

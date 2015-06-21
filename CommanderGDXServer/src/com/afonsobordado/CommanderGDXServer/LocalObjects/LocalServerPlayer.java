@@ -1,5 +1,7 @@
 package com.afonsobordado.CommanderGDXServer.LocalObjects;
 
+import java.util.Iterator;
+
 import com.afonsobordado.CommanderGDX.entities.weapons.Bullet;
 import com.afonsobordado.CommanderGDX.handlers.ActionList;
 import com.afonsobordado.CommanderGDX.packets.NetworkObject.NetworkPlayer;
@@ -77,10 +79,30 @@ public class LocalServerPlayer extends NetworkPlayer{
 		return footContacts>0;
 	}
 
-	public void hit(Bullet b) {
+	public void hit(Bullet b, float multiplier) {
 		Vector2 vel = b.getBody().getLinearVelocity();
-		this.hp -= Math.sqrt((vel.x * vel.x) + (vel.y * vel.y)); 
-		System.out.println("LSP: PRV: " + hp + " : spped: "+Math.sqrt((vel.x * vel.x) + (vel.y * vel.y))+" : Now: "+hp);
+		this.hp -= Math.sqrt((vel.x * vel.x) + (vel.y * vel.y)) * multiplier;
+		if(hp < 0f){
+			deathCleanup();
+		}
+	}
+	
+	public void deathCleanup(){
+		
+	}
+	
+	public void disconnect(){
+		synchronized(GDXServer.getWorld()){
+			for (Iterator<Bullet> iterator = GDXServer.bulletList.iterator(); iterator.hasNext();) {
+			    Bullet b = iterator.next();
+			    if (b.getOwnerId() == this.id) {
+			    	GDXServer.getWorld().destroyBody(b.getBody());
+			        iterator.remove();
+			    }
+			}
+		}
+		removeBody();
+		GDXServer.playerList.remove(id);
 	}
 
 
