@@ -1,8 +1,6 @@
 package com.afonsobordado.CommanderGDXServer;
 
 import java.util.ArrayList;
-import java.util.Iterator;
-
 import com.afonsobordado.CommanderGDX.entities.weapons.Bullet;
 import com.afonsobordado.CommanderGDX.files.HashFileMap;
 import com.afonsobordado.CommanderGDX.packets.PacketAccepted;
@@ -122,9 +120,9 @@ public class NetworkListener extends Listener{
     		GDXServer.playerList.get(pd.np.id).disconnect();
     		GDXServer.server.sendToAllExceptTCP(connection.getID(), pd);
     	} else if (object instanceof PacketBullet){
-    		//add to some sort of list
     		//verify validity of the bullet position
     		PacketBullet pb = (PacketBullet) object;
+    		System.out.println("b: BID:" + pb.ownerId);
     		synchronized(GDXServer.world){
     			GDXServer.bulletList.add(new Bullet(GDXServer.world,
     												GDXServer.bel,
@@ -144,6 +142,14 @@ public class NetworkListener extends Listener{
     		if(p == null){return;}
     		p.al.update(pa.action, pa.down, pa.press);
     	}
+	}
+	
+	public void disconnected(Connection connection) {
+		for(LocalServerPlayer lsp: GDXServer.playerList.values()){
+			if(lsp.connectionID == connection.getID()){
+				lsp.disconnect();
+			}
+		}
 	}
 }
 

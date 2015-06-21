@@ -50,8 +50,9 @@ public class Weapon {
 		
 	}
 	private void shoot(){
+		bullet.setOwnerId(Play.player.id);
 		nextTimeShoot=System.nanoTime()+coolDown;
-		PacketBullet pb = new PacketBullet(barrelPos.cpy(), bullet.getOwnerId(), bullet);
+		PacketBullet pb = new PacketBullet(barrelPos.cpy(), bullet);
 		Game.client.sendUDP(pb);
 		
 		if(!IPmenu.play){ //we are offline //TODO: this is debug only

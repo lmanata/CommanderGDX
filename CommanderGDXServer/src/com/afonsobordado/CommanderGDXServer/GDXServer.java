@@ -11,7 +11,6 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import net.bigfootsoftware.bobtrucking.BodyEditorLoader;
 
-import com.afonsobordado.CommanderGDX.packets.PacketFile;
 import com.afonsobordado.CommanderGDX.entities.Lists.AnimationList;
 import com.afonsobordado.CommanderGDX.entities.Lists.BulletList;
 import com.afonsobordado.CommanderGDX.entities.Lists.WeaponList;
@@ -30,6 +29,8 @@ import com.afonsobordado.CommanderGDX.packets.PacketBullet;
 import com.afonsobordado.CommanderGDX.packets.PacketConsoleMessage;
 import com.afonsobordado.CommanderGDX.packets.PacketDeclined;
 import com.afonsobordado.CommanderGDX.packets.PacketDisconnect;
+import com.afonsobordado.CommanderGDX.packets.PacketFile;
+import com.afonsobordado.CommanderGDX.packets.PacketHP;
 import com.afonsobordado.CommanderGDX.packets.PacketHello;
 import com.afonsobordado.CommanderGDX.packets.PacketNewPlayer;
 import com.afonsobordado.CommanderGDX.packets.PacketPositionUpdate;
@@ -48,6 +49,7 @@ import com.badlogic.gdx.backends.headless.HeadlessApplication;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.World;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.io.Input;
@@ -72,6 +74,7 @@ public class GDXServer {
 	
 	public static ConcurrentHashMap<Integer, LocalServerPlayer> playerList;
 	public static ArrayList<Bullet> bulletList;
+	public static ArrayList<Body> bodyList;
 
 	public static Server server;
 	public static Kryo fileSerializer;
@@ -112,7 +115,8 @@ public class GDXServer {
 		HashFileMapOrig = SUtils.genHashFileMapList(Gdx.files.internal(resDir));
 		fileSerializer = new FileSerializer().getSerializer();
 		playerList = new ConcurrentHashMap<Integer, LocalServerPlayer>(16, 0.9f, 2);// 2 concurrent threads is a worst case scenario
-		bulletList = new ArrayList<Bullet>();// 2 concurrent threads is a worst case scenario
+		bulletList = new ArrayList<Bullet>();
+		bodyList = new ArrayList<Body>();
 
 		registerBullets();
 		
@@ -134,6 +138,7 @@ public class GDXServer {
 	    server.getKryo().register(HashFileMap[].class);
 	    server.getKryo().register(PacketFile.class);
 	    server.getKryo().register(byte[].class);
+	    server.getKryo().register(PacketHP.class);
 	    server.start();
 	    
 	    try {
@@ -162,6 +167,14 @@ public class GDXServer {
 				handlePlayerInput();
 				synchronized(GDXServer.getWorld()){
 					world.step(delta / B2DW_TICK, B2DW_VELOCITY_ITER, B2DW_POSITION_ITER);
+					if(!bodyList.isEmpty()){
+						
+						for(Body b:bodyList)
+							world.destroyBody(b);
+						
+						bodyList.clear();
+					}
+						
 				}
 				delta--;
 			}
@@ -172,16 +185,17 @@ public class GDXServer {
 				
 				
 				for(LocalServerPlayer lsp: GDXServer.playerList.values()){
-					
-					if( (System.currentTimeMillis()-lsp.lastPacketTime) > GameVars.PLAYER_TIMEOUT){ //poll the timeout
-						PacketDisconnect pd = new PacketDisconnect();
-						pd.np = lsp.getNetworkPlayer();
-						pd.reason = "Timeout";
-						server.sendToAllTCP(pd);
-						lsp.disconnect();
-						continue;
+					if(lsp.isAlive()){
+						if( (System.currentTimeMillis()-lsp.lastPacketTime) > GameVars.PLAYER_TIMEOUT){ //poll the timeout
+							PacketDisconnect pd = new PacketDisconnect();
+							pd.np = lsp.getNetworkPlayer();
+							pd.reason = "Timeout";
+							server.sendToAllTCP(pd);
+							lsp.disconnect();
+							continue;
+						}
+						server.sendToAllUDP(lsp.getNetworkPlayer());
 					}
-					server.sendToAllUDP(lsp.getNetworkPlayer());
 					
 				}
 			}
@@ -192,6 +206,7 @@ public class GDXServer {
 	
 	public static void handlePlayerInput(){
 		for(LocalServerPlayer lsp: GDXServer.playerList.values()){
+			if(lsp.isAlive());
 			for(Action a: Action.values()){
 				ActionStatus as = lsp.al.get(a);
 				if(as == null) continue;

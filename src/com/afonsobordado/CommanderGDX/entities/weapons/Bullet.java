@@ -149,6 +149,11 @@ public class Bullet {
 		return name;
 	}
 
+	public void setOwnerId(int id) {
+		this.ownerId = id;
+		
+	}
+
 
 	
 }

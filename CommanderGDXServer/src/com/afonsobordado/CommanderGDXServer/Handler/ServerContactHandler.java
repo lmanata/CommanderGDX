@@ -52,7 +52,6 @@ public class ServerContactHandler implements ContactListener{
 			
 		}else if(fb.getBody().getUserData() instanceof Bullet &&
 			     fa.getBody().getUserData() instanceof LocalServerPlayer){
-			System.out.println("HIT: " + fb.getUserData());
 
 			float multiplier=0;
 			if(fa.getUserData() == "legs")

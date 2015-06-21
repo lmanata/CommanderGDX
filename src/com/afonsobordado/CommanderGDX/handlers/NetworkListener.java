@@ -9,6 +9,7 @@ import com.afonsobordado.CommanderGDX.packets.PacketConsoleMessage;
 import com.afonsobordado.CommanderGDX.packets.PacketDeclined;
 import com.afonsobordado.CommanderGDX.packets.PacketDisconnect;
 import com.afonsobordado.CommanderGDX.packets.PacketFile;
+import com.afonsobordado.CommanderGDX.packets.PacketHP;
 import com.afonsobordado.CommanderGDX.packets.PacketNewPlayer;
 import com.afonsobordado.CommanderGDX.packets.PacketSwitchWeapon;
 import com.afonsobordado.CommanderGDX.packets.NetworkObject.NetworkPlayer;
@@ -97,7 +98,7 @@ public class NetworkListener extends Listener{
 										    pb.name,
 											pb.pos,
 											pb.angle,
-											Play.player.id));
+											pb.ownerId));
 		} else if (object instanceof PacketSwitchWeapon){
 			PacketSwitchWeapon psw = (PacketSwitchWeapon) object;
 			LocalClientPlayer lcp = Play.playerList.get(psw.id);
@@ -105,6 +106,11 @@ public class NetworkListener extends Listener{
 		} else if (object instanceof PacketFile){
 			PacketFile pf = (PacketFile) object;
 			Game.writeList.add(pf);
+		} else if (object instanceof PacketHP){
+			PacketHP ph = (PacketHP) object;
+			if(Play.player.id == ph.id){
+				Play.player.setHp(ph.hp);
+			} 
 		}
 		
    }

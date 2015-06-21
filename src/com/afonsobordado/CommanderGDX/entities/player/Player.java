@@ -28,7 +28,7 @@ import com.badlogic.gdx.utils.Array;
 public class Player {
 	public static String playerClass = "MainChar";
 	
-	
+	private float hp;
 	private Body body;
 	public boolean grounded;
 	private long lastGroundTime;
@@ -216,6 +216,15 @@ public class Player {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+	
+	public float getHp() {
+		return hp;
+	}
+
+
+	public void setHp(float hp) {
+		this.hp = hp;
 	}
 
 

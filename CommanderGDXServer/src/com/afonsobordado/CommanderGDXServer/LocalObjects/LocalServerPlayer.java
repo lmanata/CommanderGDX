@@ -4,6 +4,7 @@ import java.util.Iterator;
 
 import com.afonsobordado.CommanderGDX.entities.weapons.Bullet;
 import com.afonsobordado.CommanderGDX.handlers.ActionList;
+import com.afonsobordado.CommanderGDX.packets.PacketHP;
 import com.afonsobordado.CommanderGDX.packets.NetworkObject.NetworkPlayer;
 import com.afonsobordado.CommanderGDXServer.GDXServer;
 import com.badlogic.gdx.math.Vector2;
@@ -58,9 +59,7 @@ public class LocalServerPlayer extends NetworkPlayer{
 	}
 	
 	public void removeBody(){
-		synchronized(GDXServer.getWorld()){
-			GDXServer.getWorld().destroyBody(this.body);
-		}
+			GDXServer.bodyList.add(body);
 	}
 	
 	public void setWeapon(String newWeapon){
@@ -82,27 +81,38 @@ public class LocalServerPlayer extends NetworkPlayer{
 	public void hit(Bullet b, float multiplier) {
 		Vector2 vel = b.getBody().getLinearVelocity();
 		this.hp -= Math.sqrt((vel.x * vel.x) + (vel.y * vel.y)) * multiplier;
+		sendHP();
 		if(hp < 0f){
 			deathCleanup();
 		}
 	}
 	
 	public void deathCleanup(){
-		
+		removeBody();
+	}
+	
+	public void sendHP(){
+		PacketHP php = new PacketHP(id,hp);
+		GDXServer.server.sendToTCP(this.connectionID, php);
 	}
 	
 	public void disconnect(){
 		synchronized(GDXServer.getWorld()){
 			for (Iterator<Bullet> iterator = GDXServer.bulletList.iterator(); iterator.hasNext();) {
 			    Bullet b = iterator.next();
+			    System.out.println("Bullet: BID: "+ b.getOwnerId() + " PID: " + id);
 			    if (b.getOwnerId() == this.id) {
-			    	GDXServer.getWorld().destroyBody(b.getBody());
+			    	GDXServer.bodyList.add(b.getBody());
 			        iterator.remove();
 			    }
 			}
 		}
 		removeBody();
 		GDXServer.playerList.remove(id);
+	}
+
+	public boolean isAlive() {
+		return hp < 0f;
 	}
 
 
