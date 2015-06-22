@@ -34,7 +34,7 @@ public class LocalClientPlayer{
 		this.nextPacket = pnp.np;
 		this.playerClass = pnp.playerClass;
 		this.weapon = WeaponList.get(pnp.weapon);
-		
+		System.out.println("LCP!");
 
 		body = pf.getBodyByClass(playerClass);
 		
@@ -49,9 +49,10 @@ public class LocalClientPlayer{
 		body.setUserData(this);
 	
 		
-		
+		pc = new PlayerCharacter(pf.getFileByClass(playerClass), this.weapon, body);
 
-		pc = new PlayerCharacter(AnimationList.get("MainCharLegsIdle"),
+
+		/*pc = new PlayerCharacter(AnimationList.get("MainCharLegsIdle"),
    								 AnimationList.get("MainCharLegsJump"),
 								 AnimationList.get("MainCharLegsRun"),
 								 AnimationList.get("MainCharTorso"),
@@ -59,11 +60,10 @@ public class LocalClientPlayer{
 								 new Vector2(13,12), //torsoPin
 								 new Vector2(4,8), //armPin
 								 this.weapon,
-								 this.body);
+								 this.body);*/
 		
 		body.setLinearVelocity(pnp.np.linearVelocity);
 		body.setTransform(pnp.np.pos, body.getAngle());
-		body.setUserData(this); //circular refrences
 	}
 	
 	public void updateNetworkPlayer(NetworkPlayer np){

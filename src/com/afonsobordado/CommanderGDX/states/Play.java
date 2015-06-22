@@ -116,7 +116,7 @@ public class Play extends GameState{
 		}
 		
 		player.update(dt);
-		Game.client.sendTCP(player.getNetworkPacket());
+		Game.client.sendUDP(player.getNetworkPacket());
 		
 		for(LocalClientPlayer lcp: playerList.values()){
 			lcp.update(dt);

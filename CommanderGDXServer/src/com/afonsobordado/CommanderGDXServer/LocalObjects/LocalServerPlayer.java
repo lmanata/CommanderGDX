@@ -112,7 +112,7 @@ public class LocalServerPlayer extends NetworkPlayer{
 	}
 
 	public boolean isAlive() {
-		return hp < 0f;
+		return hp > 0f;
 	}
 
 

@@ -53,11 +53,14 @@ public class NetworkListener extends Listener{
 			//pop back to the menu and present a decline reason
 		} else if (object instanceof PacketNewPlayer){
 			PacketNewPlayer pnp = (PacketNewPlayer) object;
-			if(Play.playerList == null) return; //if this happens we should ask for the packet again or else it will be ignored
+			if(Play.playerList == null){
+				System.out.println("PNP FAIL");
+				return; //if this happens we should ask for the packet again or else it will be ignored
+			}
 			if(pnp.np.id == Play.player.id) return; //this is the local player, there is no need to add
 			
 			LocalClientPlayer lcp = new LocalClientPlayer(pnp,Play.getWorld(),Play.getPlayerFactory());
-			
+			System.out.println("PNP!");
 			Play.playerList.put(pnp.np.id, lcp); //using the same id as the server prevents many array traversals
 		} else if (object instanceof NetworkPlayer){
 			NetworkPlayer np = (NetworkPlayer) object;
