@@ -185,7 +185,6 @@ public class GDXServer {
 				
 				
 				for(LocalServerPlayer lsp: GDXServer.playerList.values()){
-					System.out.println("UPD: LSP: "+lsp.connectionID+" a:" + lsp.isAlive());
 					if(lsp.isAlive()){
 						if( (System.currentTimeMillis()-lsp.lastPacketTime) > GameVars.PLAYER_TIMEOUT){ //poll the timeout
 							PacketDisconnect pd = new PacketDisconnect();

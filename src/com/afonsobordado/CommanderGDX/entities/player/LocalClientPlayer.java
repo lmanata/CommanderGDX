@@ -1,11 +1,11 @@
 package com.afonsobordado.CommanderGDX.entities.player;
 
-import com.afonsobordado.CommanderGDX.entities.Lists.AnimationList;
 import com.afonsobordado.CommanderGDX.entities.Lists.WeaponList;
 import com.afonsobordado.CommanderGDX.entities.characters.PlayerCharacter;
 import com.afonsobordado.CommanderGDX.entities.weapons.Weapon;
 import com.afonsobordado.CommanderGDX.packets.PacketNewPlayer;
 import com.afonsobordado.CommanderGDX.packets.NetworkObject.NetworkPlayer;
+import com.afonsobordado.CommanderGDX.states.Play;
 import com.afonsobordado.CommanderGDX.utils.PlayerFactory;
 import com.afonsobordado.CommanderGDX.vars.B2DVars;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -26,6 +26,7 @@ public class LocalClientPlayer{
 	
 	private NetworkPlayer nextPacket;
 	private int lerpCount = B2DVars.LERP_MAX_COUNT;
+	private float hp;
 	
 	public LocalClientPlayer(PacketNewPlayer pnp,World world,PlayerFactory pf) {
 		this.armDegrees = pnp.np.armAngle;
@@ -34,7 +35,7 @@ public class LocalClientPlayer{
 		this.nextPacket = pnp.np;
 		this.playerClass = pnp.playerClass;
 		this.weapon = WeaponList.get(pnp.weapon);
-		System.out.println("LCP!");
+		this.hp = 100f;
 
 		body = pf.getBodyByClass(playerClass);
 		
@@ -130,11 +131,22 @@ public class LocalClientPlayer{
 	}
 	
 	public void destroy(){
-		body.getWorld().destroyBody(body);
+		Play.bodyList.add(body);
 	}
 	public void setWeapon(String newWeapon){
 		this.weapon = WeaponList.get(newWeapon);
 		pc.setWeapon(this.weapon);
+	}
+
+	public void updateHp(float hp) {
+		this.hp = hp;
+		if(this.hp < 0f){
+			destroy();
+		}
+	}
+	
+	public boolean isAlive(){
+		return hp > 0f;
 	}
 	
 }

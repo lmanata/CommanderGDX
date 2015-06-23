@@ -12,6 +12,7 @@ import com.afonsobordado.CommanderGDX.handlers.KeyMap;
 import com.afonsobordado.CommanderGDX.packets.PacketAction;
 import com.afonsobordado.CommanderGDX.packets.PacketSwitchWeapon;
 import com.afonsobordado.CommanderGDX.packets.NetworkObject.NetworkPlayer;
+import com.afonsobordado.CommanderGDX.states.Play;
 import com.afonsobordado.CommanderGDX.utils.PlayerFactory;
 import com.afonsobordado.CommanderGDX.vars.Action;
 import com.afonsobordado.CommanderGDX.vars.ActionMap;
@@ -52,7 +53,7 @@ public class Player {
 		KeyMap = new KeyMap();
 		weapons = new Array<Weapon>();
 		currentWeapon = 0;
-		
+		hp = 100f;
 
 		//THIS IS CLASS STUff
 		weapons.add(WeaponList.get("ak47"));
@@ -225,6 +226,9 @@ public class Player {
 
 	public void setHp(float hp) {
 		this.hp = hp;
+		if(this.hp < 0f){
+			Play.bodyList.add(body);
+		}
 	}
 
 
@@ -256,5 +260,10 @@ public class Player {
 		this.lastNetworkPlayer = np;
 		this.lerpCount = 0;
 
+	}
+
+
+	public boolean isAlive() {
+		return hp > 0f;
 	}
 }

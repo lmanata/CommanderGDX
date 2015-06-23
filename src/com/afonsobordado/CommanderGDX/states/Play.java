@@ -50,7 +50,7 @@ public class Play extends GameState{
 
 	public static ConcurrentHashMap<Integer, LocalClientPlayer> playerList; // will probably be changed to clientPlayer or something like that
 	public static Array<Bullet> bulletList; // change to object list plz
-
+	public static Array<Body> bodyList;
 	
 	private HUD hud;
 	public static String mapName = "level3";
@@ -60,6 +60,7 @@ public class Play extends GameState{
 	
 	private static PlayerFactory pf;
 	//animations
+	
 
 	
 	public Play(GameStateManager gsm) {
@@ -80,6 +81,7 @@ public class Play extends GameState{
 		
 		playerList = new ConcurrentHashMap<Integer, LocalClientPlayer>(16, 0.9f, 2);
 		bulletList = new Array<Bullet>();
+		bodyList = new Array<Body>();
 
 		tileMap = new TmxMapLoader().load("res/maps/" + mapName + ".tmx");
 		tmr = new OrthogonalTiledMapRenderer(tileMap);
@@ -115,11 +117,13 @@ public class Play extends GameState{
 			world.step(dt, 6, 2);
 		}
 		
-		player.update(dt);
+		if(player.isAlive())
+			player.update(dt);
 		Game.client.sendUDP(player.getNetworkPacket());
 		
 		for(LocalClientPlayer lcp: playerList.values()){
-			lcp.update(dt);
+			if(lcp.isAlive())
+				lcp.update(dt);
 		}
 
 		
@@ -136,13 +140,16 @@ public class Play extends GameState{
 		}
 		
 		
-		Array<Body> bodies = cl.getBodiesToRemove();
-		for(Body b: bodies){
+		bodyList.addAll( cl.getBodiesToRemove() );
+		if(bodyList.size > 0){ //this is to ensure that we don't wait on world if there are no bodies to remove
+							   //TODO: verify that java doesn't enter the synchronized block if the for is empty
 			synchronized(Play.getWorld()){
-				world.destroyBody(b);
+				for(Body b: bodyList){
+						world.destroyBody(b);
+				}
 			}
 		}
-		bodies.clear();
+		bodyList.clear();
 	}
 	
 	public void render() {
@@ -163,9 +170,13 @@ public class Play extends GameState{
 		
 		//draw players
 		sb.setProjectionMatrix(cam.combined);
-		player.render(sb);
+		if(player.isAlive()) //?spectator mode?
+			player.render(sb);
+		
 		for(LocalClientPlayer lcp: playerList.values()){
-			lcp.render(sb);
+			if(lcp.isAlive()){
+				lcp.render(sb);
+			}
 		}
 		
 		for(Bullet b: bulletList){

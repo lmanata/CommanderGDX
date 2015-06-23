@@ -93,14 +93,13 @@ public class LocalServerPlayer extends NetworkPlayer{
 	
 	public void sendHP(){
 		PacketHP php = new PacketHP(id,hp);
-		GDXServer.server.sendToTCP(this.connectionID, php);
+		GDXServer.server.sendToAllTCP(php);
 	}
 	
 	public void disconnect(){
 		synchronized(GDXServer.getWorld()){
 			for (Iterator<Bullet> iterator = GDXServer.bulletList.iterator(); iterator.hasNext();) {
 			    Bullet b = iterator.next();
-			    System.out.println("Bullet: BID: "+ b.getOwnerId() + " PID: " + id);
 			    if (b.getOwnerId() == this.id) {
 			    	GDXServer.bodyList.add(b.getBody());
 			        iterator.remove();

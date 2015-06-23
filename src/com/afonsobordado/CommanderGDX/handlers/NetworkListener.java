@@ -15,9 +15,6 @@ import com.afonsobordado.CommanderGDX.packets.PacketSwitchWeapon;
 import com.afonsobordado.CommanderGDX.packets.NetworkObject.NetworkPlayer;
 import com.afonsobordado.CommanderGDX.states.IPmenu;
 import com.afonsobordado.CommanderGDX.states.Play;
-import com.afonsobordado.CommanderGDX.utils.SUtils;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.files.FileHandle;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 
@@ -111,7 +108,9 @@ public class NetworkListener extends Listener{
 			PacketHP ph = (PacketHP) object;
 			if(Play.player.id == ph.id){
 				Play.player.setHp(ph.hp);
-			} 
+			}else{
+				Play.playerList.get(ph.id).updateHp(ph.hp);
+			}
 		}
 		
    }

@@ -128,7 +128,6 @@ public class NetworkListener extends Listener{
     	} else if (object instanceof PacketBullet){
     		//verify validity of the bullet position
     		PacketBullet pb = (PacketBullet) object;
-    		System.out.println("b: BID:" + pb.ownerId);
     		synchronized(GDXServer.world){
     			GDXServer.bulletList.add(new Bullet(GDXServer.world,
     												GDXServer.bel,
