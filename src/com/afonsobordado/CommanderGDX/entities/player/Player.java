@@ -80,43 +80,44 @@ public class Player {
 	
 	
 	public void handleInput(){
-		if(grounded){
-			lastGroundTime = System.nanoTime();
-		}else{
-			if(System.nanoTime() - lastGroundTime < 100000000) grounded = true;
+		if(isAlive()){
+			if(grounded){
+				lastGroundTime = System.nanoTime();
+			}else{
+				if(System.nanoTime() - lastGroundTime < 100000000) grounded = true;
+			}
+			
+			if(Game.getKeyMap().isPressed(ActionMap.actionToKey(Action.GO_UP)) && grounded)
+				body.applyForceToCenter(0, B2DVars.JUMP_FORCE, true);
+			
+			//jumping action
+			Vector2 vel = body.getLinearVelocity();
+			Vector2 pos = body.getPosition();
+			
+			if(Math.abs(vel.x) > PLAYER_MAX_VELOCITY){ 
+				vel.x = Math.signum(vel.x) * PLAYER_MAX_VELOCITY;
+				body.setLinearVelocity(vel.x,vel.y);
+			}
+					
+			// apply left impulse, but only if max velocity is not reached yet
+			if(Game.getKeyMap().isDown(ActionMap.actionToKey(Action.GO_LEFT)) && vel.x > -PLAYER_MAX_VELOCITY){
+				body.applyLinearImpulse(-B2DVars.PLAYER_WALK_FORCE, 0, pos.x, pos.y, true);
+			}
+	
+			// apply right impulse, but only if max velocity is not reached yet
+			if(Game.getKeyMap().isDown(ActionMap.actionToKey(Action.GO_RIGHT)) && vel.x < PLAYER_MAX_VELOCITY){
+				body.applyLinearImpulse(B2DVars.PLAYER_WALK_FORCE, 0, pos.x, pos.y, true);
+			}
+			
+			if(Game.getKeyMap().isDown(ActionMap.actionToKey(Action.SHOOT))){
+				if(Game.getKeyMap().isPressed(ActionMap.actionToKey(Action.SHOOT))) 
+					weapons.get(currentWeapon).shoot(true);
+				else
+					weapons.get(currentWeapon).shoot(false);
+			}
+			
+			if(Game.getKeyMap().isPressed(ActionMap.actionToKey(Action.SWITCH))) switchNextWeapon();
 		}
-		
-		if(Game.getKeyMap().isPressed(ActionMap.actionToKey(Action.GO_UP)) && grounded)
-			body.applyForceToCenter(0, B2DVars.JUMP_FORCE, true);
-		
-		//jumping action
-		Vector2 vel = body.getLinearVelocity();
-		Vector2 pos = body.getPosition();
-		
-		if(Math.abs(vel.x) > PLAYER_MAX_VELOCITY){ 
-			vel.x = Math.signum(vel.x) * PLAYER_MAX_VELOCITY;
-			body.setLinearVelocity(vel.x,vel.y);
-		}
-				
-		// apply left impulse, but only if max velocity is not reached yet
-		if(Game.getKeyMap().isDown(ActionMap.actionToKey(Action.GO_LEFT)) && vel.x > -PLAYER_MAX_VELOCITY){
-			body.applyLinearImpulse(-B2DVars.PLAYER_WALK_FORCE, 0, pos.x, pos.y, true);
-		}
-
-		// apply right impulse, but only if max velocity is not reached yet
-		if(Game.getKeyMap().isDown(ActionMap.actionToKey(Action.GO_RIGHT)) && vel.x < PLAYER_MAX_VELOCITY){
-			body.applyLinearImpulse(B2DVars.PLAYER_WALK_FORCE, 0, pos.x, pos.y, true);
-		}
-		
-		if(Game.getKeyMap().isDown(ActionMap.actionToKey(Action.SHOOT))){
-			if(Game.getKeyMap().isPressed(ActionMap.actionToKey(Action.SHOOT))) 
-				weapons.get(currentWeapon).shoot(true);
-			else
-				weapons.get(currentWeapon).shoot(false);
-		}
-		
-		if(Game.getKeyMap().isPressed(ActionMap.actionToKey(Action.SWITCH))) switchNextWeapon();
-		
 		
 		for(Action a: Action.values()){
 			if(al.needsUpdate(a,
