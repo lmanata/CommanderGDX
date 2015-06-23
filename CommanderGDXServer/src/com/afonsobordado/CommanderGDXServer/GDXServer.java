@@ -83,7 +83,6 @@ public class GDXServer {
 	public static ServerViewerHandler svh;
 	public static boolean SVHEnable = true;
 	
-	public static boolean forceHashCheck = true;
 	public static String resDir = "../res/";
 	public static HashFileMap[] HashFileMapOrig;
 	

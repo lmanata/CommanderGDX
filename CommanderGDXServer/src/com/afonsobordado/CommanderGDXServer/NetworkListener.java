@@ -45,7 +45,11 @@ public class NetworkListener extends Listener{
     			}
     		}
     		
-    		if(GDXServer.forceHashCheck){
+    		if(GDXServer.playerList.size() >= GameVars.SERVER_MAX_PLAYERS){
+				rejectReason = "Server Full";
+    		}
+    		
+    		if(GameVars.SERVER_FORCE_HASH_CHECK){
 	    		ArrayList<HashFileMap> failList;
 	    		if(!((failList = SUtils.checkHash(GDXServer.HashFileMapOrig, pnp.hfc)).isEmpty())){
 					rejectReason = "Hash File Check Failed Retry";
