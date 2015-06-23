@@ -129,7 +129,8 @@ public class Play extends GameState{
 		
 		for(int i=0; i<bulletList.size;i++){
 			Bullet b = bulletList.get(i);
-			if(b.toRemove()){
+			//System.out.println(Math.sqrt((b.getBody().getLinearVelocity().x*b.getBody().getLinearVelocity().x) + (b.getBody().getLinearVelocity().y*b.getBody().getLinearVelocity().y)));
+			if(b.toRemove() || b.getSpeed() < B2DVars.BULLET_DEL_SPEED){
 				synchronized(Play.getWorld()){
 					world.destroyBody(b.getBody());
 					bulletList.removeIndex(i);

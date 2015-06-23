@@ -79,8 +79,7 @@ public class LocalServerPlayer extends NetworkPlayer{
 	}
 
 	public void hit(Bullet b, float multiplier) {
-		Vector2 vel = b.getBody().getLinearVelocity();
-		this.hp -= Math.sqrt((vel.x * vel.x) + (vel.y * vel.y)) * multiplier;
+		this.hp -= b.getSpeed() * multiplier;
 		sendHP();
 		if(hp < 0f){
 			deathCleanup();

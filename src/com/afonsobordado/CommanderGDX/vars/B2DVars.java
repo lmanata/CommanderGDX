@@ -21,6 +21,8 @@ public class B2DVars {
 	//network vars
 	public static final int LERP_MAX_COUNT = 6;
 	public static final float LERP_FACTOR = 0.1f;
+
+	public static final float BULLET_DEL_SPEED = 5f;
 	
 
 }

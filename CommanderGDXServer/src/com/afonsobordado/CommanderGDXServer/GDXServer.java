@@ -7,6 +7,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.concurrent.ConcurrentHashMap;
 
 import net.bigfootsoftware.bobtrucking.BodyEditorLoader;
@@ -165,6 +166,15 @@ public class GDXServer {
 			lastTime = now;
 			if(delta >= 1){
 				handlePlayerInput();
+				
+				for (Iterator<Bullet> iterator = bulletList.iterator(); iterator.hasNext();) {
+				    Bullet b = iterator.next();
+				    if (b.getSpeed() < GameVars.BULLET_DEL_SPEED) {
+				    	GDXServer.bodyList.add(b.getBody());
+				        iterator.remove();
+				    }
+				}
+				
 				synchronized(GDXServer.getWorld()){
 					world.step(delta / B2DW_TICK, B2DW_VELOCITY_ITER, B2DW_POSITION_ITER);
 					if(!bodyList.isEmpty()){

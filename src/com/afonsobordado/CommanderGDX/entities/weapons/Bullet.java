@@ -96,6 +96,8 @@ public class Bullet {
 		   Math.abs(body.getLinearVelocity().x) > 0.02f )
 			angle = (float) Math.toDegrees(Math.atan2(body.getLinearVelocity().y, body.getLinearVelocity().x));
 		
+		
+		
 		animation.update(dt);
 		this.lifespan-=(dt*1000000000);
 		if(lifespanEnabled) toRemove = ((this.lifespan) < 0);
@@ -120,14 +122,16 @@ public class Bullet {
 	}
 	
 	public void setRemove(boolean b) {toRemove=b;}
-	public boolean toRemove(){ return toRemove;}
+	public boolean toRemove(){return toRemove;}
 	public Body getBody() {return body;}
-	public float getSpeed() {return speed;}
+	public float getSpeed() {
+		this.speed = (float) Math.sqrt(( body.getLinearVelocity().x* body.getLinearVelocity().x)+( body.getLinearVelocity().y* body.getLinearVelocity().y));
+		return speed;
+	}
 	public long getLifespan() {return lifespan;}
 	public float getAngle() {return angle;}
 	public short getEffects() {return effects;}
 	public int getOwnerId() {return ownerId;}
-
 	public void setAngle(float angle) {this.angle = angle;}
 
 	public Bullet getCopy() {
