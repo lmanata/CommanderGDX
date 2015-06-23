@@ -190,6 +190,11 @@ public class GDXServer {
 			/*fixed time step*/
 			
 			/*send updated values to clients*/
+			/*if(System.currentTimeMillis() % 1000 == 0){
+				for(LocalServerPlayer lsp: GDXServer.playerList.values())
+					System.out.println("Player: " + lsp.id + " Team: " + lsp.team);
+			}
+			*/
 			if(System.currentTimeMillis() % SERVER_TICK == 0){
 				
 				

@@ -18,6 +18,7 @@ public class LocalServerPlayer extends NetworkPlayer{
 	public Body body;
 	public ActionList al;
 	public int hp;
+	public int team;
 	private int footContacts;
 	public LocalServerPlayer(int id,
 							 String name,
@@ -26,7 +27,8 @@ public class LocalServerPlayer extends NetworkPlayer{
 							 Vector2 linearVelocity,
 							 int connectionID,
 							 String weapon,
-							 String playerClass) {
+							 String playerClass,
+							 int team) {
 		this.id = id;
 		this.name = name;
 		this.pos = pos;
@@ -40,6 +42,7 @@ public class LocalServerPlayer extends NetworkPlayer{
 		this.al = new ActionList();
 		this.body = GDXServer.pf.getBodyByClass(playerClass);
 		this.body.setUserData(this);
+		this.team = team;
 	}
 	
 	public void networkUpdate(NetworkPlayer np){

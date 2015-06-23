@@ -12,5 +12,5 @@ public class PacketNewPlayer {
 	public String weapon;
 	public String playerClass;
 	public HashFileMap[] hfc;
-	
+	public int team;
 }

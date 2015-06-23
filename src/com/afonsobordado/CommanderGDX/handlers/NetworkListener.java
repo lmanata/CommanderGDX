@@ -40,7 +40,9 @@ public class NetworkListener extends Listener{
 				}
 			}
 			Play.player.id = pa.id;
+			Play.player.team = pa.team;
 			Play.mapName = pa.mapName;
+			
 			
 
 			

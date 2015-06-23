@@ -47,6 +47,8 @@ public class Player {
 	
 	private NetworkPlayer lastNetworkPlayer = null;
 	private float lerpCount = 0f;
+
+	public int team;
 	
 	public Player(World world, PlayerFactory pf){
 		al = new ActionList();

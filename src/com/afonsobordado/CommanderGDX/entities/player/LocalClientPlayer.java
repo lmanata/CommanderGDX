@@ -27,6 +27,7 @@ public class LocalClientPlayer{
 	private NetworkPlayer nextPacket;
 	private int lerpCount = B2DVars.LERP_MAX_COUNT;
 	private float hp;
+	private int team;
 	
 	public LocalClientPlayer(PacketNewPlayer pnp,World world,PlayerFactory pf) {
 		this.armDegrees = pnp.np.armAngle;
@@ -36,6 +37,7 @@ public class LocalClientPlayer{
 		this.playerClass = pnp.playerClass;
 		this.weapon = WeaponList.get(pnp.weapon);
 		this.hp = 100f;
+		this.team = pnp.team;
 
 		body = pf.getBodyByClass(playerClass);
 		

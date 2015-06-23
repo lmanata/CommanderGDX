@@ -64,6 +64,7 @@ public class IPmenu extends GameState{
 		    	pnp.playerClass = Player.playerClass;
 		    	pnp.weapon = "ak47";
 		    	pnp.hfc = SUtils.genHashFileMapList(Gdx.files.internal("res/"));
+		    	//pnp.team = ? perf team
 		    	
 				Game.client.sendTCP(pnp);
 		    	 

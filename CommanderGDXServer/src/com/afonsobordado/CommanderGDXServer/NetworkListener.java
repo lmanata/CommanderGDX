@@ -76,6 +76,7 @@ public class NetworkListener extends Listener{
     		PacketAccepted pa = new PacketAccepted();
     		pa.id = GDXServer.playerList.size();
     		pa.mapName = GDXServer.currentMap;
+    		pa.team = (GDXServer.playerList.size() % 2);
     		connection.sendTCP(pa);
     		
     		LocalServerPlayer newPlayer = new LocalServerPlayer(GDXServer.playerList.size(),
@@ -85,7 +86,8 @@ public class NetworkListener extends Listener{
 																new Vector2(0,0),
 																connection.getID(),
 																pnp.weapon,
-																pnp.playerClass);
+																pnp.playerClass,
+																(GDXServer.playerList.size() % 2));
     		
     		
     		//Announce to all connected clients, there is a new player
@@ -94,6 +96,7 @@ public class NetworkListener extends Listener{
 			outPnp.name = newPlayer.name;
 			outPnp.weapon = newPlayer.weapon;
 			outPnp.playerClass = newPlayer.playerClass;
+			outPnp.team = newPlayer.team;
     		GDXServer.server.sendToAllExceptTCP(newPlayer.connectionID, outPnp);
     		
     		//send to new player all the connected clients
@@ -103,6 +106,7 @@ public class NetworkListener extends Listener{
     			outPnp.name = lsp.name;
     			outPnp.playerClass = lsp.playerClass;
     			outPnp.weapon = lsp.weapon;
+    			outPnp.team = lsp.team;
     			connection.sendTCP(outPnp);
     		}
     		
