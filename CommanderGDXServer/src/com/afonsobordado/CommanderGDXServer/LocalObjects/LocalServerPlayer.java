@@ -7,6 +7,7 @@ import com.afonsobordado.CommanderGDX.handlers.ActionList;
 import com.afonsobordado.CommanderGDX.packets.PacketHP;
 import com.afonsobordado.CommanderGDX.packets.NetworkObject.NetworkPlayer;
 import com.afonsobordado.CommanderGDXServer.GDXServer;
+import com.afonsobordado.CommanderGDXServer.GameVars;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 
@@ -82,10 +83,13 @@ public class LocalServerPlayer extends NetworkPlayer{
 	}
 
 	public void hit(Bullet b, float multiplier) {
-		this.hp -= b.getSpeed() * multiplier;
-		sendHP();
-		if(hp < 0f){
-			deathCleanup();
+		if(((GDXServer.playerList.get(b.getOwnerId()).team == this.team) && GameVars.SERVER_FRIENDLY_FIRE) ||
+			(GDXServer.playerList.get(b.getOwnerId()).team != this.team)){ 
+			this.hp -= b.getSpeed() * multiplier;
+			sendHP();
+			if(hp < 0f){
+				deathCleanup();
+			}
 		}
 	}
 	
