@@ -225,6 +225,7 @@ public class GDXServer {
 				}
 				
 				
+				
 				fList.clear();
 				world.getFixtures(fList);
 

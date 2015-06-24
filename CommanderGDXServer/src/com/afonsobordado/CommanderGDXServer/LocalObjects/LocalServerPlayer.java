@@ -9,6 +9,7 @@ import com.afonsobordado.CommanderGDX.packets.PacketSpawn;
 import com.afonsobordado.CommanderGDX.packets.NetworkObject.NetworkPlayer;
 import com.afonsobordado.CommanderGDXServer.GDXServer;
 import com.afonsobordado.CommanderGDXServer.GameVars;
+import com.afonsobordado.CommanderGDXServer.Stats.PlayerStats;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Fixture;
@@ -24,6 +25,7 @@ public class LocalServerPlayer extends NetworkPlayer{
 	public int team;
 	private int footContacts;
 	public long deathTime;
+	public PlayerStats ps;
 	public LocalServerPlayer(int id,
 							 String name,
 							 Vector2 pos,
@@ -33,6 +35,7 @@ public class LocalServerPlayer extends NetworkPlayer{
 							 String weapon,
 							 String playerClass,
 							 int team) {
+		ps=new PlayerStats();
 		this.id = id;
 		this.name = name;
 		this.pos = pos;
@@ -85,12 +88,18 @@ public class LocalServerPlayer extends NetworkPlayer{
 		return footContacts>0;
 	}
 
+	public void addKill(){
+		ps.kills++;
+	}
+	
 	public void hit(Bullet b, float multiplier) {
 		if(((GDXServer.playerList.get(b.getOwnerId()).team == this.team) && GameVars.SERVER_FRIENDLY_FIRE) ||
 			(GDXServer.playerList.get(b.getOwnerId()).team != this.team)){ 
 			this.hp -= b.getSpeed() * multiplier;
 			sendHP();
 			if(hp < 0f){
+				GDXServer.playerList.get(b.getOwnerId()).addKill();
+				ps.deaths++;
 				deathCleanup();
 				this.deathTime = System.currentTimeMillis();
 			}

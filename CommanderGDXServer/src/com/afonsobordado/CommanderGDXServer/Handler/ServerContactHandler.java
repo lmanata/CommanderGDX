@@ -1,6 +1,7 @@
 package com.afonsobordado.CommanderGDXServer.Handler;
 
 import com.afonsobordado.CommanderGDX.entities.weapons.Bullet;
+import com.afonsobordado.CommanderGDXServer.GDXServer;
 import com.afonsobordado.CommanderGDXServer.GameVars;
 import com.afonsobordado.CommanderGDXServer.LocalObjects.LocalServerPlayer;
 import com.badlogic.gdx.physics.box2d.Body;
@@ -48,8 +49,7 @@ public class ServerContactHandler implements ContactListener{
 			else if(fb.getUserData().equals("head"))
 				multiplier = GameVars.HEAD_DMG_MULTIPLIER;
 			
-			((LocalServerPlayer) fb.getBody().getUserData()).hit((Bullet) fa.getBody().getUserData(), multiplier);
-			
+			((LocalServerPlayer) fb.getBody().getUserData()).hit((Bullet) fa.getBody().getUserData(), multiplier);			
 		}else if(fb.getBody().getUserData() instanceof Bullet &&
 			     fa.getBody().getUserData() instanceof LocalServerPlayer){
 
