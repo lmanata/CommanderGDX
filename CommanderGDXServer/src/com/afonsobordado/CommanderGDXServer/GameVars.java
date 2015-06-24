@@ -7,10 +7,13 @@ public class GameVars {
 	public static final float TORSO_DMG_MULTIPLIER = 1.2f;
 	public static final float HEAD_DMG_MULTIPLIER = 2f;
 
+
 	
 	//imported from file
 	public static int SERVER_MAX_PLAYERS = 10;
 	public static boolean SERVER_FRIENDLY_FIRE = false;
 	public static boolean SERVER_AUTO_TEAM_BALANCE = true;
 	public static boolean SERVER_FORCE_HASH_CHECK = true;
+	public static long SERVER_RESPAWN_TIME = 6000; //ms to respawn
+	public static boolean SERVER_RESPAWN_ENABLED = true;
 }

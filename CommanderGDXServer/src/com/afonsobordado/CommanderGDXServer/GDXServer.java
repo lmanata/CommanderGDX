@@ -37,6 +37,7 @@ import com.afonsobordado.CommanderGDX.packets.PacketHP;
 import com.afonsobordado.CommanderGDX.packets.PacketHello;
 import com.afonsobordado.CommanderGDX.packets.PacketNewPlayer;
 import com.afonsobordado.CommanderGDX.packets.PacketPositionUpdate;
+import com.afonsobordado.CommanderGDX.packets.PacketSpawn;
 import com.afonsobordado.CommanderGDX.packets.PacketSwitchWeapon;
 import com.afonsobordado.CommanderGDX.packets.NetworkObject.NetworkPlayer;
 import com.afonsobordado.CommanderGDX.utils.PlayerFactory;
@@ -55,7 +56,9 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.utils.Array;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryonet.Server;
@@ -81,6 +84,8 @@ public class GDXServer {
 	public static ArrayList<Bullet> bulletList;
 	public static ArrayList<Body> bodyList;
 	public static ArrayList<SpawnPos> spawnPosList;
+	public static Array<Fixture> fList;
+
 
 	public static Server server;
 	public static Kryo fileSerializer;
@@ -122,6 +127,7 @@ public class GDXServer {
 		bulletList = new ArrayList<Bullet>();
 		bodyList = new ArrayList<Body>();
 		spawnPosList = new ArrayList<SpawnPos>();
+		fList = new Array<Fixture>();
 		
 		registerSpwanPoints(map);
 		registerBullets();
@@ -145,6 +151,8 @@ public class GDXServer {
 	    server.getKryo().register(PacketFile.class);
 	    server.getKryo().register(byte[].class);
 	    server.getKryo().register(PacketHP.class);
+	    server.getKryo().register(PacketSpawn.class);
+
 	    server.start();
 	    
 	    try {
@@ -201,9 +209,13 @@ public class GDXServer {
 					System.out.println("Player: " + lsp.id + " Team: " + lsp.team);
 			}
 			*/
+			
+
+			
 			if(System.currentTimeMillis() % SERVER_TICK == 0){
-				
-				
+				fList.clear();
+				world.getFixtures(fList);
+
 				for(LocalServerPlayer lsp: GDXServer.playerList.values()){
 					if(lsp.isAlive()){
 						if( (System.currentTimeMillis()-lsp.lastPacketTime) > GameVars.PLAYER_TIMEOUT){ //poll the timeout
@@ -215,6 +227,12 @@ public class GDXServer {
 							continue;
 						}
 						server.sendToAllUDP(lsp.getNetworkPlayer());
+					}else{
+						if(GameVars.SERVER_RESPAWN_ENABLED){
+							if(lsp.deathTime!=0 && (System.currentTimeMillis() - lsp.deathTime > GameVars.SERVER_RESPAWN_TIME)){
+								lsp.respawn();
+							}
+						}
 					}
 					
 				}

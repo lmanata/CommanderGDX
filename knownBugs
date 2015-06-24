@@ -1,4 +1,3 @@
-[Fixed] All Bullets face the same direction when idle (Also general instability)
 [Linux only] Mouse doesen't work when returning from Alt-tab
 CircleShapes don't appear on the Box2D debug renderer
 Mouse doesen't work properly on high resolutions

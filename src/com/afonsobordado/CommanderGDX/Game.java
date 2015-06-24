@@ -30,6 +30,7 @@ import com.afonsobordado.CommanderGDX.packets.PacketHP;
 import com.afonsobordado.CommanderGDX.packets.PacketHello;
 import com.afonsobordado.CommanderGDX.packets.PacketNewPlayer;
 import com.afonsobordado.CommanderGDX.packets.PacketPositionUpdate;
+import com.afonsobordado.CommanderGDX.packets.PacketSpawn;
 import com.afonsobordado.CommanderGDX.packets.PacketSwitchWeapon;
 import com.afonsobordado.CommanderGDX.packets.NetworkObject.NetworkPlayer;
 import com.afonsobordado.CommanderGDX.utils.SUtils;
@@ -104,6 +105,7 @@ public class Game implements ApplicationListener{
 	    client.getKryo().register(PacketFile.class);
 	    client.getKryo().register(byte[].class);
 	    client.getKryo().register(PacketHP.class);
+	    client.getKryo().register(PacketSpawn.class);
 
 	   
 		new Thread(client).start();

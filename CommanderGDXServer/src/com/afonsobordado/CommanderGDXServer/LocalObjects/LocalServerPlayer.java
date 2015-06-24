@@ -5,11 +5,13 @@ import java.util.Iterator;
 import com.afonsobordado.CommanderGDX.entities.weapons.Bullet;
 import com.afonsobordado.CommanderGDX.handlers.ActionList;
 import com.afonsobordado.CommanderGDX.packets.PacketHP;
+import com.afonsobordado.CommanderGDX.packets.PacketSpawn;
 import com.afonsobordado.CommanderGDX.packets.NetworkObject.NetworkPlayer;
 import com.afonsobordado.CommanderGDXServer.GDXServer;
 import com.afonsobordado.CommanderGDXServer.GameVars;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.physics.box2d.Fixture;
 
 public class LocalServerPlayer extends NetworkPlayer{
 	public int connectionID;
@@ -21,6 +23,7 @@ public class LocalServerPlayer extends NetworkPlayer{
 	public int hp;
 	public int team;
 	private int footContacts;
+	public long deathTime;
 	public LocalServerPlayer(int id,
 							 String name,
 							 Vector2 pos,
@@ -89,6 +92,7 @@ public class LocalServerPlayer extends NetworkPlayer{
 			sendHP();
 			if(hp < 0f){
 				deathCleanup();
+				this.deathTime = System.currentTimeMillis();
 			}
 		}
 	}
@@ -120,6 +124,25 @@ public class LocalServerPlayer extends NetworkPlayer{
 		return hp > 0f;
 	}
 
+	public void respawn(){
+		Vector2 pos=null;
+		spawnListLoop:
+		for(SpawnPos sp: GDXServer.spawnPosList){
+			pos=sp.pos;
+			for(Fixture f: GDXServer.fList){
+				if(f.testPoint(sp.pos)){
+					pos = null;
+					break spawnListLoop;
+				}
+					
+			}
+		}
+		if(pos != null){
+			PacketSpawn ps = new PacketSpawn(id, pos);
+			GDXServer.server.sendToAllTCP(ps);
+			deathTime=0;
+		}
+	}
 
 
 }

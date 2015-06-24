@@ -11,6 +11,7 @@ import com.afonsobordado.CommanderGDX.packets.PacketDisconnect;
 import com.afonsobordado.CommanderGDX.packets.PacketFile;
 import com.afonsobordado.CommanderGDX.packets.PacketHP;
 import com.afonsobordado.CommanderGDX.packets.PacketNewPlayer;
+import com.afonsobordado.CommanderGDX.packets.PacketSpawn;
 import com.afonsobordado.CommanderGDX.packets.PacketSwitchWeapon;
 import com.afonsobordado.CommanderGDX.packets.NetworkObject.NetworkPlayer;
 import com.afonsobordado.CommanderGDX.states.IPmenu;
@@ -113,6 +114,9 @@ public class NetworkListener extends Listener{
 			}else{
 				Play.playerList.get(ph.id).updateHp(ph.hp);
 			}
+		} else if (object instanceof PacketSpawn){
+			PacketSpawn ps = (PacketSpawn) object;
+			System.out.println("PacketSpawn: id:" + ps.id + " : "+ps.pos.toString());
 		}
 		
    }
