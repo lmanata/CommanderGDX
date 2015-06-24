@@ -1,5 +1,8 @@
 package com.afonsobordado.CommanderGDXServer;
 
+import com.afonsobordado.CommanderGDXServer.GameTypes.GameType;
+import com.afonsobordado.CommanderGDXServer.GameTypes.GameTypeTDM;
+
 public class GameVars {
 	public static final float BULLET_DEL_SPEED = 5f;
 	public static final int PLAYER_TIMEOUT = 5000;
@@ -16,4 +19,6 @@ public class GameVars {
 	public static boolean SERVER_FORCE_HASH_CHECK = true;
 	public static long SERVER_RESPAWN_TIME = 6000; //ms to respawn
 	public static boolean SERVER_RESPAWN_ENABLED = true;
+	public static GameType SERVER_GAME_TYPE = new GameTypeTDM();
+	
 }

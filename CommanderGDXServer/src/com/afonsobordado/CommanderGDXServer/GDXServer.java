@@ -44,6 +44,8 @@ import com.afonsobordado.CommanderGDX.utils.PlayerFactory;
 import com.afonsobordado.CommanderGDX.utils.SUtils;
 import com.afonsobordado.CommanderGDX.vars.Action;
 import com.afonsobordado.CommanderGDX.vars.B2DVars;
+import com.afonsobordado.CommanderGDXServer.GameTypes.GameType;
+import com.afonsobordado.CommanderGDXServer.GameTypes.GameTypeTDM;
 import com.afonsobordado.CommanderGDXServer.Handler.ServerContactHandler;
 import com.afonsobordado.CommanderGDXServer.Handler.ServerViewerHandler;
 import com.afonsobordado.CommanderGDXServer.LocalObjects.LocalServerPlayer;
@@ -87,6 +89,8 @@ public class GDXServer {
 	public static Array<Fixture> fList;
 
 
+	public static GameType currGameType;
+	
 	public static Server server;
 	public static Kryo fileSerializer;
 	
@@ -213,6 +217,14 @@ public class GDXServer {
 
 			
 			if(System.currentTimeMillis() % SERVER_TICK == 0){
+				int teamWon;
+				if((teamWon = GameVars.SERVER_GAME_TYPE.gameWon()) >= 0){
+					//Server anounce
+					//Server reset with new map
+					//recconect all clients
+				}
+				
+				
 				fList.clear();
 				world.getFixtures(fList);
 
