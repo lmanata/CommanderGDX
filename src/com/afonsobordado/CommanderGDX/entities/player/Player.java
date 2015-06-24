@@ -277,11 +277,11 @@ public class Player {
 
 
 	public void respawn(Vector2 pos) {
-		hp = 100;
+
 		createBody();
 		body.setTransform(pos, 0f);
 		pc.setBody(this.body);
-
+		hp = 100f;
 		
 	}
 }

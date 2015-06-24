@@ -157,10 +157,11 @@ public class LocalClientPlayer{
 	}
 
 	public void respawn(Vector2 pos) {
-		this.hp = 100;
+		
 		createBody();
 		this.body.setTransform(pos, 0f);
 		pc.setBody(this.body);
+		this.hp = 100;
 	}
 	
 }

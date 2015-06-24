@@ -148,7 +148,7 @@ public class LocalServerPlayer extends NetworkPlayer{
 					
 			}
 		}
-		System.out.println("res with pos: "+pos.toString());
+		
 		if(pos != null){
 			PacketSpawn ps = new PacketSpawn(id, pos);
 			GDXServer.server.sendToAllTCP(ps);
