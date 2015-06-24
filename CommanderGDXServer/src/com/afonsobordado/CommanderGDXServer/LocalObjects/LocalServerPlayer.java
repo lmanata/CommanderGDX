@@ -1,6 +1,7 @@
 package com.afonsobordado.CommanderGDXServer.LocalObjects;
 
 import java.util.Iterator;
+import java.util.Map.Entry;
 
 import com.afonsobordado.CommanderGDX.entities.weapons.Bullet;
 import com.afonsobordado.CommanderGDX.handlers.ActionList;
@@ -117,8 +118,9 @@ public class LocalServerPlayer extends NetworkPlayer{
 	
 	public void disconnect(){
 		synchronized(GDXServer.getWorld()){
-			for (Iterator<Bullet> iterator = GDXServer.bulletList.iterator(); iterator.hasNext();) {
-			    Bullet b = iterator.next();
+			for (Iterator<Entry<Integer, Bullet>> iterator = GDXServer.bulletList.entrySet().iterator(); iterator.hasNext();) {
+				Entry<Integer, Bullet> e = iterator.next();
+				Bullet b = e.getValue();
 			    if (b.getOwnerId() == this.id) {
 			    	GDXServer.bodyList.add(b.getBody());
 			        iterator.remove();

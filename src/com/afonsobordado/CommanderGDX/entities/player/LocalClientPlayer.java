@@ -153,7 +153,7 @@ public class LocalClientPlayer{
 	}
 	
 	public boolean isAlive(){
-		return hp > 0f;
+		return (hp > 0f) && (body != null);
 	}
 
 	public void respawn(Vector2 pos) {

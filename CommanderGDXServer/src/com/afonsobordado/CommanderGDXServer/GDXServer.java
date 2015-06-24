@@ -8,6 +8,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -83,7 +84,7 @@ public class GDXServer {
 	
 	
 	public static ConcurrentHashMap<Integer, LocalServerPlayer> playerList;
-	public static ArrayList<Bullet> bulletList;
+	public static ConcurrentHashMap<Integer, Bullet> bulletList;
 	public static ArrayList<Body> bodyList;
 	public static ArrayList<SpawnPos> spawnPosList;
 	public static Array<Fixture> fList;
@@ -128,7 +129,7 @@ public class GDXServer {
 		HashFileMapOrig = SUtils.genHashFileMapList(Gdx.files.internal(resDir));
 		fileSerializer = new FileSerializer().getSerializer();
 		playerList = new ConcurrentHashMap<Integer, LocalServerPlayer>(16, 0.9f, 2);// 2 concurrent threads is a worst case scenario
-		bulletList = new ArrayList<Bullet>();
+		bulletList = new ConcurrentHashMap<Integer, Bullet>();
 		bodyList = new ArrayList<Body>();
 		spawnPosList = new ArrayList<SpawnPos>();
 		fList = new Array<Fixture>();
@@ -184,8 +185,9 @@ public class GDXServer {
 			if(delta >= 1){
 				handlePlayerInput();
 				
-				for (Iterator<Bullet> iterator = bulletList.iterator(); iterator.hasNext();) {
-				    Bullet b = iterator.next();
+				for (Iterator<Entry<Integer, Bullet>> iterator = bulletList.entrySet().iterator(); iterator.hasNext();) {
+					Entry<Integer, Bullet> e = iterator.next();
+					Bullet b = e.getValue();
 				    if (b.getSpeed() < GameVars.BULLET_DEL_SPEED) {
 				    	GDXServer.bodyList.add(b.getBody());
 				        iterator.remove();
@@ -222,6 +224,7 @@ public class GDXServer {
 					//Server anounce
 					//Server reset with new map
 					//recconect all clients
+					System.out.println("Endgame");
 				}
 				
 				

@@ -1,6 +1,8 @@
 package com.afonsobordado.CommanderGDXServer;
 
 import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.Map.Entry;
 
 import com.afonsobordado.CommanderGDX.entities.weapons.Bullet;
 import com.afonsobordado.CommanderGDX.files.HashFileMap;
@@ -110,7 +112,10 @@ public class NetworkListener extends Listener{
     			connection.sendTCP(outPnp);
     		}
     		
-    		for(Bullet b: GDXServer.bulletList){
+			for (Iterator<Entry<Integer, Bullet>> iterator = GDXServer.bulletList.entrySet().iterator(); iterator.hasNext();) {
+				Entry<Integer, Bullet> e = iterator.next();
+				Bullet b = e.getValue();
+				
     			PacketBullet pb = new PacketBullet(b.getBody().getPosition().scl(B2DVars.PPM), b);
     			connection.sendTCP(pb);
     		}
@@ -137,7 +142,8 @@ public class NetworkListener extends Listener{
     		//verify validity of the bullet position
     		PacketBullet pb = (PacketBullet) object;
     		synchronized(GDXServer.world){
-    			GDXServer.bulletList.add(new Bullet(GDXServer.world,
+    			GDXServer.bulletList.put(GDXServer.bulletList.size(),
+    												new Bullet(GDXServer.world,
     												GDXServer.bel,
     												pb.name,
     												pb.pos,
