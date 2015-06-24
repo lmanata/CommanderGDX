@@ -76,7 +76,7 @@ public class NetworkListener extends Listener{
     		PacketAccepted pa = new PacketAccepted();
     		pa.id = GDXServer.playerList.size();
     		pa.mapName = GDXServer.currentMap;
-    		pa.team = (GDXServer.playerList.size() % 2);
+    		pa.team = (GDXServer.playerList.size() % GameVars.SERVER_MAX_TEAMS);
     		connection.sendTCP(pa);
     		
     		LocalServerPlayer newPlayer = new LocalServerPlayer(GDXServer.playerList.size(),
@@ -87,7 +87,7 @@ public class NetworkListener extends Listener{
 																connection.getID(),
 																pnp.weapon,
 																pnp.playerClass,
-																(GDXServer.playerList.size() % 2));
+																(GDXServer.playerList.size() % GameVars.SERVER_MAX_TEAMS));
     		
     		
     		//Announce to all connected clients, there is a new player
