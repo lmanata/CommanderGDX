@@ -137,10 +137,16 @@ public class LocalServerPlayer extends NetworkPlayer{
 					
 			}
 		}
+		System.out.println("res with pos: "+pos.toString());
 		if(pos != null){
 			PacketSpawn ps = new PacketSpawn(id, pos);
 			GDXServer.server.sendToAllTCP(ps);
 			deathTime=0;
+			this.body = GDXServer.pf.getBodyByClass(playerClass);
+			this.body.setUserData(this);
+			this.body.setTransform(pos, 0f);
+			this.hp = 100;
+			//respawn code
 		}
 	}
 

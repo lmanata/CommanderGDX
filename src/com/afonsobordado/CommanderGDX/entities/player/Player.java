@@ -269,4 +269,10 @@ public class Player {
 	public boolean isAlive() {
 		return hp > 0f;
 	}
+
+
+	public void respawn(Vector2 pos) {
+		// TODO Auto-generated method stub
+		
+	}
 }

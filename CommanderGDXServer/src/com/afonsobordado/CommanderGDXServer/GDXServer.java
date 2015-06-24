@@ -377,6 +377,7 @@ public class GDXServer {
 		for(SpawnPos sp:spawnPosList){
 			sp.pos.x *= tileX;
 			sp.pos.y *= tileY;
+			sp.pos.scl(1/B2DVars.PPM);
 		}
 		
 	}

@@ -116,7 +116,11 @@ public class NetworkListener extends Listener{
 			}
 		} else if (object instanceof PacketSpawn){
 			PacketSpawn ps = (PacketSpawn) object;
-			System.out.println("PacketSpawn: id:" + ps.id + " : "+ps.pos.toString());
+			if(ps.id == Play.player.id){
+				Play.player.respawn(ps.pos);
+			}else{
+				Play.playerList.get(ps.id).respawn(ps.pos);
+			}
 		}
 		
    }
