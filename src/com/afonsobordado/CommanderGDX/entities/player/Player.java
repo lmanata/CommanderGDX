@@ -44,6 +44,7 @@ public class Player {
 	private String name;
 	
 	private ActionList al;
+	private PlayerFactory pf;
 	
 	private NetworkPlayer lastNetworkPlayer = null;
 	private float lerpCount = 0f;
@@ -56,11 +57,21 @@ public class Player {
 		weapons = new Array<Weapon>();
 		currentWeapon = 0;
 		hp = 100f;
+		this.pf = pf;
 
 		//THIS IS CLASS STUff
 		weapons.add(WeaponList.get("ak47"));
 		weapons.add(WeaponList.get("usp-s"));
+		createBody();
+
 		
+		pc = new PlayerCharacter(pf.getFileByClass(playerClass), this.weapons.get(currentWeapon), body);
+		
+		
+		
+	}
+	
+	public void createBody(){
 		body = pf.getBodyByClass(playerClass);
 		
 		
@@ -73,13 +84,7 @@ public class Player {
 		}
 		
 		body.setUserData(this);
-		
-		pc = new PlayerCharacter(pf.getFileByClass(playerClass), this.weapons.get(currentWeapon), body);
-		
-		
-		
 	}
-	
 	
 	public void handleInput(){
 		if(isAlive()){
@@ -272,7 +277,11 @@ public class Player {
 
 
 	public void respawn(Vector2 pos) {
-		// TODO Auto-generated method stub
+		hp = 100;
+		createBody();
+		body.setTransform(pos, 0f);
+		pc.setBody(this.body);
+
 		
 	}
 }

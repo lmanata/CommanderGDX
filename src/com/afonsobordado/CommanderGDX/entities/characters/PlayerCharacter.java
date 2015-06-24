@@ -227,7 +227,10 @@ public class PlayerCharacter {
 		this.isAir = isAir;
 	}
 
-
+	public void setBody(Body b){
+		this.body =b;
+	}
+	
 	public void setIdle(boolean isIdle) {
 		this.isIdle = isIdle;
 	}

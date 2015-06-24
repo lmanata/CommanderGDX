@@ -24,21 +24,13 @@ public class LocalClientPlayer{
 	private PlayerCharacter pc;
 	private Weapon weapon;
 	
+	private PlayerFactory pf;
 	private NetworkPlayer nextPacket;
 	private int lerpCount = B2DVars.LERP_MAX_COUNT;
 	private float hp;
 	private int team;
 	
-	public LocalClientPlayer(PacketNewPlayer pnp,World world,PlayerFactory pf) {
-		this.armDegrees = pnp.np.armAngle;
-		this.id = pnp.np.id;
-		this.name = pnp.np.name;
-		this.nextPacket = pnp.np;
-		this.playerClass = pnp.playerClass;
-		this.weapon = WeaponList.get(pnp.weapon);
-		this.hp = 100f;
-		this.team = pnp.team;
-
+	public void createBody(){
 		body = pf.getBodyByClass(playerClass);
 		
 		//PlayerFactory creates generalized bodies, we now need to identify them
@@ -50,6 +42,19 @@ public class LocalClientPlayer{
 		}
 
 		body.setUserData(this);
+	}
+	public LocalClientPlayer(PacketNewPlayer pnp,World world,PlayerFactory pf) {
+		this.armDegrees = pnp.np.armAngle;
+		this.id = pnp.np.id;
+		this.name = pnp.np.name;
+		this.nextPacket = pnp.np;
+		this.playerClass = pnp.playerClass;
+		this.weapon = WeaponList.get(pnp.weapon);
+		this.hp = 100f;
+		this.team = pnp.team;
+		this.pf = pf;
+		createBody();
+
 	
 		
 		pc = new PlayerCharacter(pf.getFileByClass(playerClass), this.weapon, body);
@@ -152,8 +157,10 @@ public class LocalClientPlayer{
 	}
 
 	public void respawn(Vector2 pos) {
-		// TODO Auto-generated method stub
-		
+		this.hp = 100;
+		createBody();
+		this.body.setTransform(pos, 0f);
+		pc.setBody(this.body);
 	}
 	
 }
