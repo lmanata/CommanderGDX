@@ -9,6 +9,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import net.bigfootsoftware.bobtrucking.BodyEditorLoader;
 
@@ -44,10 +46,12 @@ import com.afonsobordado.CommanderGDX.vars.B2DVars;
 import com.afonsobordado.CommanderGDXServer.Handler.ServerContactHandler;
 import com.afonsobordado.CommanderGDXServer.Handler.ServerViewerHandler;
 import com.afonsobordado.CommanderGDXServer.LocalObjects.LocalServerPlayer;
+import com.afonsobordado.CommanderGDXServer.LocalObjects.SpawnPos;
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.headless.HeadlessApplication;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
@@ -76,6 +80,7 @@ public class GDXServer {
 	public static ConcurrentHashMap<Integer, LocalServerPlayer> playerList;
 	public static ArrayList<Bullet> bulletList;
 	public static ArrayList<Body> bodyList;
+	public static ArrayList<SpawnPos> spawnPosList;
 
 	public static Server server;
 	public static Kryo fileSerializer;
@@ -106,10 +111,9 @@ public class GDXServer {
 		bel = new BodyEditorLoader(Gdx.files.internal(bodyFile));
 		pf = new PlayerFactory(world,bel, resDir);
 		
+		TiledMap map = new TmxMapLoader().load("../res/maps/" + currentMap + ".tmx");
 		synchronized(world){
-			TiledMapImporter.create(
-					new TmxMapLoader().load("../res/maps/" + currentMap + ".tmx"),
-					world);
+			TiledMapImporter.create(map,world);
 		}
 		
 		HashFileMapOrig = SUtils.genHashFileMapList(Gdx.files.internal(resDir));
@@ -117,7 +121,9 @@ public class GDXServer {
 		playerList = new ConcurrentHashMap<Integer, LocalServerPlayer>(16, 0.9f, 2);// 2 concurrent threads is a worst case scenario
 		bulletList = new ArrayList<Bullet>();
 		bodyList = new ArrayList<Body>();
-
+		spawnPosList = new ArrayList<SpawnPos>();
+		
+		registerSpwanPoints(map);
 		registerBullets();
 		
 	    server = new Server(65536,65536);
@@ -313,6 +319,48 @@ public class GDXServer {
 				}
 			}
 		}
+	}
+	
+	public static void registerSpwanPoints(TiledMap tm){
+		Iterator<String> keys = tm.getProperties().getKeys();
+		Iterator<Object> values = tm.getProperties().getValues();
+		
+		float tileX = 0f;
+		float tileY = 0f;
+		
+		Pattern kp = Pattern.compile("SPAWN(\\d+)");
+		Pattern vp = Pattern.compile("(\\d+):(\\d+)");
+		for ( ;keys.hasNext() && values.hasNext();) {
+		    String key = keys.next();
+		    Object value = values.next();
+		    
+		    Matcher km = kp.matcher(key);
+		    if(km.matches()){
+			    Matcher vm = vp.matcher((String) value);
+			    vm.matches();
+			    spawnPosList.add(new SpawnPos(
+			    					Integer.parseInt(km.group(1)),
+			    					new Vector2(
+			    							Integer.parseInt(vm.group(1)),
+			    							Integer.parseInt(vm.group(2))
+			    							)
+			    					)
+			    				);
+			    
+		    }
+		    
+		    if(key.equals("tileheight")){
+			    tileY = (Integer) value;
+		    }else if(key.equals("tilewidth")){
+		    	tileX = (Integer) value;
+		    }
+		}
+		
+		for(SpawnPos sp:spawnPosList){
+			sp.pos.x *= tileX;
+			sp.pos.y *= tileY;
+		}
+		
 	}
 	
 	public static World getWorld(){
