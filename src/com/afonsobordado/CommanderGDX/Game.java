@@ -25,6 +25,7 @@ import com.afonsobordado.CommanderGDX.packets.PacketBullet;
 import com.afonsobordado.CommanderGDX.packets.PacketConsoleMessage;
 import com.afonsobordado.CommanderGDX.packets.PacketDeclined;
 import com.afonsobordado.CommanderGDX.packets.PacketDisconnect;
+import com.afonsobordado.CommanderGDX.packets.PacketEndgame;
 import com.afonsobordado.CommanderGDX.packets.PacketFile;
 import com.afonsobordado.CommanderGDX.packets.PacketHP;
 import com.afonsobordado.CommanderGDX.packets.PacketHello;
@@ -33,6 +34,7 @@ import com.afonsobordado.CommanderGDX.packets.PacketPositionUpdate;
 import com.afonsobordado.CommanderGDX.packets.PacketSpawn;
 import com.afonsobordado.CommanderGDX.packets.PacketSwitchWeapon;
 import com.afonsobordado.CommanderGDX.packets.NetworkObject.NetworkPlayer;
+import com.afonsobordado.CommanderGDX.stats.PlayerStats;
 import com.afonsobordado.CommanderGDX.utils.SUtils;
 import com.afonsobordado.CommanderGDX.vars.Action;
 import com.afonsobordado.CommanderGDX.vars.ActionMap;
@@ -70,7 +72,7 @@ public class Game implements ApplicationListener{
 	private OrthographicCamera cam;
 	private OrthographicCamera hudCam;
 	
-	private GameStateManager gsm;
+	public static GameStateManager gsm;
 	
 	public static AssetManager aManager;
 	public static Client client;
@@ -106,6 +108,9 @@ public class Game implements ApplicationListener{
 	    client.getKryo().register(byte[].class);
 	    client.getKryo().register(PacketHP.class);
 	    client.getKryo().register(PacketSpawn.class);
+	    client.getKryo().register(PlayerStats.class);
+	    client.getKryo().register(PlayerStats[].class);
+	    client.getKryo().register(PacketEndgame.class);
 
 	   
 		new Thread(client).start();

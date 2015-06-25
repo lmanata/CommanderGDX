@@ -24,7 +24,7 @@ import com.badlogic.gdx.utils.Array;
 
 
 public class ServerViewerHandler{
-
+	public LwjglApplication la;
 	public ServerViewerHandler(){
 		System.out.println("Starting SVH");
 		LwjglApplicationConfiguration cfg =
@@ -39,7 +39,7 @@ public class ServerViewerHandler{
 		cfg.forceExit = true;
 		cfg.foregroundFPS = 60;
 		
-		new LwjglApplication(new ServerViewerWindow(), cfg);
+		la = new LwjglApplication(new ServerViewerWindow(), cfg);
 	}
 }
 
@@ -74,8 +74,6 @@ class ServerViewerWindow implements ApplicationListener{
 	public static short KEY_ZOOMOUT = 5;
 	public static short KEY_MOVE = 6;
 	public static short KEY_GRAB = 7;
-	
-
 	
 	public void create() {
 		b2dr = new Box2DDebugRenderer();

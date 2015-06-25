@@ -11,6 +11,7 @@ import com.afonsobordado.CommanderGDX.packets.PacketAction;
 import com.afonsobordado.CommanderGDX.packets.PacketBullet;
 import com.afonsobordado.CommanderGDX.packets.PacketConsoleMessage;
 import com.afonsobordado.CommanderGDX.packets.PacketDeclined;
+import com.afonsobordado.CommanderGDX.packets.PacketEndgame;
 import com.afonsobordado.CommanderGDX.packets.PacketFile;
 import com.afonsobordado.CommanderGDX.packets.PacketDisconnect;
 import com.afonsobordado.CommanderGDX.packets.PacketNewPlayer;
@@ -160,7 +161,7 @@ public class NetworkListener extends Listener{
     		LocalServerPlayer p  = GDXServer.playerList.get(pa.id);
     		if(p == null){return;}
     		p.al.update(pa.action, pa.down, pa.press);
-    	}
+    	} 
 	}
 	
 	public void disconnected(Connection connection) {

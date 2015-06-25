@@ -8,6 +8,7 @@ import com.afonsobordado.CommanderGDX.packets.PacketBullet;
 import com.afonsobordado.CommanderGDX.packets.PacketConsoleMessage;
 import com.afonsobordado.CommanderGDX.packets.PacketDeclined;
 import com.afonsobordado.CommanderGDX.packets.PacketDisconnect;
+import com.afonsobordado.CommanderGDX.packets.PacketEndgame;
 import com.afonsobordado.CommanderGDX.packets.PacketFile;
 import com.afonsobordado.CommanderGDX.packets.PacketHP;
 import com.afonsobordado.CommanderGDX.packets.PacketNewPlayer;
@@ -121,7 +122,9 @@ public class NetworkListener extends Listener{
 			}else{
 				Play.playerList.get(ps.id).respawn(ps.pos);
 			}
-		}
+		} else if (object instanceof PacketEndgame){
+    		Play.endgame((PacketEndgame) object);
+    	}
 		
    }
 }

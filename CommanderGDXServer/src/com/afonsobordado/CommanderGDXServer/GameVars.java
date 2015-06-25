@@ -21,7 +21,9 @@ public class GameVars {
 	public static long SERVER_RESPAWN_TIME = 1000; //ms to respawn
 	public static boolean SERVER_RESPAWN_ENABLED = true;
 	public static GameType SERVER_GAME_TYPE = new GameTypeTDM();
+	public static int SERVER_RETRY_TIME = 10; // in seconds
+
 	
-	public static int SERVER_TDM_KILLS_WIN = 10;
+	public static int SERVER_TDM_KILLS_WIN = 2;
 	
 }

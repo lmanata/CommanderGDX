@@ -8,9 +8,9 @@ import com.afonsobordado.CommanderGDX.handlers.ActionList;
 import com.afonsobordado.CommanderGDX.packets.PacketHP;
 import com.afonsobordado.CommanderGDX.packets.PacketSpawn;
 import com.afonsobordado.CommanderGDX.packets.NetworkObject.NetworkPlayer;
+import com.afonsobordado.CommanderGDX.stats.PlayerStats;
 import com.afonsobordado.CommanderGDXServer.GDXServer;
 import com.afonsobordado.CommanderGDXServer.GameVars;
-import com.afonsobordado.CommanderGDXServer.Stats.PlayerStats;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Fixture;
@@ -37,6 +37,7 @@ public class LocalServerPlayer extends NetworkPlayer{
 							 String playerClass,
 							 int team) {
 		ps=new PlayerStats();
+		ps.id = id;
 		this.id = id;
 		this.name = name;
 		this.pos = pos;

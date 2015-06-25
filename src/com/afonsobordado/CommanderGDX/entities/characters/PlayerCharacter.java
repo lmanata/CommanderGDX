@@ -97,7 +97,6 @@ public class PlayerCharacter {
 	
 	public void render(SpriteBatch sb) {
 		Vector2 boxSize = new Vector2();
-		System.out.println(body);
 		for(Fixture f: body.getFixtureList()){
 			if(f.getUserData().equals("player") ||
 			   f.getUserData().equals("lcp")){

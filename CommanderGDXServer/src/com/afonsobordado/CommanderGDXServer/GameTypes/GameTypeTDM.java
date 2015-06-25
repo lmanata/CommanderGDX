@@ -1,9 +1,9 @@
 package com.afonsobordado.CommanderGDXServer.GameTypes;
 
+import com.afonsobordado.CommanderGDX.stats.PlayerStats;
 import com.afonsobordado.CommanderGDXServer.GDXServer;
 import com.afonsobordado.CommanderGDXServer.GameVars;
 import com.afonsobordado.CommanderGDXServer.LocalObjects.LocalServerPlayer;
-import com.afonsobordado.CommanderGDXServer.Stats.PlayerStats;
 import com.badlogic.gdx.utils.Array;
 
 public class GameTypeTDM implements GameType{

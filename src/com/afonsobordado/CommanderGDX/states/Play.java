@@ -12,6 +12,7 @@ import com.afonsobordado.CommanderGDX.entities.weapons.Bullet;
 import com.afonsobordado.CommanderGDX.handlers.GameStateManager;
 import com.afonsobordado.CommanderGDX.handlers.MyContactListener;
 import com.afonsobordado.CommanderGDX.handlers.TiledMapImporter;
+import com.afonsobordado.CommanderGDX.packets.PacketEndgame;
 import com.afonsobordado.CommanderGDX.utils.PlayerFactory;
 import com.afonsobordado.CommanderGDX.vars.Action;
 import com.afonsobordado.CommanderGDX.vars.ActionMap;
@@ -218,6 +219,11 @@ public class Play extends GameState{
 	
 	public static Vector2 getCameraPosition(){
 		return cameraPos.cpy();
+	}
+
+	public static void endgame(PacketEndgame peg) {
+		Game.gsm.pushState(GameStateManager.IPMENU);
+		IPmenu.endgameRetry(peg);
 	}
 
 	

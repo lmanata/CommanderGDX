@@ -33,6 +33,7 @@ import com.afonsobordado.CommanderGDX.packets.PacketBullet;
 import com.afonsobordado.CommanderGDX.packets.PacketConsoleMessage;
 import com.afonsobordado.CommanderGDX.packets.PacketDeclined;
 import com.afonsobordado.CommanderGDX.packets.PacketDisconnect;
+import com.afonsobordado.CommanderGDX.packets.PacketEndgame;
 import com.afonsobordado.CommanderGDX.packets.PacketFile;
 import com.afonsobordado.CommanderGDX.packets.PacketHP;
 import com.afonsobordado.CommanderGDX.packets.PacketHello;
@@ -41,12 +42,12 @@ import com.afonsobordado.CommanderGDX.packets.PacketPositionUpdate;
 import com.afonsobordado.CommanderGDX.packets.PacketSpawn;
 import com.afonsobordado.CommanderGDX.packets.PacketSwitchWeapon;
 import com.afonsobordado.CommanderGDX.packets.NetworkObject.NetworkPlayer;
+import com.afonsobordado.CommanderGDX.stats.PlayerStats;
 import com.afonsobordado.CommanderGDX.utils.PlayerFactory;
 import com.afonsobordado.CommanderGDX.utils.SUtils;
 import com.afonsobordado.CommanderGDX.vars.Action;
 import com.afonsobordado.CommanderGDX.vars.B2DVars;
 import com.afonsobordado.CommanderGDXServer.GameTypes.GameType;
-import com.afonsobordado.CommanderGDXServer.GameTypes.GameTypeTDM;
 import com.afonsobordado.CommanderGDXServer.Handler.ServerContactHandler;
 import com.afonsobordado.CommanderGDXServer.Handler.ServerViewerHandler;
 import com.afonsobordado.CommanderGDXServer.LocalObjects.LocalServerPlayer;
@@ -82,6 +83,7 @@ public class GDXServer {
 	public static BodyEditorLoader bel;
 	public static PlayerFactory pf;
 	
+	public static long serverInitTime = System.currentTimeMillis();
 	
 	public static ConcurrentHashMap<Integer, LocalServerPlayer> playerList;
 	public static ConcurrentHashMap<Integer, Bullet> bulletList;
@@ -89,7 +91,8 @@ public class GDXServer {
 	public static ArrayList<SpawnPos> spawnPosList;
 	public static Array<Fixture> fList;
 
-
+	private static HeadlessApplication ha;
+	
 	public static GameType currGameType;
 	
 	public static Server server;
@@ -104,12 +107,51 @@ public class GDXServer {
 	//current game vars
 	public static String currentMap = "level2";
 	private static NetworkListener nl = new NetworkListener();
+	
+	public static void restartWorld(){
+		Gdx.app.exit();
+		ha.exit();
+		Gdx.gl = mock(GL20.class);	//headless gdx to load the maps
+		ha = new HeadlessApplication(new ApplicationListener(){
+			public void create() {}
+			public void dispose() {}
+			public void pause() {}
+			public void render() {}
+			public void resize(int arg0, int arg1) {}
+			public void resume() {}
+		});
+		
+		world.dispose();
+		world = new World(new Vector2(0, -9.81f), true);
+		TiledMap map = new TmxMapLoader().load("../res/maps/" + currentMap + ".tmx");
+		synchronized(world){
+			TiledMapImporter.create(map,world);
+		}
+		
+		playerList.clear();
+		bulletList.clear();
+		bodyList.clear();
+		spawnPosList.clear();
+		fList.clear();
+		HashFileMapOrig = SUtils.genHashFileMapList(Gdx.files.internal(resDir)); //whynot?
+		server.close();
+		
+		registerSpwanPoints(map);
+		registerBullets();
+		registerServer();
+		if(SVHEnable){
+			svh.la.exit();
+			svh = new ServerViewerHandler();
+		}
+		loop();
+	}
+	
 	public static void main(String[] args){
 		world = new World(new Vector2(0, -9.81f), true);
 		world.setContactListener(sch = new ServerContactHandler());
 
 		Gdx.gl = mock(GL20.class);					//headless gdx to load the maps
-		new HeadlessApplication(new ApplicationListener(){
+		ha = new HeadlessApplication(new ApplicationListener(){
 			public void create() {}
 			public void dispose() {}
 			public void pause() {}
@@ -136,126 +178,108 @@ public class GDXServer {
 		
 		registerSpwanPoints(map);
 		registerBullets();
-		
-	    server = new Server(65536,65536);
-	    server.getKryo().register(PacketConsoleMessage.class);
-	    server.getKryo().register(PacketHello.class);
-	    server.getKryo().register(PacketAccepted.class);
-	    server.getKryo().register(PacketDeclined.class);
-	    server.getKryo().register(PacketPositionUpdate.class);
-	    server.getKryo().register(Vector2.class);
-	    server.getKryo().register(NetworkPlayer.class);
-	    server.getKryo().register(PacketNewPlayer.class);
-	    server.getKryo().register(PacketDisconnect.class);
-	    server.getKryo().register(PacketBullet.class);
-	    server.getKryo().register(PacketSwitchWeapon.class);
-	    server.getKryo().register(Action.class);
-	    server.getKryo().register(PacketAction.class);
-	    server.getKryo().register(HashFileMap.class);
-	    server.getKryo().register(HashFileMap[].class);
-	    server.getKryo().register(PacketFile.class);
-	    server.getKryo().register(byte[].class);
-	    server.getKryo().register(PacketHP.class);
-	    server.getKryo().register(PacketSpawn.class);
-
-	    server.start();
-	    
-	    try {
-			server.bind(1337, 1337);
-		} catch (IOException e) {
-			System.err.println("Could not bind to port!\n"
-							+  "You may have another service is using it.\n");
-			e.printStackTrace();
-			System.exit(1);
-		}
-	    
-	    server.addListener(nl);
+		registerServer();
 	    
 	    if(SVHEnable)
 	    	svh = new ServerViewerHandler();
 
+	    loop();
+	}
+	
+	public static void loop(){
 	    long lastTime = System.nanoTime();
 
-		for(;;){
-			
-			/*fixed time step*/
-			long now = System.nanoTime();
-			delta += (now - lastTime) / B2DW_FIXED_TIMESTEP;
-			lastTime = now;
-			if(delta >= 1){
-				handlePlayerInput();
+			for(;;){
 				
-				for (Iterator<Entry<Integer, Bullet>> iterator = bulletList.entrySet().iterator(); iterator.hasNext();) {
-					Entry<Integer, Bullet> e = iterator.next();
-					Bullet b = e.getValue();
-				    if (b.getSpeed() < GameVars.BULLET_DEL_SPEED) {
-				    	GDXServer.bodyList.add(b.getBody());
-				        iterator.remove();
-				    }
-				}
-				
-				synchronized(GDXServer.getWorld()){
-					world.step(delta / B2DW_TICK, B2DW_VELOCITY_ITER, B2DW_POSITION_ITER);
-					if(!bodyList.isEmpty()){
-						
-						for(Body b:bodyList)
-							world.destroyBody(b);
-						
-						bodyList.clear();
-					}
-						
-				}
-				delta--;
-			}
-			/*fixed time step*/
-			
-			/*send updated values to clients*/
-			/*if(System.currentTimeMillis() % 1000 == 0){
-				for(LocalServerPlayer lsp: GDXServer.playerList.values())
-					System.out.println("Player: " + lsp.id + " Team: " + lsp.team);
-			}
-			*/
-			
-
-			
-			if(System.currentTimeMillis() % SERVER_TICK == 0){
-				int teamWon;
-				if((teamWon = GameVars.SERVER_GAME_TYPE.gameWon()) >= 0){
-					//Server anounce
-					//Server reset with new map
-					//recconect all clients
-					System.out.println("Endgame");
-				}
-				
-				
-				
-				fList.clear();
-				world.getFixtures(fList);
-
-				for(LocalServerPlayer lsp: GDXServer.playerList.values()){
-					if(lsp.isAlive()){
-						if( (System.currentTimeMillis()-lsp.lastPacketTime) > GameVars.PLAYER_TIMEOUT){ //poll the timeout
-							PacketDisconnect pd = new PacketDisconnect();
-							pd.np = lsp.getNetworkPlayer();
-							pd.reason = "Timeout";
-							server.sendToAllTCP(pd);
-							lsp.disconnect();
-							continue;
-						}
-						server.sendToAllUDP(lsp.getNetworkPlayer());
-					}else{
-						if(GameVars.SERVER_RESPAWN_ENABLED){
-							if(lsp.deathTime!=0 && (System.currentTimeMillis() - lsp.deathTime > GameVars.SERVER_RESPAWN_TIME)){
-								lsp.respawn();
-							}
-						}
+				/*fixed time step*/
+				long now = System.nanoTime();
+				delta += (now - lastTime) / B2DW_FIXED_TIMESTEP;
+				lastTime = now;
+				if(delta >= 1){
+					handlePlayerInput();
+					
+					for (Iterator<Entry<Integer, Bullet>> iterator = bulletList.entrySet().iterator(); iterator.hasNext();) {
+						Entry<Integer, Bullet> e = iterator.next();
+						Bullet b = e.getValue();
+					    if (b.getSpeed() < GameVars.BULLET_DEL_SPEED) {
+					    	GDXServer.bodyList.add(b.getBody());
+					        iterator.remove();
+					    }
 					}
 					
+					synchronized(GDXServer.getWorld()){
+						world.step(delta / B2DW_TICK, B2DW_VELOCITY_ITER, B2DW_POSITION_ITER);
+						if(!bodyList.isEmpty()){
+							
+							for(Body b:bodyList)
+								world.destroyBody(b);
+							
+							bodyList.clear();
+						}
+							
+					}
+					delta--;
+				}
+				/*fixed time step*/
+				
+				/*send updated values to clients*/
+				/*if(System.currentTimeMillis() % 1000 == 0){
+					for(LocalServerPlayer lsp: GDXServer.playerList.values())
+						System.out.println("Player: " + lsp.id + " Team: " + lsp.team);
+				}
+				*/
+				
+
+				
+				if(System.currentTimeMillis() % SERVER_TICK == 0){
+					int teamWon;
+					if((teamWon = GameVars.SERVER_GAME_TYPE.gameWon()) >= 0){
+						PacketEndgame peg = new PacketEndgame();
+						peg.retryTime = GameVars.SERVER_RETRY_TIME;
+						peg.stats = new PlayerStats[playerList.size()];
+						for(int i=0;i<playerList.size();i++){
+							peg.stats[i] = playerList.get(i).ps;
+						}
+						peg.winningTeam = teamWon;
+						peg.duration = System.currentTimeMillis() - serverInitTime;
+						server.sendToAllTCP(peg);
+						currentMap = "level1";
+						restartWorld();
+						//packet endgame
+							//shows endgamescreen
+							//waits 10 s
+							//drops everyone while the server recreates world
+							//once server has finished loading loads everyone
+						//System.out.println("Endgame");
+					}
+					
+					
+					
+					fList.clear();
+					world.getFixtures(fList);
+
+					for(LocalServerPlayer lsp: GDXServer.playerList.values()){
+						if(lsp.isAlive()){
+							if( (System.currentTimeMillis()-lsp.lastPacketTime) > GameVars.PLAYER_TIMEOUT){ //poll the timeout
+								PacketDisconnect pd = new PacketDisconnect();
+								pd.np = lsp.getNetworkPlayer();
+								pd.reason = "Timeout";
+								server.sendToAllTCP(pd);
+								lsp.disconnect();
+								continue;
+							}
+							server.sendToAllUDP(lsp.getNetworkPlayer());
+						}else{
+							if(GameVars.SERVER_RESPAWN_ENABLED){
+								if(lsp.deathTime!=0 && (System.currentTimeMillis() - lsp.deathTime > GameVars.SERVER_RESPAWN_TIME)){
+									lsp.respawn();
+								}
+							}
+						}
+						
+					}
 				}
 			}
-		}
-		
-		
 	}
 	
 	public static void handlePlayerInput(){
@@ -291,6 +315,44 @@ public class GDXServer {
 		}
 	}
 
+	
+	private static void registerServer(){
+	    server = new Server(65536,65536);
+	    server.getKryo().register(PacketConsoleMessage.class);
+	    server.getKryo().register(PacketHello.class);
+	    server.getKryo().register(PacketAccepted.class);
+	    server.getKryo().register(PacketDeclined.class);
+	    server.getKryo().register(PacketPositionUpdate.class);
+	    server.getKryo().register(Vector2.class);
+	    server.getKryo().register(NetworkPlayer.class);
+	    server.getKryo().register(PacketNewPlayer.class);
+	    server.getKryo().register(PacketDisconnect.class);
+	    server.getKryo().register(PacketBullet.class);
+	    server.getKryo().register(PacketSwitchWeapon.class);
+	    server.getKryo().register(Action.class);
+	    server.getKryo().register(PacketAction.class);
+	    server.getKryo().register(HashFileMap.class);
+	    server.getKryo().register(HashFileMap[].class);
+	    server.getKryo().register(PacketFile.class);
+	    server.getKryo().register(byte[].class);
+	    server.getKryo().register(PacketHP.class);
+	    server.getKryo().register(PacketSpawn.class);
+	    server.getKryo().register(PlayerStats.class);
+	    server.getKryo().register(PlayerStats[].class);
+	    server.getKryo().register(PacketEndgame.class);
+	    server.start();
+	    
+	    try {
+			server.bind(1337, 1337);
+		} catch (IOException e) {
+			System.err.println("Could not bind to port!\n"
+							+  "You may have another service is using it.\n");
+			e.printStackTrace();
+			System.exit(1);
+		}
+	    
+	    server.addListener(nl);
+	}
 	
 	private static void registerBullets() {
 		File folder = new File("../res/bullets");

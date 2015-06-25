@@ -7,6 +7,7 @@ import java.security.SecureRandom;
 import com.afonsobordado.CommanderGDX.Game;
 import com.afonsobordado.CommanderGDX.entities.player.Player;
 import com.afonsobordado.CommanderGDX.handlers.GameStateManager;
+import com.afonsobordado.CommanderGDX.packets.PacketEndgame;
 import com.afonsobordado.CommanderGDX.packets.PacketNewPlayer;
 import com.afonsobordado.CommanderGDX.utils.SUtils;
 import com.afonsobordado.CommanderGDX.vars.CVars;
@@ -18,7 +19,7 @@ import com.badlogic.gdx.utils.Timer.Task;
 
 public class IPmenu extends GameState{
 
-	boolean timerIsOn = false;
+	static boolean timerIsOn = false;
 	GameStateManager gsm;
 	public static String declineReason;
 	public static boolean play=false;
@@ -47,46 +48,61 @@ public class IPmenu extends GameState{
 		  // gsm.pushState(GameStateManager.PLAY);
 		   
 		      if(!timerIsOn) {
-		    	try {
-					Game.client.connect(5000, Game.ipAddr, CVars.SERVER_TCP_PORT, CVars.SERVER_UDP_PORT); 
-				} catch (IOException e) {
-					System.out.println(e.getMessage());
-				}
-		    	
-		    	  
-		    	
-		    	//move this code out of here
-		    	
-		    	PacketNewPlayer pnp = new PacketNewPlayer();
-		    	
-		    	pnp.np = null;
-		    	pnp.name = new BigInteger(130, new SecureRandom()).toString(32); // this is some random global with the players name
-		    	pnp.playerClass = Player.playerClass;
-		    	pnp.weapon = "ak47";
-		    	pnp.hfc = SUtils.genHashFileMapList(Gdx.files.internal("res/"));
-		    	//pnp.team = ? perf team
-		    	
-				Game.client.sendTCP(pnp);
-		    	 
-				
-		        timerIsOn = true;
-		         
-		        Timer.schedule(new Task() {
-		            
-		            @Override
-		            public void run() {
-		           
-		            	//timeout, plz advise user
-		            	//push menu
-		            }
-
-		         }, 5);
+		    	  tryConnection();
 		            
 		      } else if(Gdx.input.isTouched()) {
 		           Timer.instance().clear();
 		           //we should push the menu state
 		           gsm.pushState(GameStateManager.PLAY);
 		      }
+	}
+	
+	public static void tryConnection(){
+		try {
+			Game.client.connect(5000, Game.ipAddr, CVars.SERVER_TCP_PORT, CVars.SERVER_UDP_PORT); 
+		} catch (IOException e) {
+			System.out.println(e.getMessage());
+		}
+    	
+    	//move this code out of here
+    	
+    	PacketNewPlayer pnp = new PacketNewPlayer();
+    	
+    	pnp.np = null;
+    	pnp.name = new BigInteger(130, new SecureRandom()).toString(32); // this is some random global with the players name
+    	pnp.playerClass = Player.playerClass;
+    	pnp.weapon = "ak47";
+    	pnp.hfc = SUtils.genHashFileMapList(Gdx.files.internal("res/"));
+    	//pnp.team = ? perf team
+    	
+		Game.client.sendTCP(pnp);
+    	 
+		
+        timerIsOn = true;
+        
+        Timer.schedule(new Task() {
+            
+            @Override
+            public void run() {
+           
+            	//timeout, plz advise user
+            	//push menu
+            }
+
+         }, 5);
+	}
+	
+	public static void endgameRetry(PacketEndgame peg){
+		timerIsOn = true;
+		//show stats 
+        Timer.schedule(new Task() {
+            
+            @Override
+            public void run() {
+            	tryConnection();
+            }
+
+         }, peg.retryTime);
 	}
 
 	public void dispose() {
