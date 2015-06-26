@@ -41,7 +41,7 @@ public class Player {
 	private short currentWeapon;
 	
 	private float armDegrees;
-	private String name;
+	public static String name;
 	
 	private ActionList al;
 	private PlayerFactory pf;
@@ -87,6 +87,7 @@ public class Player {
 	}
 	
 	public void handleInput(){
+
 		if(isAlive()){
 			if(grounded){
 				lastGroundTime = System.nanoTime();

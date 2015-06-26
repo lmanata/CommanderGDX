@@ -31,6 +31,7 @@ import com.afonsobordado.CommanderGDX.packets.PacketAccepted;
 import com.afonsobordado.CommanderGDX.packets.PacketAction;
 import com.afonsobordado.CommanderGDX.packets.PacketBullet;
 import com.afonsobordado.CommanderGDX.packets.PacketConsoleMessage;
+import com.afonsobordado.CommanderGDX.packets.PacketDeath;
 import com.afonsobordado.CommanderGDX.packets.PacketDeclined;
 import com.afonsobordado.CommanderGDX.packets.PacketDisconnect;
 import com.afonsobordado.CommanderGDX.packets.PacketEndgame;
@@ -340,6 +341,8 @@ public class GDXServer {
 	    server.getKryo().register(PlayerStats.class);
 	    server.getKryo().register(PlayerStats[].class);
 	    server.getKryo().register(PacketEndgame.class);
+	    server.getKryo().register(PacketDeath.class);
+
 	    server.start();
 	    
 	    try {

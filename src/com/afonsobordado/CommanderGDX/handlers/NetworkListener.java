@@ -6,6 +6,7 @@ import com.afonsobordado.CommanderGDX.entities.weapons.Bullet;
 import com.afonsobordado.CommanderGDX.packets.PacketAccepted;
 import com.afonsobordado.CommanderGDX.packets.PacketBullet;
 import com.afonsobordado.CommanderGDX.packets.PacketConsoleMessage;
+import com.afonsobordado.CommanderGDX.packets.PacketDeath;
 import com.afonsobordado.CommanderGDX.packets.PacketDeclined;
 import com.afonsobordado.CommanderGDX.packets.PacketDisconnect;
 import com.afonsobordado.CommanderGDX.packets.PacketEndgame;
@@ -124,6 +125,9 @@ public class NetworkListener extends Listener{
 			}
 		} else if (object instanceof PacketEndgame){
     		Play.endgame((PacketEndgame) object);
+    	} else if (object instanceof PacketDeath){
+    		PacketDeath pd = (PacketDeath) object;
+    		Play.hud.kill(pd);
     	}
 		
    }

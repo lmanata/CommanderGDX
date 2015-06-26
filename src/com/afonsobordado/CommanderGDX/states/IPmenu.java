@@ -65,11 +65,12 @@ public class IPmenu extends GameState{
 		}
     	
     	//move this code out of here
-    	
+    	Player.name = new BigInteger(130, new SecureRandom()).toString(32).substring(0, 5);
+		
     	PacketNewPlayer pnp = new PacketNewPlayer();
     	
     	pnp.np = null;
-    	pnp.name = new BigInteger(130, new SecureRandom()).toString(32); // this is some random global with the players name
+    	pnp.name = Player.name; // this is some random global with the players name
     	pnp.playerClass = Player.playerClass;
     	pnp.weapon = "ak47";
     	pnp.hfc = SUtils.genHashFileMapList(Gdx.files.internal("res/"));

@@ -23,6 +23,7 @@ import com.afonsobordado.CommanderGDX.packets.PacketAccepted;
 import com.afonsobordado.CommanderGDX.packets.PacketAction;
 import com.afonsobordado.CommanderGDX.packets.PacketBullet;
 import com.afonsobordado.CommanderGDX.packets.PacketConsoleMessage;
+import com.afonsobordado.CommanderGDX.packets.PacketDeath;
 import com.afonsobordado.CommanderGDX.packets.PacketDeclined;
 import com.afonsobordado.CommanderGDX.packets.PacketDisconnect;
 import com.afonsobordado.CommanderGDX.packets.PacketEndgame;
@@ -111,6 +112,7 @@ public class Game implements ApplicationListener{
 	    client.getKryo().register(PlayerStats.class);
 	    client.getKryo().register(PlayerStats[].class);
 	    client.getKryo().register(PacketEndgame.class);
+	    client.getKryo().register(PacketDeath.class);
 
 	   
 		new Thread(client).start();

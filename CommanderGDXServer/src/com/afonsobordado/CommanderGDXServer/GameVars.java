@@ -24,6 +24,6 @@ public class GameVars {
 	public static int SERVER_RETRY_TIME = 10; // in seconds
 
 	
-	public static int SERVER_TDM_KILLS_WIN = 2;
+	public static int SERVER_TDM_KILLS_WIN = 200;
 	
 }

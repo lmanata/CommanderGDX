@@ -1,7 +1,11 @@
 package com.afonsobordado.CommanderGDX.entities.UI;
 
+import java.util.ArrayList;
+
 import com.afonsobordado.CommanderGDX.Game;
 import com.afonsobordado.CommanderGDX.entities.player.Player;
+import com.afonsobordado.CommanderGDX.packets.PacketDeath;
+import com.afonsobordado.CommanderGDX.states.Play;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -16,7 +20,10 @@ public class HUD {
 	private BitmapFont font;
 	private Texture whitecross;
 	
+	private ArrayList<PacketDeath> killFeed;
+	
 	public HUD(Player player){
+		this.killFeed = new ArrayList<PacketDeath>(); 
 		this.player = player; 
         parameter = new FreeTypeFontParameter();
         parameter.size = 12 * Game.SCALE;
@@ -35,11 +42,26 @@ public class HUD {
         font.draw(sb, player.getClipBullets() + " / " + player.getReloadBullets(), Game.V_WIDTH-60, 20); //bullets
         sb.draw(whitecross, 17 , 11, 10, 10);
         font.draw(sb, ""+Math.round(player.getHp()), 30, 20);
+        
+        for(int i=killFeed.size()-1, z=0;i>=0;i--,z++){
+        	PacketDeath pd = killFeed.get(i);
+        	String kname = (pd.killerID == Play.player.id) ? Play.player.getName() : Play.playerList.get(pd.killerID).name ;
+        	String dname = (pd.deathID == Play.player.id) ? Play.player.getName() : Play.playerList.get(pd.deathID).name ;
+        	String dispString =  kname + " killed " + dname;
+            font.draw(sb, dispString, Game.V_WIDTH-(dispString.length()*7), Game.V_HEIGHT-5-(z*10));
+            if((killFeed.size()>=3) && i<(killFeed.size()-2)) break;
+        }
+       
+        
 		sb.end();
 	}
 	
 	public void dispose(){
 		
+	}
+
+	public void kill(PacketDeath pd) {
+		killFeed.add(pd);
 	}
 	
 }

@@ -53,7 +53,7 @@ public class Play extends GameState{
 	public static Array<Bullet> bulletList; // change to object list plz
 	public static Array<Body> bodyList;
 	
-	private HUD hud;
+	public static HUD hud;
 	public static String mapName = "level3";
 	public static String playerClass = "MainChar";
 	public static String bodyFile = "res/bodies/bodyList.json";

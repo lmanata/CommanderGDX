@@ -5,6 +5,7 @@ import java.util.Map.Entry;
 
 import com.afonsobordado.CommanderGDX.entities.weapons.Bullet;
 import com.afonsobordado.CommanderGDX.handlers.ActionList;
+import com.afonsobordado.CommanderGDX.packets.PacketDeath;
 import com.afonsobordado.CommanderGDX.packets.PacketHP;
 import com.afonsobordado.CommanderGDX.packets.PacketSpawn;
 import com.afonsobordado.CommanderGDX.packets.NetworkObject.NetworkPlayer;
@@ -100,6 +101,8 @@ public class LocalServerPlayer extends NetworkPlayer{
 			this.hp -= b.getSpeed() * multiplier;
 			sendHP();
 			if(hp < 0f){
+				PacketDeath pd = new PacketDeath(this.id, b.getOwnerId(), false);
+				GDXServer.server.sendToAllTCP(pd);
 				GDXServer.playerList.get(b.getOwnerId()).addKill();
 				ps.deaths++;
 				deathCleanup();
