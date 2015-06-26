@@ -237,7 +237,7 @@ public class Player {
 	}
 	
 	public float getHp() {
-		return hp;
+		return (hp>0f) ? hp : 0f;
 	}
 	
 	public int getClipBullets(){

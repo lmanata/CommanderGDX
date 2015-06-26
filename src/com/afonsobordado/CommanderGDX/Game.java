@@ -140,6 +140,7 @@ public class Game implements ApplicationListener{
 		aManager.load("res/animations/soldier/arms/001.png", Texture.class);
 		aManager.load("res/animations/test/legs/idle.png", Texture.class);
 		aManager.load("res/animations/test/legs/jump.png", Texture.class);
+		aManager.load("res/HUD/redcross.png", Texture.class);
 		
 		loadAssets(); // will block the aplication until is done loading
 		
