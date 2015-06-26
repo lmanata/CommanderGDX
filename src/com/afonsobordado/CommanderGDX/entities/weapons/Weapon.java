@@ -20,27 +20,40 @@ public class Weapon {
 	private Vector2 weaponPin;
 	private Bullet bullet;
 	private String weaponName;
+	private int clipBullets;
+	private int reloadBullets;
+	private int currentClipBullets;
+	private int currentReloadBullets;
+	private int msReloadTime;
+	private boolean isReloading;
 	
-	public Weapon(String weaponName,Animation animation, float bulletsPerSec, boolean shootOnPress ,Vector2 weaponPin, Bullet b){ //all time args are given in seconds, and transleted into nanoseconds on the constructor
+	public Weapon(String weaponName,Animation animation, float bulletsPerSec, boolean shootOnPress ,Vector2 weaponPin, Bullet b, int clipBullets, int reloadBullets, int msReloadTime){ //all time args are given in seconds, and transleted into nanoseconds on the constructor
 		this.weaponPin = weaponPin;
 		this.animation = animation;
 		this.weaponName = weaponName;
 		this.bullet = b;
 		this.shootOnPress = shootOnPress;
+		this.clipBullets = clipBullets;
+		this.reloadBullets = reloadBullets;
+		this.msReloadTime = msReloadTime;
+		this.currentClipBullets = clipBullets;
+		this.currentReloadBullets = reloadBullets;
+		this.isReloading = false;
 		nextTimeShoot = System.nanoTime();
 		canShoot=true;
 		barrelPos=new Vector2();
 		angle = 0f;
+
 		
 		if(bulletsPerSec != 0)
 			this.coolDown = (long) (1000000000 / bulletsPerSec);
 	}
 	
 	public void update(float dt){
-		canShoot = (System.nanoTime()>=nextTimeShoot);
 		animation.update(dt);
 	}
 	public void shoot(boolean pressed){ //down differentiates between isPressed and isDown
+		canShoot = (System.nanoTime()>=nextTimeShoot) && (!isReloading) && (currentClipBullets > 0);
 		if(!canShoot) return;
 		if(shootOnPress){
 			if(pressed) shoot();
@@ -50,6 +63,9 @@ public class Weapon {
 		
 	}
 	private void shoot(){
+
+		this.currentClipBullets--;
+
 		bullet.setOwnerId(Play.player.id);
 		nextTimeShoot=System.nanoTime()+coolDown;
 		PacketBullet pb = new PacketBullet(barrelPos.cpy(), bullet);
@@ -78,6 +94,30 @@ public class Weapon {
 	public void setBarrelPos(Vector2 position) {
 		this.barrelPos = position;
 	}
+	
+	public void reload(){
+		System.out.println("Reload");
+		if(this.currentClipBullets == this.clipBullets) return;
+		this.isReloading = true;
+		new java.util.Timer().schedule( 
+		        new java.util.TimerTask() {
+		            @Override
+		            public void run() {
+		            	if(currentReloadBullets > (clipBullets-currentClipBullets)){
+		            		currentReloadBullets -= (clipBullets-currentClipBullets);
+		            		currentClipBullets += (clipBullets-currentClipBullets);
+		            	}else{
+		            		int tmp =currentReloadBullets; 
+		            		currentReloadBullets -= currentClipBullets;
+		            		currentClipBullets += tmp;
+		            	}
+		            	isReloading = false;
+
+		            }
+		        }, 
+		        msReloadTime
+		);
+	}
 
 	public Vector2 getPin() {
 		return this.weaponPin;
@@ -89,7 +129,10 @@ public class Weapon {
 						  (coolDown != 0) ? (1000000000f / coolDown) : 0 ,
 						  shootOnPress,
 						  weaponPin.cpy(),
-						  bullet.getCopy());
+						  bullet.getCopy(),
+						  clipBullets,
+						  reloadBullets,
+						  msReloadTime);
 	}
 
 	public String getName() {

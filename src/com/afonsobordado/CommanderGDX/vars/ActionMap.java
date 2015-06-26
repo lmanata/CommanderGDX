@@ -14,7 +14,7 @@ public class ActionMap {
 		private static HashMap<Action,Integer> actionToKeyMap = new HashMap<Action,Integer>();
 
 		static{
-			add(Buttons.LEFT, Action.SHOOT);
+			add(Keys.R, Action.RELOAD);
 			add(Buttons.LEFT, Action.SHOOT);
 			add(Buttons.RIGHT, Action.SWITCH);
 			add(Keys.Z, Action.DEBUG);
@@ -22,6 +22,7 @@ public class ActionMap {
 			add(Keys.LEFT, Action.GO_LEFT);
 			add(Keys.RIGHT, Action.GO_RIGHT);
 			add(Keys.DOWN, Action.GO_DOWN);
+			
 		}
 		
 		public static void changeKey(Integer k, Action a){

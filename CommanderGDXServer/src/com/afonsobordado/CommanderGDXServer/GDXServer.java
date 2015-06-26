@@ -409,7 +409,10 @@ public class GDXServer {
 										  		wf.getBulletsPerSec(),
 										  		wf.isShootOnPress(),
 										  		wf.getWeaponPin(),
-										  		BulletList.get(wf.getBullet())
+										  		BulletList.get(wf.getBullet()),
+										  		wf.getClipBullets(),
+										  		wf.getReloadBullets(),
+										  		wf.getMsReloadTime()
 										  		)
 								 );
 				}
