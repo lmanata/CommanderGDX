@@ -239,6 +239,13 @@ public class Player {
 	public float getHp() {
 		return hp;
 	}
+	
+	public int getClipBullets(){
+		return weapons.get(currentWeapon).getCurrentClipBullets();
+	}
+	public int getReloadBullets(){
+		return weapons.get(currentWeapon).getCurrentReloadBullets();
+	}
 
 
 	public void setHp(float hp) {

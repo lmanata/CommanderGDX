@@ -186,8 +186,8 @@ public class Play extends GameState{
 		}
 		
 		//draw hud
-		/*sb.setProjectionMatrix(hudCam.combined);
-		hud.render(sb);*/
+		sb.setProjectionMatrix(hudCam.combined);
+		hud.render(sb);
 		
 		if(debug){
 			//fps.log();

@@ -2,32 +2,41 @@ package com.afonsobordado.CommanderGDX.entities.UI;
 
 import com.afonsobordado.CommanderGDX.Game;
 import com.afonsobordado.CommanderGDX.entities.player.Player;
-import com.afonsobordado.CommanderGDX.vars.B2DVars;
-import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
 
 public class HUD {
 	private Player player;
-	
-	private TextureRegion[] blocks;
+	private FreeTypeFontGenerator generator;
+	private FreeTypeFontParameter parameter;
+	private BitmapFont font;
 	
 	public HUD(Player player){
-		this.player = player;
-		Texture tex = Game.aManager.get("res/images/hud.png", Texture.class);
+		this.player = player;        
+        generator = new FreeTypeFontGenerator(Gdx.files.internal("res/fonts/Square.ttf"));
+        generator.scaleForPixelHeight(Game.V_HEIGHT);
+        //generator.scaleForPixelWidth(Game.V_WIDTH, 1);
+        parameter = new FreeTypeFontParameter();
+        parameter.size = 12 * Game.SCALE;
+        font = generator.generateFont(parameter); // font size 12 pixels
+        font.getData().setScale((float) 1/Game.SCALE, (float) 1/Game.SCALE);
+        
+       // font.getRegion().getTexture().setFilter(TextureFilter.Linear, TextureFilter.Linear);
+        generator.dispose();
 		
-		blocks = new TextureRegion[3];
-		for(int i = 0; i< blocks.length; i++){
-			blocks[i] = new TextureRegion(tex, 32+i*16,0,16,16);
-		}
 	}
 	
 	public void render(SpriteBatch sb){
 		sb.begin();
-		short bits = player.getBody().getFixtureList().first().getFilterData().maskBits;
-		
-		if((bits & B2DVars.BIT_GROUND) != 0) sb.draw(blocks[2],40,200);
+        font.draw(sb, player.getClipBullets() + " / " + player.getReloadBullets(), Game.V_WIDTH-60, 20); //bullets
 		sb.end();
+	}
+	
+	public void dispose(){
+		
 	}
 	
 }

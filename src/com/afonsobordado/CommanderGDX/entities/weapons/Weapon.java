@@ -138,6 +138,12 @@ public class Weapon {
 	public String getName() {
 		return weaponName;
 	}
+	public int getCurrentClipBullets() {
+		return currentClipBullets;
+	}
 
+	public int getCurrentReloadBullets() {
+		return currentReloadBullets;
+	}
 
 }
