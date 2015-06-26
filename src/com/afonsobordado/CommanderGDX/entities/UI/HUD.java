@@ -39,9 +39,13 @@ public class HUD {
 	
 	public void render(SpriteBatch sb){
 		sb.begin();
-        font.draw(sb, player.getClipBullets() + " / " + player.getReloadBullets(), Game.V_WIDTH-60, 20); //bullets
+		font.setColor(1f, (player.getHp()/100), (player.getHp()/100), 1f);
+		font.draw(sb, ""+Math.round(player.getHp()), 30, 20);
+        font.setColor(1f,1f,1f,1f);
+        
         sb.draw(whitecross, 17 , 11, 10, 10);
-        font.draw(sb, ""+Math.round(player.getHp()), 30, 20);
+        font.draw(sb, player.getClipBullets() + " / " + player.getReloadBullets(), Game.V_WIDTH-60, 20); //bullets
+        
         
         for(int i=killFeed.size()-1, z=0;i>=0;i--,z++){
         	PacketDeath pd = killFeed.get(i);
