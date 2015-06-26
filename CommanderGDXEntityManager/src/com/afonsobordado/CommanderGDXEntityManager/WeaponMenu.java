@@ -45,6 +45,11 @@ public class WeaponMenu extends FDefExtender{
 	private JButton btnNewButton_1;
 	private JCheckBox chckbxNewCheckBox;
 	private String file;
+	private JLabel lblClip;
+	private JTextField textField_6;
+	private JTextField textField_7;
+	private JTextField textField_8;
+	private JLabel lblReloadtime;
 
 	/**
 	 * Create the frame.
@@ -52,15 +57,15 @@ public class WeaponMenu extends FDefExtender{
 	public WeaponMenu(String file) {
 		this.file = file;
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		setBounds(100, 100, 307, 219);
+		setBounds(100, 100, 307, 270);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		GridBagLayout gbl_contentPane = new GridBagLayout();
 		gbl_contentPane.columnWidths = new int[]{0, -1, 0, 0};
-		gbl_contentPane.rowHeights = new int[]{0, 0, 0, 0, 0, 0, 0, 0};
+		gbl_contentPane.rowHeights = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 		gbl_contentPane.columnWeights = new double[]{0.0, 1.0, 1.0, Double.MIN_VALUE};
-		gbl_contentPane.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
+		gbl_contentPane.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
 		contentPane.setLayout(gbl_contentPane);
 		
 		JLabel lblNewLabel = new JLabel("Name:");
@@ -170,7 +175,7 @@ public class WeaponMenu extends FDefExtender{
 		GridBagConstraints gbc_btnNewButton = new GridBagConstraints();
 		gbc_btnNewButton.insets = new Insets(0, 0, 0, 5);
 		gbc_btnNewButton.gridx = 1;
-		gbc_btnNewButton.gridy = 6;
+		gbc_btnNewButton.gridy = 8;
 		
 		
 		btnNewButton_1 = new JButton("Reset");
@@ -181,9 +186,54 @@ public class WeaponMenu extends FDefExtender{
 		});
 		GridBagConstraints gbc_btnNewButton_1 = new GridBagConstraints();
 		gbc_btnNewButton_1.gridx = 2;
-		gbc_btnNewButton_1.gridy = 6;
+		gbc_btnNewButton_1.gridy = 8;
+		
+		lblClip = new JLabel("Clip:");
+		GridBagConstraints gbc_lblClip = new GridBagConstraints();
+		gbc_lblClip.anchor = GridBagConstraints.EAST;
+		gbc_lblClip.insets = new Insets(0, 0, 5, 5);
+		gbc_lblClip.gridx = 0;
+		gbc_lblClip.gridy = 6;
 		
 		
+		textField_6 = new JTextField();
+		textField_6.setText("0.0");
+		textField_6.setColumns(10);
+		GridBagConstraints gbc_textField_6 = new GridBagConstraints();
+		gbc_textField_6.insets = new Insets(0, 0, 5, 5);
+		gbc_textField_6.fill = GridBagConstraints.HORIZONTAL;
+		gbc_textField_6.gridx = 1;
+		gbc_textField_6.gridy = 6;
+
+		
+		textField_7 = new JTextField();
+		textField_7.setText("0.0");
+		textField_7.setColumns(10);
+		GridBagConstraints gbc_textField_7 = new GridBagConstraints();
+		gbc_textField_7.insets = new Insets(0, 0, 5, 0);
+		gbc_textField_7.fill = GridBagConstraints.HORIZONTAL;
+		gbc_textField_7.gridx = 2;
+		gbc_textField_7.gridy = 6;
+
+		
+		lblReloadtime = new JLabel("reloadTime:");
+		GridBagConstraints gbc_lblReloadtime = new GridBagConstraints();
+		gbc_lblReloadtime.insets = new Insets(0, 0, 5, 5);
+		gbc_lblReloadtime.anchor = GridBagConstraints.EAST;
+		gbc_lblReloadtime.gridx = 0;
+		gbc_lblReloadtime.gridy = 7;
+
+		
+		textField_8 = new JTextField();
+		textField_8.setText("0.0");
+		textField_8.setColumns(10);
+		GridBagConstraints gbc_textField_8 = new GridBagConstraints();
+		gbc_textField_8.gridwidth = 2;
+		gbc_textField_8.insets = new Insets(0, 0, 5, 5);
+		gbc_textField_8.fill = GridBagConstraints.HORIZONTAL;
+		gbc_textField_8.gridx = 1;
+		gbc_textField_8.gridy = 7;
+
 
 		resetFields();
 		
@@ -213,6 +263,13 @@ public class WeaponMenu extends FDefExtender{
 		contentPane.add(textField_5, gbc_textField_5); //bullet
 		textField_5.setColumns(10);
 		
+		contentPane.add(lblClip, gbc_lblClip);
+		contentPane.add(textField_6, gbc_textField_6);
+		contentPane.add(textField_7, gbc_textField_7);
+		
+		contentPane.add(lblReloadtime, gbc_lblReloadtime);
+		contentPane.add(textField_8, gbc_textField_8);
+	
 		contentPane.add(btnNewButton, gbc_btnNewButton);
 		contentPane.add(btnNewButton_1, gbc_btnNewButton_1);
 		
@@ -230,13 +287,9 @@ public class WeaponMenu extends FDefExtender{
 			textField_3.setText(Float.toString(wf.getWeaponPin().x));
 			textField_4.setText(Float.toString(wf.getWeaponPin().y));
 			textField_5.setText(wf.getBullet());
-			System.out.println("S: " + wf.toString() + 
-					   "\nName: " + wf.getName() +
-					   "\nAnimation: " + wf.getAnimation() +
-					   "\nbulletsPerSec: "+ wf.getBulletsPerSec()+
-					   "\nshootOnPress:"+wf.isShootOnPress()+
-					   "\nweaponPin: "+wf.getWeaponPin()+
-					   "\nbullet: " + wf.getBullet());
+			textField_6.setText(Integer.toString(wf.getClipBullets()));
+			textField_7.setText(Integer.toString(wf.getReloadBullets()));
+			textField_8.setText(Integer.toString(wf.getMsReloadTime()));
 		}catch (FileNotFoundException ex) {
 			ex.printStackTrace();
 		}catch (KryoException ke) {
@@ -259,18 +312,14 @@ public class WeaponMenu extends FDefExtender{
 												   		Float.parseFloat(textField_3.getText()),
 												   		Float.parseFloat(textField_4.getText())
 												   	  ),
-										   textField_5.getText()
+										   textField_5.getText(),
+										   Integer.parseInt(textField_6.getText()),
+										   Integer.parseInt(textField_7.getText()),
+										   Integer.parseInt(textField_8.getText())
 										   );
 			
 			Main.kryo.writeObject(output, wf);
 			output.flush();
-			System.out.println("S: " + wf.toString() + 
-							   "\nName: " + wf.getName() +
-							   "\nAnimation: " + wf.getAnimation() +
-							   "\nbulletsPerSec: "+ wf.getBulletsPerSec()+
-							   "\nshootOnPress:"+wf.isShootOnPress()+
-							   "\nweaponPin: "+wf.getWeaponPin()+
-							   "\nbullet: " + wf.getBullet());
 		}catch (FileNotFoundException ex) {
 			ex.printStackTrace();
 		}finally{
