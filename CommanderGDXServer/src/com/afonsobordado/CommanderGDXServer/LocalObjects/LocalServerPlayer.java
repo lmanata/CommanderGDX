@@ -28,6 +28,7 @@ public class LocalServerPlayer extends NetworkPlayer{
 	private int footContacts;
 	public long deathTime;
 	public PlayerStats ps;
+	private NetworkPlayer networkPlayer;
 	public LocalServerPlayer(int id,
 							 String name,
 							 Vector2 pos,
@@ -53,6 +54,11 @@ public class LocalServerPlayer extends NetworkPlayer{
 		this.body = GDXServer.pf.getBodyByClass(playerClass);
 		this.body.setUserData(this);
 		this.team = team;
+		this.networkPlayer = new NetworkPlayer(id,
+				 name,
+				 body.getPosition(),
+				 armAngle,
+				 body.getLinearVelocity());
 	}
 	
 	public void networkUpdate(NetworkPlayer np){
@@ -64,11 +70,12 @@ public class LocalServerPlayer extends NetworkPlayer{
 	
 	public NetworkPlayer getNetworkPlayer(){
 		
-		return new NetworkPlayer(id,
-								 name,
-								 body.getPosition(),
-								 armAngle,
-								 body.getLinearVelocity());
+		this.networkPlayer.id = this.id;
+		this.networkPlayer.name = this.name;
+		this.networkPlayer.pos = this.body.getPosition();
+		this.networkPlayer.armAngle = this.armAngle;
+		this.networkPlayer.linearVelocity = this.body.getLinearVelocity();
+		return this.networkPlayer;
 	}
 	
 	public void removeBody(){
@@ -92,21 +99,25 @@ public class LocalServerPlayer extends NetworkPlayer{
 	}
 
 	public void addKill(){
+		GDXServer.teamStats[this.team].kills++;
 		ps.kills++;
 	}
 	
 	public void hit(Bullet b, float multiplier) {
-		if(((GDXServer.playerList.get(b.getOwnerId()).team == this.team) && GameVars.SERVER_FRIENDLY_FIRE) ||
-			(GDXServer.playerList.get(b.getOwnerId()).team != this.team)){ 
-			this.hp -= b.getSpeed() * multiplier;
-			sendHP();
-			if(hp < 0f){
-				PacketDeath pd = new PacketDeath(this.id, b.getOwnerId(), false);
-				GDXServer.server.sendToAllTCP(pd);
-				GDXServer.playerList.get(b.getOwnerId()).addKill();
-				ps.deaths++;
-				deathCleanup();
-				this.deathTime = System.currentTimeMillis();
+		if(this.isAlive()){
+			if(((GDXServer.playerList.get(b.getOwnerId()).team == this.team) && GameVars.SERVER_FRIENDLY_FIRE) ||
+				(GDXServer.playerList.get(b.getOwnerId()).team != this.team)){ 
+				this.hp -= b.getSpeed() * multiplier;
+				sendHP();
+				if(hp < 0f){
+					GDXServer.teamStats[this.team].deaths++;
+					PacketDeath pd = new PacketDeath(this.id, b.getOwnerId(), false);
+					GDXServer.server.sendToAllTCP(pd);
+					GDXServer.playerList.get(b.getOwnerId()).addKill();
+					ps.deaths++;
+					deathCleanup();
+					this.deathTime = System.currentTimeMillis();
+				}
 			}
 		}
 	}

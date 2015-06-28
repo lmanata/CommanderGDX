@@ -29,6 +29,7 @@ public class LocalClientPlayer{
 	private int lerpCount = B2DVars.LERP_MAX_COUNT;
 	private float hp;
 	private int team;
+	private NetworkPlayer networkPlayer;
 	
 	public void createBody(){
 		body = pf.getBodyByClass(playerClass);
@@ -72,6 +73,11 @@ public class LocalClientPlayer{
 		
 		body.setLinearVelocity(pnp.np.linearVelocity);
 		body.setTransform(pnp.np.pos, body.getAngle());
+		this.networkPlayer = new NetworkPlayer(id,
+											 name,
+											 body.getPosition(),
+											 armDegrees,
+											 body.getLinearVelocity());
 	}
 	
 	public void updateNetworkPlayer(NetworkPlayer np){
@@ -83,11 +89,12 @@ public class LocalClientPlayer{
 	}
 	
 	public NetworkPlayer getNetworkPlayer(){
-		return new NetworkPlayer(id,
-								 name,
-								 body.getPosition(),
-								 armDegrees,
-								 body.getLinearVelocity());
+		this.networkPlayer.id = this.id;
+		this.networkPlayer.name = this.name;
+		this.networkPlayer.pos = this.body.getPosition();
+		this.networkPlayer.armAngle = this.armDegrees;
+		this.networkPlayer.linearVelocity = this.body.getLinearVelocity();
+		return this.networkPlayer;
 	}
 	
 

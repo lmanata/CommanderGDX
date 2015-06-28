@@ -48,8 +48,10 @@ public class Player {
 	
 	private NetworkPlayer lastNetworkPlayer = null;
 	private float lerpCount = 0f;
-
+	
 	public int team;
+
+	private NetworkPlayer networkPlayer;
 	
 	public Player(World world, PlayerFactory pf){
 		al = new ActionList();
@@ -67,7 +69,11 @@ public class Player {
 		
 		pc = new PlayerCharacter(pf.getFileByClass(playerClass), this.weapons.get(currentWeapon), body);
 		
-		
+		this.networkPlayer = new NetworkPlayer(id,
+											 name,
+											 body.getPosition(),
+											 armDegrees,
+											 body.getLinearVelocity());
 		
 	}
 	
@@ -260,11 +266,12 @@ public class Player {
 	public Body getBody() {return body;}
 	public Vector2 getPostion(){return body.getPosition();}
 	public NetworkPlayer getNetworkPacket(){
-		return new NetworkPlayer(id,
-				 				 name,
-				 				 body.getPosition(),
-				 				 armDegrees,
-				 				 body.getLinearVelocity());
+		this.networkPlayer.id = this.id;
+		this.networkPlayer.name = this.name;
+		this.networkPlayer.pos = this.body.getPosition();
+		this.networkPlayer.armAngle = this.armDegrees;
+		this.networkPlayer.linearVelocity = this.body.getLinearVelocity();
+		return this.networkPlayer;
 	}
 	
 	public KeyMap getKeyMap(){

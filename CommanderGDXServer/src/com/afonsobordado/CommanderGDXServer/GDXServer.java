@@ -91,6 +91,7 @@ public class GDXServer {
 	public static ArrayList<Body> bodyList;
 	public static ArrayList<SpawnPos> spawnPosList;
 	public static Array<Fixture> fList;
+	public static PlayerStats[] teamStats;
 
 	private static HeadlessApplication ha;
 	
@@ -110,6 +111,7 @@ public class GDXServer {
 	private static NetworkListener nl = new NetworkListener();
 	
 	public static void restartWorld(){
+		System.err.println("ENDGAME!");
 		Gdx.app.exit();
 		ha.exit();
 		Gdx.gl = mock(GL20.class);	//headless gdx to load the maps
@@ -136,6 +138,11 @@ public class GDXServer {
 		fList.clear();
 		HashFileMapOrig = SUtils.genHashFileMapList(Gdx.files.internal(resDir)); //whynot?
 		server.close();
+		for(int i=0;i< GameVars.SERVER_MAX_TEAMS;i++){
+			teamStats[i].deaths = 0;
+			teamStats[i].kills = 0;
+			teamStats[i].id = i;
+		}
 		
 		registerSpwanPoints(map);
 		registerBullets();
@@ -176,6 +183,15 @@ public class GDXServer {
 		bodyList = new ArrayList<Body>();
 		spawnPosList = new ArrayList<SpawnPos>();
 		fList = new Array<Fixture>();
+		teamStats = new PlayerStats[GameVars.SERVER_MAX_TEAMS];
+		for(int i=0;i< GameVars.SERVER_MAX_TEAMS;i++){
+			teamStats[i] = new PlayerStats();
+			teamStats[i].id = i;
+			teamStats[i].kills = 0;
+			teamStats[i].deaths = 0;
+		}
+		
+
 		
 		registerSpwanPoints(map);
 		registerBullets();
