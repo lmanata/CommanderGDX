@@ -42,11 +42,19 @@ import com.afonsobordado.CommanderGDX.vars.ActionMap;
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryonet.Client;
@@ -322,6 +330,44 @@ public class Game implements ApplicationListener{
 		for(int i=0;i<8;i++)
 			tmp[i] = new TextureRegion(Game.aManager.get("res/animations/test/legs/00"+i+".png", Texture.class));
 		AnimationList.add("MainCharLegsRun", new Animation(tmp));
+	}
+	
+	public static Skin createSkin(){
+	    //Create a font
+		FreeTypeFontParameter parameter =  new FreeTypeFontParameter();
+        parameter.size = 24 * Game.SCALE;
+        
+		FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("res/fonts/Square.ttf"));
+		generator.scaleForPixelHeight(Game.V_HEIGHT);
+		BitmapFont font = generator.generateFont(parameter); // font size 12 pixels
+		font.getData().setScale((float) 1/Game.SCALE, (float) 1/Game.SCALE);
+		generator.dispose();
+    
+	    Skin skin = new Skin();
+	    skin.add("default", font);
+	 
+	    //Create a texture
+	    Pixmap pixmap = new Pixmap((int)Gdx.graphics.getWidth()/4,(int)Gdx.graphics.getHeight()/10, Pixmap.Format.RGB888);
+        pixmap.setColor(Color.WHITE);
+	    pixmap.fill();
+	    skin.add("background",new Texture(pixmap));
+	 
+	    //Create a button style
+	    TextButton.TextButtonStyle textButtonStyle = new TextButton.TextButtonStyle();
+	    textButtonStyle.up = skin.newDrawable("background", Color.GRAY);
+	    textButtonStyle.down = skin.newDrawable("background", Color.DARK_GRAY);
+	    textButtonStyle.checked = skin.newDrawable("background", Color.DARK_GRAY);
+	    textButtonStyle.over = skin.newDrawable("background", Color.LIGHT_GRAY);
+	    textButtonStyle.font = skin.getFont("default");
+	    skin.add("default", textButtonStyle);
+	   
+	    Label.LabelStyle labelStyle = new Label.LabelStyle();
+	    labelStyle.fontColor = Color.BLACK;
+	    labelStyle.font = font;
+	    skin.add("default", labelStyle);
+	  
+	    return skin;
+	 
 	}
 	
 	public void dispose() {}
