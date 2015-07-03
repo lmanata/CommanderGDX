@@ -2,7 +2,6 @@ package com.afonsobordado.CommanderGDX.states;
 
 import com.afonsobordado.CommanderGDX.Game;
 import com.afonsobordado.CommanderGDX.handlers.GameStateManager;
-import com.afonsobordado.CommanderGDX.handlers.KeyMap;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 

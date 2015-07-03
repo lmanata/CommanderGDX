@@ -11,7 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
-public class HelpMenu extends GameState{
+public class OptionsMenu extends GameState{
 
     private Stage stage = new Stage();
     private Table table = new Table();
@@ -20,7 +20,7 @@ public class HelpMenu extends GameState{
     private TextButton buttonExit;
 	private GameStateManager gsm;
 
-    public HelpMenu (GameStateManager gsm){
+    public OptionsMenu (GameStateManager gsm){
     	super(gsm);
     	this.gsm = gsm;
     	this.skin = Game.createSkin();
