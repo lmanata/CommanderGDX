@@ -10,6 +10,7 @@ import com.afonsobordado.CommanderGDX.entities.player.LocalClientPlayer;
 import com.afonsobordado.CommanderGDX.entities.player.Player;
 import com.afonsobordado.CommanderGDX.entities.weapons.Bullet;
 import com.afonsobordado.CommanderGDX.handlers.GameStateManager;
+import com.afonsobordado.CommanderGDX.handlers.InputProcessor;
 import com.afonsobordado.CommanderGDX.handlers.MyContactListener;
 import com.afonsobordado.CommanderGDX.handlers.TiledMapImporter;
 import com.afonsobordado.CommanderGDX.packets.PacketEndgame;
@@ -67,7 +68,8 @@ public class Play extends GameState{
 	public Play(GameStateManager gsm) {
 		super(gsm);
 		
-		
+		Gdx.input.setInputProcessor(new InputProcessor());
+
 		world = new World(new Vector2(0, -9.81f), true);
 		world.setContactListener(cl = new MyContactListener());
 		loader = new BodyEditorLoader(Gdx.files.internal(bodyFile));

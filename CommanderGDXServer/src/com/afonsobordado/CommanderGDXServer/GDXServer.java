@@ -62,6 +62,8 @@ import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Fixture;
+import com.badlogic.gdx.physics.box2d.Joint;
+import com.badlogic.gdx.physics.box2d.JointEdge;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
 import com.esotericsoftware.kryo.Kryo;
@@ -126,6 +128,7 @@ public class GDXServer {
 		
 		world.dispose();
 		world = new World(new Vector2(0, -9.81f), true);
+		world.setAutoClearForces(true);
 		TiledMap map = new TmxMapLoader().load("../res/maps/" + currentMap + ".tmx");
 		synchronized(world){
 			TiledMapImporter.create(map,world);
@@ -156,6 +159,7 @@ public class GDXServer {
 	
 	public static void main(String[] args){
 		world = new World(new Vector2(0, -9.81f), true);
+		world.setAutoClearForces(true);
 		world.setContactListener(sch = new ServerContactHandler());
 
 		Gdx.gl = mock(GL20.class);					//headless gdx to load the maps
@@ -228,8 +232,13 @@ public class GDXServer {
 						world.step(delta / B2DW_TICK, B2DW_VELOCITY_ITER, B2DW_POSITION_ITER);
 						if(!bodyList.isEmpty()){
 							
-							for(Body b:bodyList)
+							for(Body b:bodyList){
+								for(JointEdge j : b.getJointList()){
+									world.destroyJoint(j.joint);
+								}
 								world.destroyBody(b);
+								
+							}
 							
 							bodyList.clear();
 						}

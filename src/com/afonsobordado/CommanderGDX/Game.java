@@ -53,7 +53,7 @@ import com.esotericsoftware.kryonet.Client;
 
 public class Game implements ApplicationListener{
 
-	public static final String TITLE = "CommanderGDX";
+	public static final String TITLE = "Solar Space Odyssey";
 	public static final int V_WIDTH = 480;
 	public static final int V_HEIGHT = 270;
 	public static final int SCALE = 2;
