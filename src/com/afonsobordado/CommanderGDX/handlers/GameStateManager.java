@@ -3,6 +3,7 @@ package com.afonsobordado.CommanderGDX.handlers;
 import java.util.Stack;
 
 import com.afonsobordado.CommanderGDX.Game;
+import com.afonsobordado.CommanderGDX.states.ErrorMenu;
 import com.afonsobordado.CommanderGDX.states.GameState;
 import com.afonsobordado.CommanderGDX.states.HelpMenu;
 import com.afonsobordado.CommanderGDX.states.IPmenu;
@@ -22,6 +23,7 @@ public class GameStateManager {
 	public static final int MAINMENU = 3;
 	public static final int OPTIONSMENU = 4;
 	public static final int HELPMENU = 5;
+	public static final int ERRORMENU = 6;
 
 	
 	public GameStateManager(Game game){
@@ -46,6 +48,7 @@ public class GameStateManager {
 			if(state == MAINMENU) return new MainMenu(this);
 			if(state == HELPMENU) return new HelpMenu(this);
 			if(state == OPTIONSMENU) return new OptionsMenu(this);
+			if(state == ERRORMENU) return new ErrorMenu(this);
 			return null;
 	}
 	
@@ -54,7 +57,7 @@ public class GameStateManager {
 		pushState(state);
 	}
 	
-	private void popState() {
+	public void popState() {
 		GameState g = gameStates.pop();
 		g.dispose();
 	}

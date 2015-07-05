@@ -28,7 +28,7 @@ import com.badlogic.gdx.utils.Timer.Task;
 public class IPmenu extends GameState{
 
 	static boolean timerIsOn = false;
-	GameStateManager gsm;
+	static GameStateManager gsm;
 	public static String declineReason;
 	public static boolean play=false;
 
@@ -130,9 +130,9 @@ public class IPmenu extends GameState{
             
             @Override
             public void run() {
-           
-            	//timeout, plz advise user
-            	//push menu
+            	timerIsOn=false;
+            	ErrorMenu.errorMessage = "Server timeout, please retry later.";
+            	gsm.pushState(GameStateManager.ERRORMENU);
             }
 
          }, 5);
