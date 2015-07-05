@@ -134,8 +134,6 @@ public class Player {
 				switchNextWeapon();
 			}
 			if(Game.getKeyMap().isPressed(ActionMap.actionToKey(Action.RELOAD))){
-				System.out.println("Action: " + Action.RELOAD + " KEY: " +  ActionMap.actionToKey(Action.RELOAD) + " Action: " + ActionMap.keyToAction(ActionMap.actionToKey(Action.RELOAD)));
-
 				weapons.get(currentWeapon).reload();
 			}
 			

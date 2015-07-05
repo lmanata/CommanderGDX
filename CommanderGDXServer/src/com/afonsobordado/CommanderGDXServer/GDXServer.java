@@ -182,7 +182,7 @@ public class GDXServer {
 		
 		HashFileMapOrig = SUtils.genHashFileMapList(Gdx.files.internal(resDir));
 		fileSerializer = new FileSerializer().getSerializer();
-		playerList = new ConcurrentHashMap<Integer, LocalServerPlayer>(16, 0.9f, 2);// 2 concurrent threads is a worst case scenario
+		playerList = new ConcurrentHashMap<Integer, LocalServerPlayer>(16, 0.9f, 3);// 3 concurrent threads is a worst case scenario
 		bulletList = new ConcurrentHashMap<Integer, Bullet>();
 		bodyList = new ArrayList<Body>();
 		spawnPosList = new ArrayList<SpawnPos>();
@@ -247,15 +247,6 @@ public class GDXServer {
 					delta--;
 				}
 				/*fixed time step*/
-				
-				/*send updated values to clients*/
-				/*if(System.currentTimeMillis() % 1000 == 0){
-					for(LocalServerPlayer lsp: GDXServer.playerList.values())
-						System.out.println("Player: " + lsp.id + " Team: " + lsp.team);
-				}
-				*/
-				
-
 				
 				if(System.currentTimeMillis() % SERVER_TICK == 0){
 					int teamWon;

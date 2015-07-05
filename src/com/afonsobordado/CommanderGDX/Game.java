@@ -55,6 +55,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryonet.Client;
@@ -158,71 +159,12 @@ public class Game implements ApplicationListener{
 		registerBullets();
 		registerWeapons();
 		
-		/*Input input;
-		try {
-			input = new Input(new FileInputStream("./xx.xx"));
-			WeaponFile wf = fileSerializer.readObject(input, WeaponFile.class);
-			
-			System.out.println("Name: " + wf.getName() +
-							   "\nAnimation: " + wf.getAnimation() +
-							   "\nbulletsPerSec: "+ wf.getBulletsPerSec()+
-							   "\nshootOnPress:"+wf.isShootOnPress()+
-							   "\nweaponPin: "+wf.getWeaponPin()+
-							   "\nbullet: " + wf.getBullet());
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		}*/
-
-
-		
-		/*Output output = null;
-		try {
-			PlayerCharacterFile pcf = new PlayerCharacterFile("MainChar",
-															  "MainCharLegsIdle",
-															  "MainCharLegsJump",
-															  "MainCharLegsRun",
-															  "MainCharTorso",
-															  "MainCharArm",
-															  new Vector2(13,12), //torsoPin
-															  new Vector2(4,8));
-			output = new Output(new FileOutputStream("./res/playerCharacter/"+pcf.getName()+".pcf"));
-			fileSerializer.writeObject(output, pcf);
-			output.flush();
-			System.out.println("WROTE");
-			
-		}catch (FileNotFoundException ex) {
-            ex.printStackTrace();
-        } finally {
-        	output.flush();
-        	output.close();
-        }*/
-	
-
-
-		
-		
-		
-		
-		
-		
-		
-		/*Pixmap pm = new Pixmap(Gdx.files.internal("res/images/crystal.png"));
-        int xHotSpot = pm.getWidth() / 2;
-        int yHotSpot = pm.getHeight() / 2;
-        Gdx.input.setCursorImage(pm, xHotSpot, yHotSpot);
-        pm.dispose();*/
-		
 		sb = new SpriteBatch();
 		cam = new OrthographicCamera();
 		cam.setToOrtho(false, V_WIDTH,V_HEIGHT);
 		hudCam = new OrthographicCamera();
 		hudCam.setToOrtho(false, V_WIDTH,V_HEIGHT);
 		gsm = new GameStateManager(this);
-		
-		/*disable bilinear filtering*/
-		/*Gdx.graphics.getGL20().glTexParameteri(GL20.GL_TEXTURE_2D, GL20.GL_TEXTURE_MIN_FILTER, GL20.GL_NEAREST);
-		Gdx.graphics.getGL20().glTexParameteri(GL20.GL_TEXTURE_2D, GL20.GL_TEXTURE_MAG_FILTER, GL20.GL_NEAREST);*/
-
 		
 	}
 
@@ -360,6 +302,15 @@ public class Game implements ApplicationListener{
 	    textButtonStyle.over = skin.newDrawable("background", Color.LIGHT_GRAY);
 	    textButtonStyle.font = skin.getFont("default");
 	    skin.add("default", textButtonStyle);
+	    
+	    TextField.TextFieldStyle textFieldStyle = new TextField.TextFieldStyle();
+	    textFieldStyle.selection = skin.newDrawable("background", Color.WHITE);
+	    textFieldStyle.cursor = skin.newDrawable("background", Color.LIGHT_GRAY);
+	    textFieldStyle.cursor.setMinWidth(2f);
+	    textFieldStyle.background = skin.newDrawable("background", Color.GRAY);
+	    textFieldStyle.font = font;
+	    textFieldStyle.fontColor = Color.BLACK;
+	    skin.add("default", textFieldStyle);
 	   
 	    Label.LabelStyle labelStyle = new Label.LabelStyle();
 	    labelStyle.fontColor = Color.BLACK;
