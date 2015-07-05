@@ -24,7 +24,7 @@ public class OptionsMenu extends GameState{
     	super(gsm);
     	this.gsm = gsm;
     	this.skin = Game.createSkin();
-	    buttonExit = new TextButton("Exit", skin);
+	    buttonExit = new TextButton("Back", skin);
 	    show();
     }
     

@@ -52,9 +52,10 @@ public class Weapon {
 	public void update(float dt){
 		animation.update(dt);
 	}
+	
 	public void shoot(boolean pressed){ //down differentiates between isPressed and isDown
 		canShoot = (System.nanoTime()>=nextTimeShoot) && (!isReloading) && (currentClipBullets > 0);
-		canShoot = true;
+
 		if(!canShoot) return;
 		if(shootOnPress){
 			if(pressed) shoot();
@@ -63,6 +64,7 @@ public class Weapon {
 		}
 		
 	}
+	
 	private void shoot(){
 
 		this.currentClipBullets--;

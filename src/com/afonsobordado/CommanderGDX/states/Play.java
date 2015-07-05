@@ -75,6 +75,7 @@ public class Play extends GameState{
 		loader = new BodyEditorLoader(Gdx.files.internal(bodyFile));
 		pf = new PlayerFactory(world, loader, "./res");
 
+		IPmenu.timerIsOn = false;
 		
 		player = new Player(world,pf);
 		

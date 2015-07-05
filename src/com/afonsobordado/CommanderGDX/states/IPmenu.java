@@ -130,9 +130,11 @@ public class IPmenu extends GameState{
             
             @Override
             public void run() {
-            	timerIsOn=false;
-            	ErrorMenu.errorMessage = "Server timeout, please retry later.";
-            	gsm.pushState(GameStateManager.ERRORMENU);
+            	if(timerIsOn){
+	            	timerIsOn=false;
+	            	ErrorMenu.errorMessage = "Server timeout, please retry later.";
+	            	gsm.pushState(GameStateManager.ERRORMENU);
+            	}
             }
 
          }, 5);
